@@ -1,0 +1,42 @@
+version: 2.1
+
+orbs:
+  gradle: circleci/gradle@2.2.0
+
+jobs:
+  test:
+    parameters:
+      java-version:
+        type: string
+    executor:
+      name: gradle/default
+      tag: << parameters.java-version >>
+    steps:
+      - checkout
+      - run: gradle test
+
+workflows:
+  version: 2
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - test: &test
+          matrix:
+            parameters:
+              java-version:
+                - "8.0"
+                - "11.0"
+                - "13.0"
+  build:
+    jobs:
+      - test:
+          <<: *test
+          filters:
+            tags:
+              only: /.*/
