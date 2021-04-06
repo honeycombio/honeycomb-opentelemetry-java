@@ -117,7 +117,11 @@ public final class HoneycombSdkBuilder {
     public HoneycombSdk build() {
         OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
 
-        builder.setEndpoint(Objects.requireNonNullElse(endpoint, defaultEndpoint));
+        if (endpoint != null) {
+            builder.setEndpoint(endpoint);
+        } else {
+            builder.setEndpoint(defaultEndpoint);
+        }
 
         SpanExporter exporter = builder
                 .addHeader(HoneycombTeamHeader, apiKey)
