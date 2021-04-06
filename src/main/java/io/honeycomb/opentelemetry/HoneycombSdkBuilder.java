@@ -80,7 +80,7 @@ public final class HoneycombSdkBuilder {
      *
      * @return HoneycombSdkBuilder instance.
      */
-    public HoneycombSdkBuilder setContextPropagators(ContextPropagators propagators) {
+    public HoneycombSdkBuilder setPropagators(ContextPropagators propagators) {
         this.propagators = propagators;
         return this;
     }
