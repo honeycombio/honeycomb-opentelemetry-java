@@ -8,8 +8,7 @@ import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
-
-import java.util.Objects;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
 
 /**
  * A builder for configuring an {@link HoneycombSdk}
@@ -21,6 +20,8 @@ public final class HoneycombSdkBuilder {
     private final String defaultEndpoint = "https://api.honeycomb.io";
 
     private ContextPropagators propagators;
+    private Sampler sampler = Sampler.alwaysOn();
+
     private String apiKey;
     private String dataset;
     private String endpoint;
@@ -86,6 +87,21 @@ public final class HoneycombSdkBuilder {
     }
 
     /**
+     * Sets the {@link Sampler} to use.
+     *
+     * <p>Note that if no sampler is specified, {@link io.opentelemetry.sdk.trace.samplers.AlwaysOnSampler}</p>
+     * will be used by default.</p>
+     *
+     * @param sampler Sampler instance
+     *
+     * @return HoneycombSdkBuilder instance
+     */
+    public HoneycombSdkBuilder setSampler(Sampler sampler) {
+        this.sampler = sampler;
+        return this;
+    }
+
+    /**
      * Returns a new {@link HoneycombSdk} built with the configuration of this {@link
      * HoneycombSdkBuilder} and registers it as the global {@link
      * io.opentelemetry.api.OpenTelemetry}. An exception will be thrown if this method is attempted to
@@ -127,7 +143,9 @@ public final class HoneycombSdkBuilder {
                 .addHeader(HoneycombTeamHeader, apiKey)
                 .addHeader(HoneycombDatasetHeader, dataset)
                 .build();
+
         SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+                .setSampler(sampler)
                 .addSpanProcessor(BatchSpanProcessor.builder(exporter).build()).build();
 
         if (propagators == null) {
