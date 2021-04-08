@@ -3,9 +3,12 @@ package io.honeycomb.opentelemetry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -22,38 +25,44 @@ public class HoneycombSdkTest {
     }
 
     @Test
-    void testRegisterGlobal() {
-        HoneycombSdk sdk =
-            HoneycombSdk.builder().setPropagators(propagators).buildAndRegisterGlobal();
-        assertThat(GlobalOpenTelemetry.get()).extracting("delegate").isSameAs(sdk);
-        assertThat(sdk.getTracerProvider().get(""))
-            .isSameAs(GlobalOpenTelemetry.getTracerProvider().get(""))
-            .isSameAs(GlobalOpenTelemetry.get().getTracer(""));
+    void testConfiguration_tracerSettings() {
+        Sampler sampler = new DeterministicTraceSampler(5);
+        HoneycombSdk honeycomb = HoneycombSdk.builder()
+            .setSampler(sampler)
+            .setApiKey("foobar")
+            .setDataset("dataset")
+            .build();
 
-        assertThat(GlobalOpenTelemetry.getPropagators())
-            .isSameAs(GlobalOpenTelemetry.get().getPropagators())
-            .isSameAs(sdk.getPropagators())
-            .isSameAs(propagators);
+        TracerProvider unobfuscatedTracerProvider =
+            ((HoneycombSdk.ObfuscatedTracerProvider) honeycomb.getTracerProvider()).unobfuscate();
+
+        assertThat(unobfuscatedTracerProvider)
+            .isInstanceOfSatisfying(
+                SdkTracerProvider.class,
+                sdkTracerProvider ->
+                    assertThat(
+                        sdkTracerProvider.getSampler()
+                            .getDescription()).isEqualTo(sampler.getDescription()));
+
     }
 
     @Test
-    void castingGlobalToSdkFails() {
-        HoneycombSdk.builder().buildAndRegisterGlobal();
+    void testConfiguration_defaultSampler() {
+        HoneycombSdk honeycomb = HoneycombSdk.builder()
+            .setApiKey("foobar")
+            .setDataset("dataset")
+            .build();
 
-        assertThatThrownBy(
-            () -> {
-                @SuppressWarnings("unused")
-                HoneycombSdk shouldFail = (HoneycombSdk) GlobalOpenTelemetry.get();
-            })
-            .isInstanceOf(ClassCastException.class);
-    }
+        TracerProvider unobfuscatedTracerProvider =
+            ((HoneycombSdk.ObfuscatedTracerProvider) honeycomb.getTracerProvider()).unobfuscate();
 
-    @Test
-    void testShortcutVersions() {
-        assertThat(GlobalOpenTelemetry.getTracer("testTracer1"))
-            .isEqualTo(GlobalOpenTelemetry.getTracerProvider().get("testTracer1"));
-        assertThat(GlobalOpenTelemetry.getTracer("testTracer2", "testVersion"))
-            .isEqualTo(GlobalOpenTelemetry.getTracerProvider().get("testTracer2", "testVersion"));
+        assertThat(unobfuscatedTracerProvider)
+            .isInstanceOfSatisfying(
+                SdkTracerProvider.class,
+                sdkTracerProvider ->
+                    assertThat(
+                        sdkTracerProvider.getSampler()
+                            .getDescription()).isEqualTo(Sampler.alwaysOn().getDescription()));
     }
 
 }
