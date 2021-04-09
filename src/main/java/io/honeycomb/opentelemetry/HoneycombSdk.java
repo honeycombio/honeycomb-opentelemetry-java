@@ -1,5 +1,6 @@
 package io.honeycomb.opentelemetry;
 
+import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
@@ -145,6 +146,10 @@ public final class HoneycombSdk implements OpenTelemetry {
          * @see GlobalOpenTelemetry
          */
         public HoneycombSdk build() {
+            Preconditions.checkNotNull(apiKey, "apiKey must be non-null");
+            Preconditions.checkNotNull(dataset, "dataset must be non-null");
+            Preconditions.checkNotNull(sampler, "sampler must be non-null");
+
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
 
             if (endpoint != null) {
