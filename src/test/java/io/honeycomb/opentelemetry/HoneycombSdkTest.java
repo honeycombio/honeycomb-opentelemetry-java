@@ -27,7 +27,7 @@ public class HoneycombSdkTest {
     @Test
     void testConfiguration_tracerSettings() {
         Sampler sampler = new DeterministicTraceSampler(5);
-        HoneycombSdk honeycomb = HoneycombSdk.builder()
+        HoneycombSdk honeycomb = new HoneycombSdk.Builder()
             .setSampler(sampler)
             .setApiKey("foobar")
             .setDataset("dataset")
@@ -48,7 +48,7 @@ public class HoneycombSdkTest {
 
     @Test
     void testConfiguration_defaultSampler() {
-        HoneycombSdk honeycomb = HoneycombSdk.builder()
+        HoneycombSdk honeycomb = new HoneycombSdk.Builder()
             .setApiKey("foobar")
             .setDataset("dataset")
             .build();

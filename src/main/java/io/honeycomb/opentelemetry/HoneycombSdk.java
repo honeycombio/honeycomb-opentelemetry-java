@@ -1,10 +1,18 @@
 package io.honeycomb.opentelemetry;
 
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.api.trace.TracerProvider;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.trace.export.SpanExporter;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+
 import javax.annotation.concurrent.ThreadSafe;
 
 /**
@@ -18,17 +26,9 @@ public final class HoneycombSdk implements OpenTelemetry {
     private final SdkTracerProvider tracerProvider;
     private final ContextPropagators propagators;
 
-    HoneycombSdk(SdkTracerProvider tracerProvider, ContextPropagators propagators) {
+    private HoneycombSdk(SdkTracerProvider tracerProvider, ContextPropagators propagators) {
         this.tracerProvider = tracerProvider;
         this.propagators = propagators;
-    }
-
-    /**
-     * Returns a new {@link HoneycombSdkBuilder} for configuring an instance of {@linkplain
-     * HoneycombSdk the OpenTelemetry SDK}.
-     */
-    public static HoneycombSdkBuilder builder() {
-        return new HoneycombSdkBuilder();
     }
 
     @Override
@@ -39,6 +39,135 @@ public final class HoneycombSdk implements OpenTelemetry {
     @Override
     public ContextPropagators getPropagators() {
         return this.propagators;
+    }
+
+    public static class Builder {
+        Builder() {}
+
+        private final String HONEYCOMB_TEAM_HEADER = "X-Honeycomb-Team";
+        private final String HONEYCOMB_DATASET_HEADER = "X-Honeycomb-Dataset";
+        private final String DEFAULT_ENDPOINT = "https://api.honeycomb.io";
+
+        private ContextPropagators propagators;
+        private Sampler sampler = Sampler.alwaysOn();
+
+        private String apiKey;
+        private String dataset;
+        private String endpoint;
+
+        /**
+         * Sets the Honeycomb API Key to use.
+         *
+         * <p>This value is sent to Honeycomb on every request and is used to identify
+         * the team making a request.</p>
+         *
+         * @param apiKey a String to use as the API key. See team settings in Honeycomb.
+         */
+        public Builder setApiKey(String apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb dataset to use.
+         *
+         * <p>This value is sent to Honeycomb on every request and is used to identify
+         * the dataset that trace data is being written to.</p>
+         *
+         * @param dataset a String to use as the dataset name.
+         */
+        public Builder setDataset(String dataset) {
+            this.dataset = dataset;
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb endpoint to use. Optional, defaults to the Honeycomb ingest API.
+         *
+         * @param endpoint a String to use as the endpoint URI. Must begin with https or http.
+         */
+        public Builder setEndpoint(String endpoint) {
+            this.endpoint = endpoint;
+            return this;
+        }
+
+        /**
+         * Sets the {@link ContextPropagators} to use.
+         *
+         * <p>Note that if none are specified, {@link W3CTraceContextPropagator} will be used
+         * by default.</p>
+         */
+        public Builder setPropagators(ContextPropagators propagators) {
+            this.propagators = propagators;
+            return this;
+        }
+
+        /**
+         * Sets the {@link Sampler} to use.
+         *
+         * <p>Note that if no sampler is specified, AlwaysOnSampler</p>
+         * will be used by default.</p>
+         *
+         * @param sampler Sampler instance
+         */
+        public Builder setSampler(Sampler sampler) {
+            this.sampler = sampler;
+            return this;
+        }
+
+        /**
+         * Returns a new {@link HoneycombSdk} built with the configuration of this {@link
+         * Builder} and registers it as the global {@link
+         * io.opentelemetry.api.OpenTelemetry}. An exception will be thrown if this method is attempted to
+         * be called multiple times in the lifecycle of an application - ensure you have only one SDK for
+         * use as the global instance. If you need to configure multiple SDKs for tests, use {@link
+         * GlobalOpenTelemetry#resetForTest()} between them.
+         *
+         * @see GlobalOpenTelemetry
+         */
+        public HoneycombSdk buildAndRegisterGlobal() {
+            HoneycombSdk sdk = build();
+            GlobalOpenTelemetry.set(sdk);
+            return sdk;
+        }
+
+        /**
+         * Returns a new {@link HoneycombSdk} built with the configuration of this {@link
+         * Builder}. This SDK is not registered as the global {@link
+         * io.opentelemetry.api.OpenTelemetry}. It is recommended that you register one SDK using {@link
+         * Builder#buildAndRegisterGlobal()} for use by instrumentation that requires
+         * access to a global instance of {@link io.opentelemetry.api.OpenTelemetry}.
+         *
+         * <p>Note that the {@link Builder} automatically assigns a
+         * {@link SdkTracerProvider} with a {@link BatchSpanProcessor} that has an
+         * {@link OtlpGrpcSpanExporter} configured.</p>
+         *
+         * @see GlobalOpenTelemetry
+         */
+        public HoneycombSdk build() {
+            OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
+
+            if (endpoint != null) {
+                builder.setEndpoint(endpoint);
+            } else {
+                builder.setEndpoint(DEFAULT_ENDPOINT);
+            }
+
+            SpanExporter exporter = builder
+                .addHeader(HONEYCOMB_TEAM_HEADER, apiKey)
+                .addHeader(HONEYCOMB_DATASET_HEADER, dataset)
+                .build();
+
+            SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+                .setSampler(sampler)
+                .addSpanProcessor(BatchSpanProcessor.builder(exporter).build()).build();
+
+            if (propagators == null) {
+                propagators = ContextPropagators.create(W3CTraceContextPropagator.getInstance());
+            }
+
+            return new HoneycombSdk(tracerProvider, propagators);
+        }
     }
 
     /**
@@ -72,5 +201,4 @@ public final class HoneycombSdk implements OpenTelemetry {
             return delegate;
         }
     }
-
 }
