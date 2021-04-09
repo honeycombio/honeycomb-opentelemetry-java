@@ -1,5 +1,6 @@
 package io.honeycomb.opentelemetry;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
@@ -183,7 +184,7 @@ public final class HoneycombSdk implements OpenTelemetry {
      * use patterns like {@code (TracerSdkProvider) OpenTelemetry.getGlobalTracerProvider()}.
      */
     @ThreadSafe
-    // Visible for testing
+    @VisibleForTesting
     static class ObfuscatedTracerProvider implements TracerProvider {
 
         private final SdkTracerProvider delegate;
