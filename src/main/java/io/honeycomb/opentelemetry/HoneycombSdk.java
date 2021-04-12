@@ -4,13 +4,17 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
+import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
@@ -49,6 +53,7 @@ public final class HoneycombSdk implements OpenTelemetry {
         private final String HONEYCOMB_TEAM_HEADER = "X-Honeycomb-Team";
         private final String HONEYCOMB_DATASET_HEADER = "X-Honeycomb-Dataset";
         private final String DEFAULT_ENDPOINT = "https://api.honeycomb.io";
+        private final String SERVICE_NAME_FIELD = "service.name";
 
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
@@ -56,6 +61,7 @@ public final class HoneycombSdk implements OpenTelemetry {
         private String apiKey;
         private String dataset;
         private String endpoint;
+        private String serviceName;
 
         /**
          * Sets the Honeycomb API Key to use.
@@ -90,6 +96,16 @@ public final class HoneycombSdk implements OpenTelemetry {
          */
         public Builder setEndpoint(String endpoint) {
             this.endpoint = endpoint;
+            return this;
+        }
+
+        /**
+         * Sets the service name as a resource attribute.
+         *
+         * @param serviceName a String to use as the service name
+         */
+        public Builder setServiceName(String serviceName) {
+            this.serviceName = serviceName;
             return this;
         }
 
@@ -164,15 +180,21 @@ public final class HoneycombSdk implements OpenTelemetry {
                 .addHeader(HONEYCOMB_DATASET_HEADER, dataset)
                 .build();
 
-            SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
                 .setSampler(sampler)
-                .addSpanProcessor(BatchSpanProcessor.builder(exporter).build()).build();
+                .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
+
+            if (serviceName != null) {
+                tracerProviderBuilder.setResource(
+                    Resource.create(
+                        Attributes.of(AttributeKey.stringKey(SERVICE_NAME_FIELD), serviceName)));
+            }
 
             if (propagators == null) {
                 propagators = ContextPropagators.create(W3CTraceContextPropagator.getInstance());
             }
 
-            return new HoneycombSdk(tracerProvider, propagators);
+            return new HoneycombSdk(tracerProviderBuilder.build(), propagators);
         }
     }
 
