@@ -33,7 +33,6 @@ subprojects {
             url = uri("https://oss.sonatype.org/content/repositories/snapshots")
         }
         mavenCentral()
-        flatDir {	dirs System.getenv("SDK_PATH") }
     }
 
     tasks {
