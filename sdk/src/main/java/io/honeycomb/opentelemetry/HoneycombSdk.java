@@ -52,6 +52,8 @@ public final class HoneycombSdk implements OpenTelemetry {
 
         private final String HONEYCOMB_TEAM_HEADER = "X-Honeycomb-Team";
         private final String HONEYCOMB_DATASET_HEADER = "X-Honeycomb-Dataset";
+        private final String HONEYCOMB_SDK_VERSION_HEADER = "X-Honeycomb-SDK-Version";
+        private final String HONEYCOMB_SDK_VERSION_PREFIX = "Honeycomb-OpenTelemetry-Java";
         private final String DEFAULT_ENDPOINT = "https://api.honeycomb.io";
         private final String SERVICE_NAME_FIELD = "service.name";
 
@@ -178,6 +180,7 @@ public final class HoneycombSdk implements OpenTelemetry {
             SpanExporter exporter = builder
                 .addHeader(HONEYCOMB_TEAM_HEADER, apiKey)
                 .addHeader(HONEYCOMB_DATASET_HEADER, dataset)
+                .addHeader(HONEYCOMB_SDK_VERSION_HEADER, HONEYCOMB_SDK_VERSION_PREFIX + " 1.0-SNAPSHOT")
                 .build();
 
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
