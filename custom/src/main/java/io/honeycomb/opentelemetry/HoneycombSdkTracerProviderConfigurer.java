@@ -5,6 +5,11 @@ import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.sdk.autoconfigure.spi.SdkTracerProviderConfigurer;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 
+/**
+ * Honeycomb implementation of {@link SdkTracerProviderConfigurer} SPI.
+ *
+ * This configurer adds a trace sampler and a span processor to the OpenTelemetry auto-instrumentation.
+ */
 public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderConfigurer {
     @Override
     public void configure(SdkTracerProviderBuilder tracerProvider) {
