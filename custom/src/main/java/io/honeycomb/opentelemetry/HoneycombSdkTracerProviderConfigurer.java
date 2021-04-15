@@ -1,9 +1,9 @@
 package io.honeycomb.opentelemetry;
 
-import io.honeycomb.opentelemetry.sdk.trace.samplers.*;
-import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.*;
-import io.opentelemetry.sdk.autoconfigure.spi.*;
-import io.opentelemetry.sdk.trace.*;
+import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
+import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
+import io.opentelemetry.sdk.autoconfigure.spi.SdkTracerProviderConfigurer;
+import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 
 public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderConfigurer {
     @Override

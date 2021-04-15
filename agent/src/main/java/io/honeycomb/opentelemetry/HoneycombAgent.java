@@ -1,8 +1,8 @@
 package io.honeycomb.opentelemetry;
 
-import io.opentelemetry.javaagent.*;
+import io.opentelemetry.javaagent.OpenTelemetryAgent;
 
-import java.lang.instrument.*;
+import java.lang.instrument.Instrumentation;
 
 public class HoneycombAgent {
 

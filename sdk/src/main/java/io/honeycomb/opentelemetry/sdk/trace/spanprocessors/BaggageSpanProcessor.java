@@ -1,8 +1,10 @@
 package io.honeycomb.opentelemetry.sdk.trace.spanprocessors;
 
-import io.opentelemetry.api.baggage.*;
-import io.opentelemetry.context.*;
-import io.opentelemetry.sdk.trace.*;
+import io.opentelemetry.api.baggage.Baggage;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.sdk.trace.ReadWriteSpan;
+import io.opentelemetry.sdk.trace.ReadableSpan;
+import io.opentelemetry.sdk.trace.SpanProcessor;
 
 public class BaggageSpanProcessor implements SpanProcessor {
     @Override
