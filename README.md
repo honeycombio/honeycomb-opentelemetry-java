@@ -32,7 +32,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:agent-1.0-SNAPSHOT-all.jar jar java-example-webapp-1.0.0.jar
+-javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 ## SDK Usage
 
