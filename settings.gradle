@@ -1,2 +1,7 @@
 rootProject.name = 'honeycomb-opentelemetry-java'
 
+include "agent"
+include "custom"
+include "sdk"
+include 'util'
+
