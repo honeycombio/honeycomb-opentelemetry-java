@@ -1,4 +1,4 @@
-package com.example.javaagent;
+package io.honeycomb.opentelemetry.sdk.trace.spanprocessors;
 
 import io.opentelemetry.api.baggage.*;
 import io.opentelemetry.context.*;

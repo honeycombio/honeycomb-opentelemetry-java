@@ -1,1 +1,1 @@
-com.example.javaagent.HoneycombSdkTracerProviderConfigurer
+io.honeycomb.opentelemetry.HoneycombSdkTracerProviderConfigurer
