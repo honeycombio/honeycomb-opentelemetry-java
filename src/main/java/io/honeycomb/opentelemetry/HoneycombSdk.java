@@ -48,7 +48,7 @@ public final class HoneycombSdk implements OpenTelemetry {
     }
 
     public static class Builder {
-        Builder() {}
+        public Builder() {}
 
         private final String HONEYCOMB_TEAM_HEADER = "X-Honeycomb-Team";
         private final String HONEYCOMB_DATASET_HEADER = "X-Honeycomb-Dataset";
