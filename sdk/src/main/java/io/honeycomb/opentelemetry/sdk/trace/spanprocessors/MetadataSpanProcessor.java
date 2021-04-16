@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class MetadataSpanProcessor implements SpanProcessor {
 
-    private final String HONEYCOMB_SDK_VERSION_ATTRIBUTE = "honeycomb.meta.sdk.version";
+    private final String HONEYCOMB_SDK_VERSION_ATTRIBUTE = "honeycomb.meta.sdk_version";
     private final String HONEYCOMB_SDK_VERSION_PREFIX = "Honeycomb-OpenTelemetry-Java";
     private final Map<String, String> metadataCache = new HashMap<String, String>();
 
