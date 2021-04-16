@@ -36,7 +36,9 @@ public class MetadataSpanProcessor implements SpanProcessor {
             return "unknown-version";
         }
 
-        return properties.getProperty("version");
+        String version = properties.getProperty("version");
+        metadataCache.put("version", version);
+        return version;
     }
 
     @Override
