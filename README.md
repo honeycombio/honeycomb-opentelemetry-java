@@ -17,6 +17,7 @@ The Honeycomb Agent has the following configuration options (system properties t
 | `service.name` | `SERVICE_NAME` | [optional] service.name attribute to be used for all events (defaults to empty)
 
 Using environment variables:
+
 ```sh
 SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
@@ -26,6 +27,7 @@ java -javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 
 Using system properties:
+
 ```sh
 java \
 -Dsample.rate=2 \
@@ -34,22 +36,27 @@ java \
 -Dhoneycomb.dataset=my-dataset \
 -javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
 ```
+
 ## SDK Usage
 
 The Honeycomb OpenTelemetry Distro provides a convenient builder syntax for configuring the OpenTelemetry SDK:
 
-    HoneycombSdk honeycomb = new HoneycombSdk.Builder()
-        .setApiKey(YOUR_API_KEY)
-        .setDataset(YOUR_DATASET)
-        .setSampler(new DeterministicSampler(5)) // optional
-        .setEndpoint(YOUR_ENDPOINT) // optional
-        .setServiceName(YOUR_SERVICE_NAME)
-        .build();
+```java
+HoneycombSdk honeycomb = new HoneycombSdk.Builder()
+    .setApiKey(YOUR_API_KEY)
+    .setDataset(YOUR_DATASET)
+    .setSampler(new DeterministicSampler(5)) // optional
+    .setEndpoint(YOUR_ENDPOINT) // optional
+    .setServiceName(YOUR_SERVICE_NAME)
+    .build();
+```
 
-The HoneycombSdk instance can then be used to create a Tracer:
+The `HoneycombSdk` instance can then be used to create a Tracer:
 
-    Tracer tracer = honeycomb.getTracer("instrumentation-name");
-    Span span = tracer.spanBuilder("my-span").startSpan();
+```java
+Tracer tracer = honeycomb.getTracer("instrumentation-name");
+Span span = tracer.spanBuilder("my-span").startSpan();
+```
 
 ## License
 
