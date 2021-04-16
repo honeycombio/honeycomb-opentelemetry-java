@@ -4,6 +4,11 @@ import io.opentelemetry.javaagent.OpenTelemetryAgent;
 
 import java.lang.instrument.Instrumentation;
 
+/**
+ * Honeycomb wrapper around {@link OpenTelemetryAgent}.
+ *
+ * HoneycombAgent converts honeycomb environment configuration into OpenTelemetry configuration.
+ */
 public class HoneycombAgent {
 
     public static void premain(String agentArgs, Instrumentation inst) {

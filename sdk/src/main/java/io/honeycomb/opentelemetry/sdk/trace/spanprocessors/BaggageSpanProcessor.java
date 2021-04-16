@@ -6,6 +6,9 @@ import io.opentelemetry.sdk.trace.ReadWriteSpan;
 import io.opentelemetry.sdk.trace.ReadableSpan;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 
+/**
+ * This span processor copies attributes stored in {@link Baggage} into each newly created {@link io.opentelemetry.api.trace.Span}.
+ */
 public class BaggageSpanProcessor implements SpanProcessor {
     @Override
     public void onStart(Context parentContext, ReadWriteSpan span) {
