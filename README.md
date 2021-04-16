@@ -17,6 +17,7 @@ The Honeycomb Agent has the following configuration options (system properties t
 | `service.name` | `SERVICE_NAME` | [optional] service.name attribute to be used for all events (defaults to empty)
 
 Using environment variables:
+
 ```sh
 SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
@@ -26,6 +27,7 @@ java -javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 
 Using system properties:
+
 ```sh
 java \
 -Dsample.rate=2 \
@@ -34,22 +36,64 @@ java \
 -Dhoneycomb.dataset=my-dataset \
 -javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
 ```
+
+### Custom instrumentation with agent
+
+If you're using the Honeycomb OpenTelemetry Agent, you can add custom instrumentation directly to auto-instrumented trace and span contexts using the vanilla OpenTelemetry SDK.
+
+Add the OpenTelemetry Packages to your project's dependencies.
+For Gradle:
+
+```java
+dependencies {
+    compile('io.opentelemetry:opentelemetry-api:1.0.0')
+    compile('io.opentelemetry:opentelemetry-sdk:1.0.0')
+    compile('io.opentelemetry:opentelemetry-exporter-otlp:1.0.0')
+    compile('io.opentelemetry:opentelemetry-extension-annotations:1.0.0')
+}
+```
+
+Then, import the relevant OpenTelemetry SDK package into your code.
+Here's an example adding custom instrumentation to an auto-instrumented Spring controller:
+
+```java
+// import OpenTelemetry package into your code
+import io.opentelemetry.api.trace.Span;
+
+@RestController
+public class ExampleController {
+    @RequestMapping("/")
+    public String index() {
+        // access the current context and add a custom attribute
+        Span span = Span.current();
+        span.setAttribute("custom_field", "important value");
+        return "hello world";
+    }
+}
+```
+
 ## SDK Usage
 
-The Honeycomb OpenTelemetry Distro provides a convenient builder syntax for configuring the OpenTelemetry SDK:
+Teams using the Honeycomb OpenTelemetry Agent won't need to set up the Honeycomb OpenTelemetry SDK.
 
-    HoneycombSdk honeycomb = new HoneycombSdk.Builder()
-        .setApiKey(YOUR_API_KEY)
-        .setDataset(YOUR_DATASET)
-        .setSampler(new DeterministicSampler(5)) // optional
-        .setEndpoint(YOUR_ENDPOINT) // optional
-        .setServiceName(YOUR_SERVICE_NAME)
-        .build();
+For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a convenient builder syntax for configuration:
 
-The HoneycombSdk instance can then be used to create a Tracer:
+```java
+HoneycombSdk honeycomb = new HoneycombSdk.Builder()
+    .setApiKey(YOUR_API_KEY)
+    .setDataset(YOUR_DATASET)
+    .setSampler(new DeterministicSampler(5)) // optional
+    .setEndpoint(YOUR_ENDPOINT) // optional
+    .setServiceName(YOUR_SERVICE_NAME)
+    .build();
+```
 
-    Tracer tracer = honeycomb.getTracer("instrumentation-name");
-    Span span = tracer.spanBuilder("my-span").startSpan();
+The `HoneycombSdk` instance can then be used to create a Tracer:
+
+```java
+Tracer tracer = honeycomb.getTracer("instrumentation-name");
+Span span = tracer.spanBuilder("my-span").startSpan();
+```
 
 ## License
 
