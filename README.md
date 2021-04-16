@@ -37,9 +37,46 @@ java \
 -javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 
+### Custom instrumentation with agent
+
+If you're using the Honeycomb OpenTelemetry Agent, you can add custom instrumentation directly to auto-instrumented trace and span contexts using the vanilla OpenTelemetry SDK.
+
+Add the OpenTelemetry Packages to your project's dependencies.
+For Gradle:
+
+```java
+dependencies {
+    compile('io.opentelemetry:opentelemetry-api:1.0.0')
+    compile('io.opentelemetry:opentelemetry-sdk:1.0.0')
+    compile('io.opentelemetry:opentelemetry-exporter-otlp:1.0.0')
+    compile('io.opentelemetry:opentelemetry-extension-annotations:1.0.0')
+}
+```
+
+Then, import the relevant OpenTelemetry SDK package into your code.
+Here's an example adding custom instrumentation to an auto-instrumented Spring controller:
+
+```java
+// import OpenTelemetry package into your code
+import io.opentelemetry.api.trace.Span;
+
+@RestController
+public class ExampleController {
+    @RequestMapping("/")
+    public String index() {
+        // access the current context and add a custom attribute
+        Span span = Span.current();
+        span.setAttribute("custom_field", "important value");
+        return "hello world";
+    }
+}
+```
+
 ## SDK Usage
 
-The Honeycomb OpenTelemetry Distro provides a convenient builder syntax for configuring the OpenTelemetry SDK:
+Teams using the Honeycomb OpenTelemetry Agent won't need to set up the Honeycomb OpenTelemetry SDK.
+
+For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a convenient builder syntax for configuration:
 
 ```java
 HoneycombSdk honeycomb = new HoneycombSdk.Builder()
