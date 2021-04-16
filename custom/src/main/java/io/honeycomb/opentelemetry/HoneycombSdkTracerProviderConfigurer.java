@@ -2,8 +2,10 @@ package io.honeycomb.opentelemetry;
 
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
+import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.MetadataSpanProcessor;
 import io.opentelemetry.sdk.autoconfigure.spi.SdkTracerProviderConfigurer;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
+import io.opentelemetry.sdk.trace.SpanProcessor;
 
 /**
  * Honeycomb implementation of {@link SdkTracerProviderConfigurer} SPI.
@@ -22,6 +24,9 @@ public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderCo
         }
         tracerProvider
             .setSampler(new DeterministicTraceSampler(sampleRate))
-            .addSpanProcessor(new BaggageSpanProcessor());
+            .addSpanProcessor(SpanProcessor.composite(
+                new BaggageSpanProcessor(),
+                new MetadataSpanProcessor()
+            ));
     }
 }

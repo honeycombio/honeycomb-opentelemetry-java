@@ -9,6 +9,14 @@ test {
     useJUnitPlatform()
 }
 
+processResources {
+    filesMatching('**/sdk.properties') {
+        filter {
+            it.replace('sdk.version', project.property('version'))
+        }
+    }
+}
+
 dependencies {
     api "io.opentelemetry:opentelemetry-sdk:${versions.opentelemetry}"
 
