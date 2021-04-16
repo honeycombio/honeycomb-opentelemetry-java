@@ -17,16 +17,15 @@ import java.util.Properties;
  */
 public class MetadataSpanProcessor implements SpanProcessor {
 
-    private final String HONEYCOMB_SDK_VERSION_ATTRIBUTE = "honeycomb.meta.sdk_version";
-    private final String HONEYCOMB_SDK_VERSION_PREFIX = "Honeycomb-OpenTelemetry-Java";
+    private final String HONEYCOMB_SDK_VERSION_ATTRIBUTE = "honeycomb.sdk.version";
     private final Map<String, String> metadataCache = new HashMap<String, String>();
 
     /**
      * Get version from properties file, storing it in an in-memory hashmap.
      */
     private String getVersion() {
-        if (metadataCache.containsKey("version")) {
-            return metadataCache.get("version");
+        if (metadataCache.containsKey("honeycomb.sdk.version")) {
+            return metadataCache.get("honeycomb.sdk.version");
         }
 
         final Properties properties = new Properties();
@@ -36,16 +35,15 @@ public class MetadataSpanProcessor implements SpanProcessor {
             return "unknown-version";
         }
 
-        String version = properties.getProperty("version");
-        metadataCache.put("version", version);
+        String version = properties.getProperty("honeycomb.sdk.version");
+        metadataCache.put("honeycomb.sdk.version", version);
         return version;
     }
 
     @Override
     public void onStart(Context parentContext, ReadWriteSpan span) {
         span.setAttribute(
-            HONEYCOMB_SDK_VERSION_ATTRIBUTE,
-            HONEYCOMB_SDK_VERSION_PREFIX + " " + getVersion());
+            HONEYCOMB_SDK_VERSION_ATTRIBUTE, getVersion());
     }
 
     @Override

@@ -12,7 +12,7 @@ test {
 processResources {
     filesMatching('**/sdk.properties') {
         filter {
-            it.replace('sdk.version', project.property('version'))
+            it.replace('{sdk.version}', project.property('version'))
         }
     }
 }
