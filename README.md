@@ -78,7 +78,6 @@ For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a 
 ### Maven
 
 ```xml
-
 <project>
     <dependencies>
         <dependency>
@@ -105,7 +104,6 @@ If you'd like to use another gRPC transport, you can exclude the `grpc-netty-sha
 
 Maven
 ```xml
-
 <project>
     <dependencies>
         <dependency>
