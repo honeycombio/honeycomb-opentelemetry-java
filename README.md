@@ -44,11 +44,9 @@ If you're using the Honeycomb OpenTelemetry Agent, you can add custom instrument
 Add the OpenTelemetry Packages to your project's dependencies.
 For Gradle:
 
-```java
+```groovy
 dependencies {
     compile('io.opentelemetry:opentelemetry-api:1.0.0')
-    compile('io.opentelemetry:opentelemetry-sdk:1.0.0')
-    compile('io.opentelemetry:opentelemetry-exporter-otlp:1.0.0')
     compile('io.opentelemetry:opentelemetry-extension-annotations:1.0.0')
 }
 ```
@@ -75,8 +73,64 @@ public class ExampleController {
 ## SDK Usage
 
 Teams using the Honeycomb OpenTelemetry Agent won't need to set up the Honeycomb OpenTelemetry SDK.
+For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a convenient builder syntax for configuration.
 
-For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a convenient builder syntax for configuration:
+### Maven
+
+```xml
+<project>
+    <dependencies>
+        <dependency>
+            <groupId>io.honeycomb</groupId>
+            <artifactId>sdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+### Gradle
+
+```groovy
+dependencies {
+    implementation('io.honeycomb:sdk:1.0-SNAPSHOT')
+}
+```
+
+### gRPC transport
+
+A gRPC transport is required to transmit OpenTelemetry data. HoneycombSDK includes `grpc-netty-shaded`.
+If you'd like to use another gRPC transport, you can exclude the `grpc-netty-shaded` transitive dependency:
+
+Maven
+```xml
+<project>
+    <dependencies>
+        <dependency>
+            <groupId>io.honeycomb</groupId>
+            <artifactId>sdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-netty-shaded</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+Gradle
+```groovy
+dependencies {
+    implementation('io.honeycomb:sdk:1.0-SNAPSHOT') {
+        exclude group: 'io.grpc', module: 'grpc-netty-shaded'
+    }
+}
+```
+
+### Setup
 
 ```java
 HoneycombSdk honeycomb = new HoneycombSdk.Builder()
