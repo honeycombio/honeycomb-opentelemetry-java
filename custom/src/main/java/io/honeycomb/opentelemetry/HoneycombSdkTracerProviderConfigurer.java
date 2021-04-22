@@ -8,9 +8,6 @@ import io.opentelemetry.sdk.autoconfigure.spi.SdkTracerProviderConfigurer;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 
-import java.io.InputStream;
-import java.util.Properties;
-
 /**
  * Honeycomb implementation of {@link SdkTracerProviderConfigurer} SPI.
  *
@@ -26,23 +23,16 @@ public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderCo
             System.err.println("WARN: Sample rate provided is not an integer, using default sample rate of 1");
             sampleRate = 1;
         }
-        try {
-            AttributesBuilder builder = Attributes.builder();
-            final Properties properties = new Properties();
-            InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("sdk.properties");
-            System.out.println(input);
-            if (input != null) {
-                properties.load(input);
-                properties.forEach((k, v) -> {
-                    builder.put(k.toString(), v.toString());
-                });
-                tracerProvider.setResource(
-                    Resource.create(builder.build()));
-            }
-        } catch (Throwable t) {
-            System.err.println(t);
-            t.printStackTrace();
+
+        AttributesBuilder builder = Attributes.builder();
+        DistroMetadata.getMetadata().forEach(builder::put);
+        String serviceName = EnvironmentConfiguration.getServiceName();
+        if (serviceName != null) {
+            builder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
         }
+        tracerProvider.setResource(
+            Resource.create(builder.build()));
+
         tracerProvider
             .setSampler(new DeterministicTraceSampler(sampleRate))
             .addSpanProcessor(new BaggageSpanProcessor());

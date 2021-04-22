@@ -56,7 +56,6 @@ public final class HoneycombSdk implements OpenTelemetry {
         private final String HONEYCOMB_TEAM_HEADER = "X-Honeycomb-Team";
         private final String HONEYCOMB_DATASET_HEADER = "X-Honeycomb-Dataset";
         private final String DEFAULT_ENDPOINT = "https://api.honeycomb.io";
-        private final String SERVICE_NAME_FIELD = "service.name";
 
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
@@ -153,24 +152,6 @@ public final class HoneycombSdk implements OpenTelemetry {
         }
 
         /**
-         * Helper method for getting metadata from a local properties file.
-         */
-        private Attributes getMetadata() {
-            AttributesBuilder builder = Attributes.builder();
-            final Properties properties = new Properties();
-            try {
-                properties.load(this.getClass().getClassLoader().getResourceAsStream("sdk.properties"));
-            } catch (IOException ignored) {}
-            properties.forEach((k, v) -> {
-                builder.put(k.toString(), v.toString());
-            });
-            if (serviceName != null) {
-                builder.put(SERVICE_NAME_FIELD, serviceName);
-            }
-            return builder.build();
-        }
-
-        /**
          * Returns a new {@link HoneycombSdk} built with the configuration of this {@link
          * Builder}. This SDK is not registered as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. It is recommended that you register one SDK using {@link
@@ -201,13 +182,18 @@ public final class HoneycombSdk implements OpenTelemetry {
                 .addHeader(HONEYCOMB_DATASET_HEADER, dataset)
                 .build();
 
+
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
                 .setSampler(sampler)
                 .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
 
+            AttributesBuilder attributesBuilder = Attributes.builder();
+            DistroMetadata.getMetadata().forEach(attributesBuilder::put);
             if (serviceName != null) {
-                tracerProviderBuilder.setResource(Resource.create(getMetadata()));
+                attributesBuilder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
+            tracerProviderBuilder.setResource(
+                Resource.create(attributesBuilder.build()));
 
             if (propagators == null) {
                 propagators = ContextPropagators.create(W3CTraceContextPropagator.getInstance());
