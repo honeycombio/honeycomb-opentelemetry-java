@@ -7,6 +7,7 @@ import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.sdk.autoconfigure.spi.SdkTracerProviderConfigurer;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Honeycomb implementation of {@link SdkTracerProviderConfigurer} SPI.
@@ -27,7 +28,7 @@ public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderCo
         AttributesBuilder builder = Attributes.builder();
         DistroMetadata.getMetadata().forEach(builder::put);
         String serviceName = EnvironmentConfiguration.getServiceName();
-        if (serviceName != null) {
+        if (StringUtils.isEmpty(serviceName)) {
             builder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
         }
         tracerProvider.setResource(

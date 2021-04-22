@@ -18,11 +18,9 @@ import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Properties;
 
 /**
  * The Honeycomb SDK implementation of {@link OpenTelemetry}.
@@ -189,7 +187,7 @@ public final class HoneycombSdk implements OpenTelemetry {
 
             AttributesBuilder attributesBuilder = Attributes.builder();
             DistroMetadata.getMetadata().forEach(attributesBuilder::put);
-            if (serviceName != null) {
+            if (StringUtils.isEmpty(serviceName)) {
                 attributesBuilder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
             tracerProviderBuilder.setResource(

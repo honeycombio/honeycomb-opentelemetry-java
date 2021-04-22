@@ -10,6 +10,7 @@ def relocatePackages = ext.relocatePackages
 dependencies {
     implementation project(":sdk")
     implementation project(":util")
+    compileOnly("org.apache.commons:commons-lang3:3.12.0")
     compileOnly("io.opentelemetry:opentelemetry-sdk:${versions.opentelemetry}")
     compileOnly("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:${versions.opentelemetryAlpha}")
     compileOnly("io.opentelemetry.javaagent:opentelemetry-javaagent-spi:${versions.opentelemetryJavaagentAlpha}")
