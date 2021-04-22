@@ -17,6 +17,8 @@ dependencies {
 
 tasks {
     shadowJar {
+        archivesBaseName = "honeycomb-opentelemetry-custom"
+
         mergeServiceFiles()
 
         exclude("**/module-info.class")

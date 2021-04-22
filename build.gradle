@@ -1,5 +1,7 @@
-group 'io.honeycomb'
-version '1.0-SNAPSHOT'
+allprojects {
+    project.group = "io.honeycomb"
+    project.version = "1.0-SNAPSHOT"
+}
 
 subprojects {
     version = rootProject.version
