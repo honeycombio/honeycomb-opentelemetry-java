@@ -13,6 +13,7 @@ public class EnvironmentConfiguration {
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String SAMPLE_RATE = "SAMPLE_RATE";
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
+    public static final String SERVICE_NAME_FIELD = "service.name";
 
     /**
      * Reads the Honeycomb API key.

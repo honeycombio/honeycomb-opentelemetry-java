@@ -4,8 +4,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
@@ -18,6 +18,7 @@ import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -53,7 +54,6 @@ public final class HoneycombSdk implements OpenTelemetry {
         private final String HONEYCOMB_TEAM_HEADER = "X-Honeycomb-Team";
         private final String HONEYCOMB_DATASET_HEADER = "X-Honeycomb-Dataset";
         private final String DEFAULT_ENDPOINT = "https://api.honeycomb.io";
-        private final String SERVICE_NAME_FIELD = "service.name";
 
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
@@ -180,15 +180,18 @@ public final class HoneycombSdk implements OpenTelemetry {
                 .addHeader(HONEYCOMB_DATASET_HEADER, dataset)
                 .build();
 
+
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
                 .setSampler(sampler)
                 .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
 
-            if (serviceName != null) {
-                tracerProviderBuilder.setResource(
-                    Resource.create(
-                        Attributes.of(AttributeKey.stringKey(SERVICE_NAME_FIELD), serviceName)));
+            AttributesBuilder attributesBuilder = Attributes.builder();
+            DistroMetadata.getMetadata().forEach(attributesBuilder::put);
+            if (StringUtils.isNotEmpty(serviceName)) {
+                attributesBuilder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
+            tracerProviderBuilder.setResource(
+                Resource.create(attributesBuilder.build()));
 
             if (propagators == null) {
                 propagators = ContextPropagators.create(W3CTraceContextPropagator.getInstance());
