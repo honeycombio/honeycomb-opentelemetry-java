@@ -4,3 +4,7 @@ plugins {
 
 group 'io.honeycomb'
 version '1.0-SNAPSHOT'
+
+jar {
+    archivesBaseName = "honeycomb-opentelemetry-util"
+}

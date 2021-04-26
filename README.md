@@ -82,7 +82,7 @@ For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a 
     <dependencies>
         <dependency>
             <groupId>io.honeycomb</groupId>
-            <artifactId>sdk</artifactId>
+            <artifactId>honeycomb-opentelemetry-sdk</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
@@ -93,7 +93,7 @@ For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a 
 
 ```groovy
 dependencies {
-    implementation('io.honeycomb:sdk:1.0-SNAPSHOT')
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:1.0-SNAPSHOT')
 }
 ```
 
@@ -108,7 +108,7 @@ Maven
     <dependencies>
         <dependency>
             <groupId>io.honeycomb</groupId>
-            <artifactId>sdk</artifactId>
+            <artifactId>honeycomb-opentelemetry-sdk</artifactId>
             <version>1.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
@@ -124,7 +124,7 @@ Maven
 Gradle
 ```groovy
 dependencies {
-    implementation('io.honeycomb:sdk:1.0-SNAPSHOT') {
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:1.0-SNAPSHOT') {
         exclude group: 'io.grpc', module: 'grpc-netty-shaded'
     }
 }

@@ -30,6 +30,8 @@ CopySpec isolateSpec() {
 
 tasks {
     shadowJar {
+        archivesBaseName = "honeycomb-opentelemetry-javaagent"
+
         dependsOn ':custom:shadowJar'
         with isolateSpec()
 
