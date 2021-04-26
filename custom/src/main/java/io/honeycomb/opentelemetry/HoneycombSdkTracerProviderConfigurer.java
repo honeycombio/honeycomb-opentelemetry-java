@@ -25,14 +25,14 @@ public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderCo
             sampleRate = 1;
         }
 
-        AttributesBuilder builder = Attributes.builder();
-        DistroMetadata.getMetadata().forEach(builder::put);
+        AttributesBuilder attributesBuilder = Attributes.builder();
+        DistroMetadata.getMetadata().forEach(attributesBuilder::put);
         String serviceName = EnvironmentConfiguration.getServiceName();
         if (StringUtils.isNotEmpty(serviceName)) {
-            builder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
+            attributesBuilder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
         }
         tracerProvider.setResource(
-            Resource.create(builder.build()));
+            Resource.create(attributesBuilder.build()));
 
         tracerProvider
             .setSampler(new DeterministicTraceSampler(sampleRate))
