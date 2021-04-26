@@ -28,7 +28,7 @@ public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderCo
         AttributesBuilder builder = Attributes.builder();
         DistroMetadata.getMetadata().forEach(builder::put);
         String serviceName = EnvironmentConfiguration.getServiceName();
-        if (StringUtils.isEmpty(serviceName)) {
+        if (StringUtils.isNotEmpty(serviceName)) {
             builder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
         }
         tracerProvider.setResource(

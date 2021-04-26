@@ -187,7 +187,7 @@ public final class HoneycombSdk implements OpenTelemetry {
 
             AttributesBuilder attributesBuilder = Attributes.builder();
             DistroMetadata.getMetadata().forEach(attributesBuilder::put);
-            if (StringUtils.isEmpty(serviceName)) {
+            if (StringUtils.isNotEmpty(serviceName)) {
                 attributesBuilder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
             tracerProviderBuilder.setResource(
