@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+}
+
+
+jar {
+    archivesBaseName = "honeycomb-opentelemetry-common"
+}
