@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation('io.honeycomb:sdk:1.0-SNAPSHOT')
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.0')
 }
 
 ```
