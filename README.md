@@ -23,7 +23,7 @@ SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:agent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 
 Using system properties:
@@ -34,7 +34,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:agent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 
 ### Custom instrumentation with agent
