@@ -8,6 +8,16 @@ This is a library for using OpenTelemetry Java with Honeycomb. It makes it easy 
 
 ## Agent Usage
 
+Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/latest/download/honeycomb-opentelemetry-javaagent-0.1.0-all.jar).
+
+The agent is run as a `-javaagent` alongside your application.
+
+```sh
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+```
+
+### Configuration
+
 The Honeycomb Agent has the following configuration options (system properties take precedence over environment variables):
 
 | System property                      | Environment variable                 | Description                                                                      |
@@ -25,7 +35,7 @@ SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
 ```
 
 Using system properties:
@@ -36,7 +46,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
 ```
 
 ### Custom instrumentation with agent
