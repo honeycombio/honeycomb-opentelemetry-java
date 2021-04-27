@@ -44,11 +44,11 @@ Your local Maven repository is located at `~/.m2/repository/`.
 Go there to inspect your build artifacts:
 
 ```sh
-$ cd ~/.m2/repository/io/honeycomb/honeycomb-opentelemetry-sdk/1.0-SNAPSHOT
+$ cd ~/.m2/repository/io/honeycomb/honeycomb-opentelemetry-sdk/0.1.0
 $ ls -1
-honeycomb-opentelemetry-sdk-1.0-SNAPSHOT.jar
-honeycomb-opentelemetry-sdk-1.0-SNAPSHOT.module
-honeycomb-opentelemetry-sdk-1.0-SNAPSHOT.pom
+honeycomb-opentelemetry-sdk-0.1.0.jar
+honeycomb-opentelemetry-sdk-0.1.0.module
+honeycomb-opentelemetry-sdk-0.1.0.pom
 maven-metadata-local.xml
 ```
 
