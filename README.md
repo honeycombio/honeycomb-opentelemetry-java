@@ -4,6 +4,8 @@
 
 This is a library for using OpenTelemetry Java with Honeycomb. It makes it easy to get started.
 
+STATUS: this library is not GA, yet. You're welcome to try it, and let us know your feedback!
+
 ## Agent Usage
 
 The Honeycomb Agent has the following configuration options (system properties take precedence over environment variables):
