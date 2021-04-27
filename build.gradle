@@ -39,7 +39,7 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(8))
+            languageVersion.set(JavaLanguageVersion.of(8)) // compile it to ensure runtime compatibility with Java 8
         }
     }
 }
