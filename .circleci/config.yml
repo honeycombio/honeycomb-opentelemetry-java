@@ -3,6 +3,37 @@ version: 2.1
 orbs:
   gradle: circleci/gradle@2.2.0
 
+jobs:
+  build:
+    executor:
+      name: gradle/default
+      tag: "13.0"
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: mkdir -p ~/artifacts
+            - run: ./gradlew build
+            - run: cp agent/build/libs/*all.jar ~/artifacts
+            - persist_to_workspace:
+                root: ~/
+                paths:
+                  - artifacts
+            - store_artifacts:
+                path: ~/artifacts
+  publish_github:
+    docker:
+      - image: cibuilds/github:0.13.0
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            echo "about to publish to tag ${CIRCLE_TAG}"
+            ls -l ~/artifacts/*
+#            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/artifacts
+
 matrix_executors: &matrix_executors
   matrix:
     parameters:
@@ -34,3 +65,18 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - build:
+          requires:
+            - gradle/test
+          filters:
+            tags:
+              only: /.*/
+      - publish_github:
+          context: Honeycomb Secrets for Public Repos
+          requires:
+            - build
+#          filters:
+#            tags:
+#              only: /^v.*/
+#            branches:
+#              ignore: /.*/
