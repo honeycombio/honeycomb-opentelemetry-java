@@ -23,7 +23,7 @@ SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 
 Using system properties:
@@ -34,7 +34,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:agent-1.0-SNAPSHOT-all.jar -jar java-example-webapp-1.0.0.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar java-example-webapp-1.0.0.jar
 ```
 
 ### Custom instrumentation with agent
@@ -83,7 +83,7 @@ For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a 
         <dependency>
             <groupId>io.honeycomb</groupId>
             <artifactId>honeycomb-opentelemetry-sdk</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
 </project>
@@ -93,7 +93,7 @@ For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a 
 
 ```groovy
 dependencies {
-    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:1.0-SNAPSHOT')
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.0')
 }
 ```
 
@@ -109,7 +109,7 @@ Maven
         <dependency>
             <groupId>io.honeycomb</groupId>
             <artifactId>honeycomb-opentelemetry-sdk</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.grpc</groupId>
@@ -124,7 +124,7 @@ Maven
 Gradle
 ```groovy
 dependencies {
-    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:1.0-SNAPSHOT') {
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.0') {
         exclude group: 'io.grpc', module: 'grpc-netty-shaded'
     }
 }
