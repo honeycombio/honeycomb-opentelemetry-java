@@ -3,17 +3,16 @@ version: 2.1
 orbs:
   gradle: circleci/gradle@2.2.0
 
-jobs:
-  test:
+matrix_executors: &matrix_executors
+  matrix:
     parameters:
-      java-version:
-        type: string
-    executor:
-      name: gradle/default
-      tag: << parameters.java-version >>
-    steps:
-      - checkout
-      - run: gradle test
+      executor:
+        - name: gradle/default
+          tag: "8.0"
+        - name: gradle/default
+          tag: "11.0"
+        - name: gradle/default
+          tag: "13.0"
 
 workflows:
   version: 2
@@ -26,17 +25,12 @@ workflows:
               only:
                 - main
     jobs:
-      - test: &test
-          matrix:
-            parameters:
-              java-version:
-                - "8.0"
-                - "11.0"
-                - "13.0"
+      - gradle/test:
+          <<: *matrix_executors
   build:
     jobs:
-      - test:
-          <<: *test
+      - gradle/test:
+          <<: *matrix_executors
           filters:
             tags:
               only: /.*/
