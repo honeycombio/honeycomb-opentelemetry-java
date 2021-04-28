@@ -62,12 +62,12 @@ For Maven:
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-api</artifactId>
-            <version>1.1.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-extension-annotations</artifactId>
-            <version>1.1.0</version>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 </project>
@@ -77,8 +77,8 @@ For Gradle:
 
 ```groovy
 dependencies {
-    compile('io.opentelemetry:opentelemetry-api:1.1.0')
-    compile('io.opentelemetry:opentelemetry-extension-annotations:1.1.0')
+    compile('io.opentelemetry:opentelemetry-api:1.0.1')
+    compile('io.opentelemetry:opentelemetry-extension-annotations:1.0.1')
 }
 ```
 
