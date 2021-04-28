@@ -33,6 +33,18 @@ jobs:
             ls -l ~/artifacts/*
             ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/artifacts
 
+filters_always: &filters_always
+  filters:
+    tags:
+      only: /.*/
+
+filters_publish: &filters_publish
+  filters:
+    tags:
+      only: /^v.*/
+    branches:
+      ignore: /.*/
+
 matrix_executors: &matrix_executors
   matrix:
     parameters:
@@ -61,21 +73,13 @@ workflows:
     jobs:
       - gradle/test:
           <<: *matrix_executors
-          filters:
-            tags:
-              only: /.*/
+          <<: *filters_always
       - build:
           requires:
             - gradle/test
-          filters:
-            tags:
-              only: /.*/
+          <<: *filters_always
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
             - build
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          <<: *filters_publish
