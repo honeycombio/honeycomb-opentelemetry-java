@@ -24,7 +24,7 @@ You can enrich your application's auto-instrumented telemetry by adding [custom 
 
 ## Agent Usage
 
-Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/latest/download/honeycomb-opentelemetry-javaagent-0.1.0-all.jar).
+Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/v0.1.0/honeycomb-opentelemetry-javaagent-0.1.0-all.jar).
 
 The agent is run as a `-javaagent` alongside your application.
 
