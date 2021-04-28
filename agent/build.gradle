@@ -1,9 +1,11 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "6.0.0"
+    id "maven-publish"
 }
 
 apply from: "$rootDir/gradle/shadow.gradle"
 
+def artifactName = "honeycomb-opentelemetry-javaagent"
 def relocatePackages = ext.relocatePackages
 
 configurations {
@@ -13,7 +15,7 @@ configurations {
 dependencies {
     customShadow project(path: ":custom", configuration: "shadow")
     implementation "io.opentelemetry.javaagent:opentelemetry-javaagent:${versions.opentelemetryJavaagent}:all"
-    implementation project(":util")
+    implementation project(":common")
 }
 
 CopySpec isolateSpec() {
@@ -30,7 +32,7 @@ CopySpec isolateSpec() {
 
 tasks {
     shadowJar {
-        archivesBaseName = "honeycomb-opentelemetry-javaagent"
+        archivesBaseName = "${artifactName}"
 
         dependsOn ':custom:shadowJar'
         with isolateSpec()
@@ -57,5 +59,14 @@ tasks {
 
     assemble {
         dependsOn(shadowJar)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = "${artifactName}"
+            from components.java
+        }
     }
 }
