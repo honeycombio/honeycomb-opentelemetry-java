@@ -42,4 +42,61 @@ subprojects {
             languageVersion.set(JavaLanguageVersion.of(8)) // compile it to ensure runtime compatibility with Java 8
         }
     }
+
+    plugins.withId("maven-publish") {
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from components.java
+                    artifactId = jar.archiveBaseName
+                    version = '0.1.0'
+                    versionMapping {
+                        usage('java-api') {
+                            fromResolutionOf('runtimeClasspath')
+                        }
+                        usage('java-runtime') {
+                            fromResolutionResult()
+                        }
+                    }
+                    pom {
+                        name = 'Honeycomb OpenTelemetry Exporters for Java'
+                        description = 'Exports OpenTelemetry data to Honeycomb.'
+                        url = 'https://docs.honeycomb.io/getting-data-in/open-standards/'
+                        licenses {
+                            license {
+                                name = 'The Apache License, Version 2.0'
+                                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = 'Honeycomb'
+                                name = 'Honeycomb'
+                                email = 'support@honeycomb.io'
+                                organization = 'Honeycomb'
+                                organizationUrl = 'https://honeycomb.io'
+                            }
+                        }
+                        scm {
+                            url = 'https://github.com/honeycombio/opentelemetry-java/tree/main/exporters'
+                            connection = 'scm:git:git@github.com:honeycombio/opentelemetry-java.git'
+                            developerConnection = 'scm:git:git@github.com:honeycombio/opentelemetry-java.git'
+                        }
+                    }
+                }
+            }
+            repositories {
+                maven {
+                    def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                    if (project.hasProperty('sonatypeUsername'))
+                        credentials {
+                            username sonatypeUsername
+                            password sonatypePassword
+                        }
+                }
+            }
+        }
+    }
 }
