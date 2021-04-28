@@ -44,11 +44,15 @@ subprojects {
     }
 
     plugins.withId("maven-publish") {
+        plugins.apply("signing")
+
         publishing {
             publications {
                 mavenJava(MavenPublication) {
                     from components.java
-                    artifactId = jar.archiveBaseName
+                    afterEvaluate {
+                        artifactId = project.findProperty("archivesBaseName") as String
+                    }
                     version = '0.1.0'
                     versionMapping {
                         usage('java-api') {
@@ -59,9 +63,8 @@ subprojects {
                         }
                     }
                     pom {
-                        name = 'Honeycomb OpenTelemetry Exporters for Java'
-                        description = 'Exports OpenTelemetry data to Honeycomb.'
-                        url = 'https://docs.honeycomb.io/getting-data-in/open-standards/'
+                        name = 'Honeycomb OpenTelemetry Distribution for Java'
+                        url = 'https://github.com/honeycombio/honeycomb-opentelemetry-java'
                         licenses {
                             license {
                                 name = 'The Apache License, Version 2.0'
@@ -78,9 +81,9 @@ subprojects {
                             }
                         }
                         scm {
-                            url = 'https://github.com/honeycombio/opentelemetry-java/tree/main/exporters'
-                            connection = 'scm:git:git@github.com:honeycombio/opentelemetry-java.git'
-                            developerConnection = 'scm:git:git@github.com:honeycombio/opentelemetry-java.git'
+                            url = 'https://github.com/honeycombio/honeycomb-opentelemetry-java'
+                            connection = 'scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-java.git'
+                            developerConnection = 'scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-java.git'
                         }
                     }
                 }

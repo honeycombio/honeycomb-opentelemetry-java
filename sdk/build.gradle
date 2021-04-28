@@ -30,12 +30,3 @@ dependencies {
 jar {
     archivesBaseName = "${artifactName}"
 }
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = "${artifactName}"
-            from components.java
-        }
-    }
-}
