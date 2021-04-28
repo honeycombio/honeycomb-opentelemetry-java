@@ -2,9 +2,24 @@
 
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java.svg?style=shield&circle-token=e2f4c30919ecbdbfb095415a6f4114a03dc491a0)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java)
 
-This is a library for using OpenTelemetry Java with Honeycomb. It makes it easy to get started.
+**STATUS: this library is BETA.** You're welcome to try it, and let us know your feedback!
 
-**STATUS: this library is not GA, yet.** You're welcome to try it, and let us know your feedback!
+This is Honeycomb's distribution of OpenTelemetry for Java. It makes getting started with OpenTelemetry and Honeycomb easier!
+
+## Why would I want to use this?
+
+- Streamlined configuration for sending data to Honeycomb!
+- Easy interop with existing instrumentation with OpenTelemetry!
+- Deterministic sampling!
+- Multi-span attributes!
+
+## Getting Started
+
+If you are looking for an all-in-one, easy-to-install auto-instrumentation for your Java application, you'll want to use the `honeycomb-opentelemetry-javaagent`.
+See the [Agent Usage](#agent-usage) section for setup.
+You can enrich your application's auto-instrumented telemetry by adding [custom instrumentation](#enrich-the-auto-instrumented-data) to your application code.
+
+If you want start first with manually instrumenting your application and are not interested in auto-instrumentation, you'll want to use the Honeycomb OpenTelemetry SDK. See the [SDK Usage](#sdk-usage) section for details.
 
 ## Agent Usage
 
@@ -49,11 +64,11 @@ java \
 -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
 ```
 
-### Custom instrumentation with agent
+### Enrich the Auto-Instrumented Data
 
-If you're using the Honeycomb OpenTelemetry Agent, you can add custom instrumentation directly to auto-instrumented trace and span contexts using the vanilla OpenTelemetry SDK.
+When using the Honeycomb OpenTelemetry Agent, you can add custom instrumentation directly to auto-instrumented trace and span contexts using the vanilla OpenTelemetry SDK.
 
-Add the OpenTelemetry Packages to your project's dependencies.
+Add the OpenTelemetry packages to your project's dependencies.
 
 For Maven:
 ```xml
@@ -83,7 +98,7 @@ dependencies {
 ```
 
 Then, import the relevant OpenTelemetry SDK package into your code.
-Here's an example adding custom instrumentation to an auto-instrumented Spring controller:
+Here's an example adding a custom attribute to a span created by the agent for a Spring controller:
 
 ```java
 // import OpenTelemetry package into your code
@@ -101,12 +116,28 @@ public class ExampleController {
 }
 ```
 
+### Multi-span Attributes
+
+Sometimes you'll want to add the same attribute to many spans within the same trace.
+We'll leverage the OpenTelemetry concept of [Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal) to do that.
+
+Use this to add a `key` with a `value` as an attribute to every subsequent child span of the current application context.
+
+```java
+Baggage.current()
+    .toBuilder()
+    .put(key, value)
+    .build()
+    .makeCurrent();
+```
+
 ## SDK Usage
 
-Teams using the Honeycomb OpenTelemetry Agent won't need to set up the Honeycomb OpenTelemetry SDK.
-For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a convenient builder syntax for configuration.
+For teams that opt not to use the agent for auto-instrumentation, the Honeycomb OpenTelemetry SDK provides convenient setup for sending manual OpenTelemetry instrumentation to Honeycomb. The SDK also provides a deterministic sampler and more span processing options.
 
-### Maven
+### Project Setup
+
+#### Maven
 
 ```xml
 <project>
@@ -120,7 +151,7 @@ For teams that opt not to use the agent, Honeycomb OpenTelemetry SDK provides a 
 </project>
 ```
 
-### Gradle
+#### Gradle
 
 ```groovy
 dependencies {
@@ -128,12 +159,13 @@ dependencies {
 }
 ```
 
-### gRPC transport
+### gRPC transport customization
 
 A gRPC transport is required to transmit OpenTelemetry data. HoneycombSDK includes `grpc-netty-shaded`.
 If you'd like to use another gRPC transport, you can exclude the `grpc-netty-shaded` transitive dependency:
 
-Maven
+#### Maven
+
 ```xml
 <project>
     <dependencies>
@@ -152,7 +184,8 @@ Maven
 </project>
 ```
 
-Gradle
+#### Gradle
+
 ```groovy
 dependencies {
     implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.0') {
@@ -161,7 +194,7 @@ dependencies {
 }
 ```
 
-### Setup
+### SDK Configuration
 
 ```java
 HoneycombSdk honeycomb = new HoneycombSdk.Builder()
@@ -178,6 +211,9 @@ The `HoneycombSdk` instance can then be used to create a Tracer:
 ```java
 Tracer tracer = honeycomb.getTracer("instrumentation-name");
 Span span = tracer.spanBuilder("my-span").startSpan();
+// ... do some cool stuff
+span.setAttribute("coolness", 100);
+span.end();
 ```
 
 ## License
