@@ -54,12 +54,31 @@ java \
 If you're using the Honeycomb OpenTelemetry Agent, you can add custom instrumentation directly to auto-instrumented trace and span contexts using the vanilla OpenTelemetry SDK.
 
 Add the OpenTelemetry Packages to your project's dependencies.
+
+For Maven:
+```xml
+<project>
+    <dependencies>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-extension-annotations</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+    </dependencies>
+</project>
+```
+
 For Gradle:
 
 ```groovy
 dependencies {
-    compile('io.opentelemetry:opentelemetry-api:1.0.0')
-    compile('io.opentelemetry:opentelemetry-extension-annotations:1.0.0')
+    compile('io.opentelemetry:opentelemetry-api:1.0.1')
+    compile('io.opentelemetry:opentelemetry-extension-annotations:1.0.1')
 }
 ```
 
