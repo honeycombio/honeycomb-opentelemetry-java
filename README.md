@@ -24,12 +24,12 @@ You can enrich your application's auto-instrumented telemetry by adding [custom 
 
 ## Agent Usage
 
-Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/v0.1.0/honeycomb-opentelemetry-javaagent-0.1.0-all.jar).
+Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/v0.1.1/honeycomb-opentelemetry-javaagent-0.1.1-all.jar).
 
 The agent is run as a `-javaagent` alongside your application.
 
 ```sh
-java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
 ```
 
 ### Configuration
@@ -51,7 +51,7 @@ SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
 ```
 
 Using system properties:
@@ -62,7 +62,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
 ```
 
 ### Enrich the Auto-Instrumented Data
@@ -143,7 +143,7 @@ OTEL_RESOURCE_ATTRIBUTES=ec2.instanceid=i-1234567890abcdef0,build_id=1337 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
 ```
 
 Using system properties:
@@ -154,7 +154,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
 ```
 
 ## SDK Usage
@@ -171,7 +171,7 @@ For teams that opt not to use the agent for auto-instrumentation, the Honeycomb 
         <dependency>
             <groupId>io.honeycomb</groupId>
             <artifactId>honeycomb-opentelemetry-sdk</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </dependency>
     </dependencies>
 </project>
@@ -181,7 +181,7 @@ For teams that opt not to use the agent for auto-instrumentation, the Honeycomb 
 
 ```groovy
 dependencies {
-    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.0')
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.1')
 }
 ```
 
@@ -198,7 +198,7 @@ If you'd like to use another gRPC transport, you can exclude the `grpc-netty-sha
         <dependency>
             <groupId>io.honeycomb</groupId>
             <artifactId>honeycomb-opentelemetry-sdk</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.grpc</groupId>
@@ -214,7 +214,7 @@ If you'd like to use another gRPC transport, you can exclude the `grpc-netty-sha
 
 ```groovy
 dependencies {
-    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.0') {
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.1') {
         exclude group: 'io.grpc', module: 'grpc-netty-shaded'
     }
 }
