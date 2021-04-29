@@ -132,6 +132,31 @@ Baggage.current()
     .makeCurrent();
 ```
 
+### Resource Attributes
+
+Sometimes you'll want one or more attributes set on all spans within a service.
+
+Using environment variables:
+
+```sh
+OTEL_RESOURCE_ATTRIBUTES=ec2.instanceid=i-1234567890abcdef0,build_id=1337 \
+SERVICE_NAME=my-favorite-service \
+HONEYCOMB_API_KEY=my-api-key \
+HONEYCOMB_DATASET=my-dataset \
+java -javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+```
+
+Using system properties:
+
+```sh
+java \
+-Dotel.resource.attributes=ec2.instanceid=i-1234567890abcdef0,build_id=1337 \
+-Dservice.name=my-favorite-service \
+-Dhoneycomb.api.key=my-api-key \
+-Dhoneycomb.dataset=my-dataset \
+-javaagent:honeycomb-opentelemetry-javaagent-0.1.0-all.jar -jar myapp.jar
+```
+
 ## SDK Usage
 
 For teams that opt not to use the agent for auto-instrumentation, the Honeycomb OpenTelemetry SDK provides convenient setup for sending manual OpenTelemetry instrumentation to Honeycomb. The SDK also provides a deterministic sampler and more span processing options.
