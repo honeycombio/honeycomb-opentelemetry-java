@@ -5,7 +5,6 @@ import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.sdk.autoconfigure.ConfigProperties;
 import io.opentelemetry.sdk.autoconfigure.spi.ResourceProvider;
 import io.opentelemetry.sdk.resources.Resource;
-import org.apache.commons.lang3.StringUtils;
 
 public class DistroMetadataResourceProvider implements ResourceProvider {
     @Override
