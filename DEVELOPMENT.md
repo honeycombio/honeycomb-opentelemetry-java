@@ -9,7 +9,7 @@ This must be configured separately for each module (agent, sdk, and common).
 ```groovy
 // ./myModule/build.gradle
 plugins {
-    id "maven-publish" 
+    id "maven-publish"
 }
 
 def artifactName = "honeycomb-opentelemetry-${yourModule}"
@@ -44,11 +44,11 @@ Your local Maven repository is located at `~/.m2/repository/`.
 Go there to inspect your build artifacts:
 
 ```sh
-$ cd ~/.m2/repository/io/honeycomb/honeycomb-opentelemetry-sdk/0.1.0
+$ cd ~/.m2/repository/io/honeycomb/honeycomb-opentelemetry-sdk/0.1.1
 $ ls -1
-honeycomb-opentelemetry-sdk-0.1.0.jar
-honeycomb-opentelemetry-sdk-0.1.0.module
-honeycomb-opentelemetry-sdk-0.1.0.pom
+honeycomb-opentelemetry-sdk-0.1.1.jar
+honeycomb-opentelemetry-sdk-0.1.1.module
+honeycomb-opentelemetry-sdk-0.1.1.pom
 maven-metadata-local.xml
 ```
 
@@ -66,6 +66,6 @@ repositories {
 }
 
 dependencies {
-    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.0')
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.1.1')
 }
 ```
