@@ -201,7 +201,7 @@ dependencies {
 HoneycombSdk honeycomb = new HoneycombSdk.Builder()
     .setApiKey(YOUR_API_KEY)
     .setDataset(YOUR_DATASET)
-    .setSampler(new DeterministicSampler(5)) // optional
+    .setSampler(new DeterministicTraceSampler(5)) // optional
     .setEndpoint(YOUR_ENDPOINT) // optional
     .setServiceName(YOUR_SERVICE_NAME)
     .build();
