@@ -198,6 +198,9 @@ dependencies {
 ### SDK Configuration
 
 ```java
+import io.honeycomb.opentelemetry.HoneycombSdk;
+import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
+
 HoneycombSdk honeycomb = new HoneycombSdk.Builder()
     .setApiKey(YOUR_API_KEY)
     .setDataset(YOUR_DATASET)
