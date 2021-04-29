@@ -37,7 +37,6 @@ public class HoneycombAgent {
         final String apiKey = EnvironmentConfiguration.getHoneycombApiKey();
         final String apiEndpoint = EnvironmentConfiguration.getHoneycombApiEndpoint();
         final String dataset = EnvironmentConfiguration.getHoneycombDataset();
-        final String serviceName = EnvironmentConfiguration.getServiceName();
 
         if (apiKey == null) {
             throw new Exception("WARN: Could not start Honeycomb agent: "
@@ -51,10 +50,6 @@ public class HoneycombAgent {
         System.setProperty("otel.exporter.otlp.headers",
             String.format("x-honeycomb-team=%s,x-honeycomb-dataset=%s", apiKey, dataset));
         System.setProperty("otel.exporter.otlp.endpoint", apiEndpoint);
-        if (serviceName != null) {
-            System.setProperty("otel.resource.attributes",
-                String.format("service.name=%s", serviceName));
-        }
     }
 
 }
