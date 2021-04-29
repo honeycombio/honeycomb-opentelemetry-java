@@ -2,9 +2,11 @@
 
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java.svg?style=shield&circle-token=e2f4c30919ecbdbfb095415a6f4114a03dc491a0)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java)
 
-**STATUS: this library is BETA.** You're welcome to try it, and let us know your feedback in the issues!
+**STATUS: this library is BETA.**
+You're welcome to try it, and let us know your feedback in the issues!
 
-This is Honeycomb's distribution of OpenTelemetry for Java. It makes getting started with OpenTelemetry and Honeycomb easier!
+This is Honeycomb's distribution of OpenTelemetry for Java.
+It makes getting started with OpenTelemetry and Honeycomb easier!
 
 ## Why would I want to use this?
 
@@ -15,12 +17,17 @@ This is Honeycomb's distribution of OpenTelemetry for Java. It makes getting sta
 
 ## Getting Started
 
-There are two ways to start using Honeycomb OpenTelemetry:
-
-1. If you are looking for an all-in-one, easy-to-install auto-instrumentation for your Java application, you'll want to use the `honeycomb-opentelemetry-javaagent`.
+Honeycomb's OpenTelemetry Java Agent gives you all-in-one,
+easy-to-install auto-instrumentation for your Java application.
 See the [Agent Usage](#agent-usage) section for setup.
-You can enrich your application's auto-instrumented telemetry by adding [custom instrumentation](#enrich-the-auto-instrumented-data) to your application code.
-2. If you want start first with manually instrumenting your application and are not interested in auto-instrumentation, you'll want to use the Honeycomb OpenTelemetry SDK. See the [SDK Usage](#sdk-usage) section for details.
+You can enrich your application's auto-instrumented telemetry
+by adding [custom instrumentation](#enrich-the-auto-instrumented-data)
+to your application code.
+
+If you're not interested in auto-instrumentation
+and you'd like to start first with manually instrumenting your application,
+you can use the Honeycomb OpenTelemetry SDK.
+See the [SDK Usage](/docs/TROUBLESHOOTING.md#sdk-usage) section for details.
 
 ## Agent Usage
 
@@ -72,6 +79,7 @@ When using the Honeycomb OpenTelemetry Agent, you can add custom instrumentation
 Add the OpenTelemetry packages to your project's dependencies.
 
 For Maven:
+
 ```xml
 <project>
     <dependencies>
@@ -164,7 +172,7 @@ the Honeycomb OpenTelemetry SDK provides convenient setup
 for sending manual OpenTelemetry instrumentation to Honeycomb.
 The SDK also provides a deterministic sampler and more span processing options.
 
-[Read the SDK documentation.](/docs/TROUBLESHOOTING.md#SDK-configuration)
+[Set up the Honeycomb OpenTelemetry SDK for Java](/docs/TROUBLESHOOTING.md#sdk-usage).
 
 ## License
 

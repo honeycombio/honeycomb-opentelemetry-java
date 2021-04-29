@@ -12,7 +12,7 @@ Don't use the manual SDK tracer.
 If you are not seeing custom spans, added from in-code instrumentation,
 it is likely because you are using incompatible versions of the agent and SDK.
 
-## Don't want auto-instrumentation? Use the Honeycomb Java SDK for OpenTelemetry
+## SDK Usage
 
 For teams that opt not to use the agent for auto-instrumentation,
 the Honeycomb OpenTelemetry SDK provides convenient setup
