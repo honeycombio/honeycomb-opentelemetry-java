@@ -1,4 +1,4 @@
-# Honeycomb OpenTelemetry Distro for Java
+# Honeycomb OpenTelemetry distribution for Java
 
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java.svg?style=shield&circle-token=e2f4c30919ecbdbfb095415a6f4114a03dc491a0)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java)
 
