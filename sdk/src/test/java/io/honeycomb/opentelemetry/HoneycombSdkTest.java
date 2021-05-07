@@ -1,8 +1,13 @@
 package io.honeycomb.opentelemetry;
 
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
+import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.sdk.trace.ReadWriteSpan;
+import io.opentelemetry.sdk.trace.ReadableSpan;
+import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 
 import org.junit.jupiter.api.AfterEach;
@@ -23,8 +28,10 @@ public class HoneycombSdkTest {
     @Test
     public void testConfiguration_tracerSettings() {
         Sampler sampler = new DeterministicTraceSampler(5);
+        BaggageSpanProcessor baggageSpanProcessor = new BaggageSpanProcessor();
         HoneycombSdk honeycomb = new HoneycombSdk.Builder()
             .setSampler(sampler)
+            .addSpanProcessor(baggageSpanProcessor)
             .setApiKey("foobar")
             .setDataset("dataset")
             .build();
@@ -34,6 +41,7 @@ public class HoneycombSdkTest {
         // configuration have a sample.rate attribute with a value
         // of 5.
         Assertions.assertNotNull(sampler);
+        Assertions.assertNotNull(baggageSpanProcessor);
         Assertions.assertNotNull(honeycomb);
     }
 
