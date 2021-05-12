@@ -53,7 +53,6 @@ subprojects {
                     afterEvaluate {
                         artifactId = project.findProperty("archivesBaseName") as String
                     }
-                    version = '0.1.0'
                     versionMapping {
                         usage('java-api') {
                             fromResolutionOf('runtimeClasspath')
@@ -102,7 +101,12 @@ subprojects {
         }
 
         signing {
-            useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"), System.getenv("GPG_PASSWORD"))
+            def base64key = System.getenv("GPG_BASE64")
+            def pw = System.getenv("GPG_PASSWORD")
+
+            def key = new String(Base64.getDecoder().decode(base64key)).trim()
+
+            useInMemoryPgpKeys(key, pw)
             sign publishing.publications.mavenJava
         }
     }
