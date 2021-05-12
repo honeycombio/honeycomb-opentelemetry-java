@@ -103,8 +103,11 @@ subprojects {
         signing {
             def base64key = System.getenv("GPG_BASE64")
             def pw = System.getenv("GPG_PASSWORD")
+            def key = ""
 
-            def key = new String(Base64.getDecoder().decode(base64key)).trim()
+            if (base64key != null) {
+                key = new String(Base64.getDecoder().decode(base64key)).trim()
+            }
 
             useInMemoryPgpKeys(key, pw)
             sign publishing.publications.mavenJava
