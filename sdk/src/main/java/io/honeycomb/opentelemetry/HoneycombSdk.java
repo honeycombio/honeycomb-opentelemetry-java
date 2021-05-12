@@ -15,6 +15,7 @@ import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
+import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
@@ -57,6 +58,7 @@ public final class HoneycombSdk implements OpenTelemetry {
 
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
+        private SpanProcessor spanProcessor;
 
         private String apiKey;
         private String dataset;
@@ -130,6 +132,18 @@ public final class HoneycombSdk implements OpenTelemetry {
          */
         public Builder setSampler(Sampler sampler) {
             this.sampler = sampler;
+            return this;
+        }
+
+        /**
+         * Sets the {@link SpanProcessor} to use.
+         *
+         * Enables multi-span attributes via a BaggageSpanProcessor
+         *
+         * @param spanProcessor Instance of a BaggageSpanProcessor or custom SpanProcessor
+         */
+        public Builder addSpanProcessor(SpanProcessor spanProcessor) {
+            this.spanProcessor = spanProcessor;
             return this;
         }
 
