@@ -20,14 +20,17 @@ It makes getting started with OpenTelemetry and Honeycomb easier!
 Honeycomb's OpenTelemetry Java Agent gives you all-in-one,
 easy-to-install auto-instrumentation for your Java application.
 See the [Agent Usage](#agent-usage) section for setup.
-You can enrich your application's auto-instrumented telemetry
-by adding [custom instrumentation](#enrich-the-auto-instrumented-data)
-to your application code.
 
-If you're not interested in auto-instrumentation
+**Note:** For teams using the Honeycomb OpenTelemetry agent for Java,
+you do not need to add the Honeycomb OpenTelemetry SDK as a dependency.
+If you would like to enrich the agent's auto-instrumentation with
+[custom instrumentation](#enrich-the-auto-instrumented-data),
+you should use the vanilla OpenTelemetry SDK packages with the agent.
+
+Otherwise, if you're not interested in auto-instrumentation
 and you'd like to start first with manually instrumenting your application,
 you can use the Honeycomb OpenTelemetry SDK.
-See the [SDK Usage](/docs/TROUBLESHOOTING.md#sdk-usage) section for details.
+See the [SDK Usage](/docs/README.md#sdk-usage) instructions for details.
 
 ## Agent Usage
 
@@ -74,7 +77,9 @@ java \
 
 ### Enrich the Auto-Instrumented Data
 
-When using the Honeycomb OpenTelemetry Agent, you can add custom instrumentation directly to auto-instrumented trace and span contexts using the vanilla OpenTelemetry SDK.
+When using the Honeycomb OpenTelemetry Agent,
+you can add custom instrumentation directly to auto-instrumented trace
+and span contexts using the vanilla OpenTelemetry SDK.
 
 Add the OpenTelemetry packages to your project's dependencies.
 
@@ -107,7 +112,8 @@ dependencies {
 ```
 
 Then, import the relevant OpenTelemetry SDK package into your code.
-Here's an example adding a custom attribute to a span created by the agent for a Spring controller:
+Here's an example adding a custom attribute to a span created by the agent
+for a Spring controller:
 
 ```java
 // import OpenTelemetry package into your code
@@ -127,10 +133,14 @@ public class ExampleController {
 
 ### Multi-span Attributes
 
-Sometimes you'll want to add the same attribute to many spans within the same trace.
-We'll leverage the OpenTelemetry concept of [Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal) to do that.
+Sometimes you'll want to add the same attribute to many spans
+within the same trace.
+We'll leverage the OpenTelemetry concept of
+[Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal)
+to do that.
 
-Use this to add a `key` with a `value` as an attribute to every subsequent child span of the current application context.
+Use this to add a `key` with a `value` as an attribute
+to every subsequent child span of the current application context.
 
 ```java
 Baggage.current()
@@ -172,7 +182,13 @@ the Honeycomb OpenTelemetry SDK provides convenient setup
 for sending manual OpenTelemetry instrumentation to Honeycomb.
 The SDK also provides a deterministic sampler and more span processing options.
 
-[Set up the Honeycomb OpenTelemetry SDK for Java](/docs/TROUBLESHOOTING.md#sdk-usage).
+[Set up the Honeycomb OpenTelemetry SDK for Java](/docs/README.md#sdk-usage).
+
+**Note:** For teams using the Honeycomb OpenTelemetry agent for Java,
+you do not need to add the Honeycomb OpenTelemetry SDK as a dependency.
+If you would like to enrich the agent's auto-instrumentation with
+[custom instrumentation](#enrich-the-auto-instrumented-data),
+you should use the vanilla OpenTelemetry SDK packages with the agent.
 
 ## License
 
