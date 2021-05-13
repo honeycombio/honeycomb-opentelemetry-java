@@ -97,7 +97,4 @@ workflows:
           context: java_beeline
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - vera.maven-publish
+          <<: *filters_publish
