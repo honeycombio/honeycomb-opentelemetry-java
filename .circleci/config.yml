@@ -39,7 +39,14 @@ jobs:
       - checkout
       - gradle/with_cache:
           steps:
-            - run: ./gradlew publish
+            - run:
+                name: "Publish Artifacts to Maven"
+                command: ./gradlew publish
+                environment:
+                  GPG_BASE64: $GPG_BASE64
+                  GPG_PASSWORD: $GPG_PASSWORD
+                  OSSRH_USERNAME: $OSSRH_USERNAME
+                  OSSRH_PASSWORD: $OSSRH_PASSWORD
 
 filters_always: &filters_always
   filters:
