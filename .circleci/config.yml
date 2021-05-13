@@ -41,10 +41,7 @@ jobs:
           steps:
             - run:
                 name: "Publish Artifacts to Maven"
-                command: |
-                  GPG_BASE64=$GPG_BASE64 GPG_PASSWORD=$GPG_PASSWORD \
-                  OSSRH_USERNAME=$OSSRH_USERNAME OSSRH_PASSWORD=$OSSRH_PASSWORD \
-                  ./gradlew publish
+                command: ./gradlew publish
 
 filters_always: &filters_always
   filters:

@@ -104,7 +104,7 @@ subprojects {
 
         signing {
             def base64key = System.getenv("GPG_BASE64")
-            def pw = System.getenv("GPG_PASSWORD")
+            def pw = System.getenv("GPG_PASSPHRASE")
             def key = ""
 
             if (base64key != null) {
