@@ -72,6 +72,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * the team making a request.</p>
          *
          * @param apiKey a String to use as the API key. See team settings in Honeycomb.
+         * @return builder
          */
         public Builder setApiKey(String apiKey) {
             this.apiKey = apiKey;
@@ -85,6 +86,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * the dataset that trace data is being written to.</p>
          *
          * @param dataset a String to use as the dataset name.
+         * @return builder
          */
         public Builder setDataset(String dataset) {
             this.dataset = dataset;
@@ -95,6 +97,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * Sets the Honeycomb endpoint to use. Optional, defaults to the Honeycomb ingest API.
          *
          * @param endpoint a String to use as the endpoint URI. Must begin with https or http.
+         * @return builder
          */
         public Builder setEndpoint(String endpoint) {
             this.endpoint = endpoint;
@@ -105,6 +108,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * Sets the service name as a resource attribute.
          *
          * @param serviceName a String to use as the service name
+         * @return builder
          */
         public Builder setServiceName(String serviceName) {
             this.serviceName = serviceName;
@@ -116,6 +120,9 @@ public final class HoneycombSdk implements OpenTelemetry {
          *
          * <p>Note that if none are specified, {@link W3CTraceContextPropagator} will be used
          * by default.</p>
+         *
+         * @param propagators {@link ContextPropagators} to use for context propagation
+         * @return builder
          */
         public Builder setPropagators(ContextPropagators propagators) {
             this.propagators = propagators;
@@ -125,10 +132,11 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Sets the {@link Sampler} to use.
          *
-         * <p>Note that if no sampler is specified, AlwaysOnSampler</p>
+         * <p>Note that if no sampler is specified, AlwaysOnSampler
          * will be used by default.</p>
          *
-         * @param sampler Sampler instance
+         * @param sampler Sampler instance`
+         * @return builder
          */
         public Builder setSampler(Sampler sampler) {
             this.sampler = sampler;
@@ -141,6 +149,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * Enables multi-span attributes via a BaggageSpanProcessor
          *
          * @param spanProcessor Instance of a BaggageSpanProcessor or custom SpanProcessor
+         * @return builder
          */
         public Builder addSpanProcessor(SpanProcessor spanProcessor) {
             this.spanProcessor = spanProcessor;
@@ -155,6 +164,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * use as the global instance. If you need to configure multiple SDKs for tests, use {@link
          * GlobalOpenTelemetry#resetForTest()} between them.
          *
+         * @return {@link HoneycombSdk} instance
          * @see GlobalOpenTelemetry
          */
         public HoneycombSdk buildAndRegisterGlobal() {
@@ -174,6 +184,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * {@link SdkTracerProvider} with a {@link BatchSpanProcessor} that has an
          * {@link OtlpGrpcSpanExporter} configured.</p>
          *
+         * @return {@link HoneycombSdk} instance
          * @see GlobalOpenTelemetry
          */
         public HoneycombSdk build() {
@@ -220,7 +231,7 @@ public final class HoneycombSdk implements OpenTelemetry {
      *
      * <p>Static global providers are obfuscated when they are returned from the API to prevent users
      * from casting them to their SDK specific implementation. For example, we do not want users to
-     * use patterns like {@code (TracerSdkProvider) OpenTelemetry.getGlobalTracerProvider()}.
+     * use patterns like {@code (TracerSdkProvider) OpenTelemetry.getGlobalTracerProvider()}.</p>
      */
     @ThreadSafe
     @VisibleForTesting

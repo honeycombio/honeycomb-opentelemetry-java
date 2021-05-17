@@ -41,5 +41,78 @@ subprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(8)) // compile it to ensure runtime compatibility with Java 8
         }
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    plugins.withId("maven-publish") {
+        plugins.apply("signing")
+
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from components.java
+                    afterEvaluate {
+                        artifactId = project.findProperty("archivesBaseName") as String
+                    }
+                    versionMapping {
+                        usage('java-api') {
+                            fromResolutionOf('runtimeClasspath')
+                        }
+                        usage('java-runtime') {
+                            fromResolutionResult()
+                        }
+                    }
+                    pom {
+                        name = 'Honeycomb OpenTelemetry Distribution for Java'
+                        url = 'https://github.com/honeycombio/honeycomb-opentelemetry-java'
+                        licenses {
+                            license {
+                                name = 'The Apache License, Version 2.0'
+                                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = 'Honeycomb'
+                                name = 'Honeycomb'
+                                email = 'support@honeycomb.io'
+                                organization = 'Honeycomb'
+                                organizationUrl = 'https://honeycomb.io'
+                            }
+                        }
+                        scm {
+                            url = 'https://github.com/honeycombio/honeycomb-opentelemetry-java'
+                            connection = 'scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-java.git'
+                            developerConnection = 'scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-java.git'
+                        }
+                    }
+                }
+            }
+            repositories {
+                maven {
+                    def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                    credentials {
+                        username = System.getenv("OSSRH_USERNAME")
+                        password = System.getenv("OSSRH_PASSWORD")
+                    }
+                }
+            }
+        }
+
+        signing {
+            def base64key = System.getenv("GPG_BASE64")
+            def pw = System.getenv("GPG_PASSPHRASE")
+            def key = ""
+
+            if (base64key != null) {
+                key = new String(Base64.getDecoder().decode(base64key)).trim()
+            }
+
+            useInMemoryPgpKeys(key, pw)
+            sign publishing.publications.mavenJava
+        }
     }
 }

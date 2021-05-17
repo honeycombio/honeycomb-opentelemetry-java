@@ -61,12 +61,3 @@ tasks {
         dependsOn(shadowJar)
     }
 }
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = "${artifactName}"
-            from components.java
-        }
-    }
-}

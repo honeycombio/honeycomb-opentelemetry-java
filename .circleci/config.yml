@@ -13,7 +13,7 @@ jobs:
           steps:
             - run: mkdir -p ~/artifacts
             - run: ./gradlew build -x test
-            - run: cp agent/build/libs/*all.jar ~/artifacts
+            - run: cp **/build/libs/*.jar ~/artifacts
             - persist_to_workspace:
                 root: ~/
                 paths:
@@ -32,6 +32,16 @@ jobs:
             echo "about to publish to tag ${CIRCLE_TAG}"
             ls -l ~/artifacts/*
             ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/artifacts
+
+  publish_maven:
+    executor: gradle/default
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run:
+                name: "Publish Artifacts to Maven"
+                command: ./gradlew publish
 
 filters_always: &filters_always
   filters:
@@ -80,6 +90,11 @@ workflows:
           <<: *filters_always
       - publish_github:
           context: Honeycomb Secrets for Public Repos
+          requires:
+            - build
+          <<: *filters_publish
+      - publish_maven:
+          context: java_beeline
           requires:
             - build
           <<: *filters_publish
