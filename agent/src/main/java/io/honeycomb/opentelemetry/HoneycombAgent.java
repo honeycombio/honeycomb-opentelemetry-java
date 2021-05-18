@@ -48,7 +48,9 @@ public class HoneycombAgent {
         }
 
         System.setProperty("otel.exporter.otlp.headers",
-            String.format("x-honeycomb-team=%s,x-honeycomb-dataset=%s", apiKey, dataset));
+            String.format("%s=%s,%s=%s",
+                EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
+                EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
         System.setProperty("otel.exporter.otlp.endpoint", apiEndpoint);
     }
 
