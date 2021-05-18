@@ -31,14 +31,27 @@ publishing {
 From project root, build all jars and publish to local maven repository:
 
 ```sh
-./gradlew publishToMavenLocal
+./gradlew publishToMavenLocal -Pskip.signing
 ```
 
 You can also specify a single build target:
 
 ```sh
-./gradlew sdk:publishToMavenLocal
+./gradlew sdk:publishToMavenLocal -Pskip.signing
 ```
+
+### Test signing
+
+If you want to test signing the local artifacts, you can omit the `-Pskip-signing`, and export `GPG_BASE64` and `GPG_PASSPHRASE` to your shell env.
+To get GPG_BASE64, you can generate a GPG key, and export the secret key:
+
+```sh
+gpg --armor --export-secret-keys KEY_ID | base64
+```
+
+Note: if you're not on OSX, you may need to use `base64 -w0` to disable line wrapping.
+
+### Verify local artifacts
 
 Your local Maven repository is located at `~/.m2/repository/`.
 Go there to inspect your build artifacts:
