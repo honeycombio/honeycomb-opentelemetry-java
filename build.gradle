@@ -46,7 +46,6 @@ subprojects {
     }
 
     plugins.withId("maven-publish") {
-        plugins.apply("signing")
 
         publishing {
             publications {
@@ -102,17 +101,22 @@ subprojects {
             }
         }
 
-        signing {
-            def base64key = System.getenv("GPG_BASE64")
-            def pw = System.getenv("GPG_PASSPHRASE")
-            def key = ""
+        if (!project.hasProperty("skip.signing")) {
+            plugins.apply("signing")
 
-            if (base64key != null) {
-                key = new String(Base64.getDecoder().decode(base64key)).trim()
+            signing {
+                def base64key = System.getenv("GPG_BASE64")
+                def pw = System.getenv("GPG_PASSPHRASE")
+                def key = ""
+
+                if (base64key != null) {
+                    key = new String(Base64.getDecoder().decode(base64key)).trim()
+                }
+
+                useInMemoryPgpKeys(key, pw)
+                sign publishing.publications.mavenJava
             }
-
-            useInMemoryPgpKeys(key, pw)
-            sign publishing.publications.mavenJava
         }
+
     }
 }
