@@ -97,6 +97,7 @@ HoneycombSdk honeycomb = new HoneycombSdk.Builder()
     .addSpanProcessor(new BaggageSpanProcessor()) // optional, for multi-span attributes
     .setEndpoint(YOUR_ENDPOINT) // optional, defaults to api.honeycomb.io
     .setServiceName(YOUR_SERVICE_NAME)
+    .addResourceAttribute("java.version", System.getProperty("java.version")) // optional
     .build();
 ```
 
