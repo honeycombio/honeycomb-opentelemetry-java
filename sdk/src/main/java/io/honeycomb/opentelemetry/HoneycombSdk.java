@@ -160,6 +160,9 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a string attribute as a resource attribute.
          *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, String value) {
@@ -168,6 +171,9 @@ public final class HoneycombSdk implements OpenTelemetry {
 
         /**
          * Add a long attribute as a resource attribute.
+         *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
          *
          * @return AttributesBuilder
          */
@@ -178,6 +184,9 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a double attribute as a resource attribute.
          *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, double value) {
@@ -187,6 +196,9 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a boolean attribute as a resource attribute.
          *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, boolean value) {
@@ -195,6 +207,9 @@ public final class HoneycombSdk implements OpenTelemetry {
 
         /**
          * Add a String array attribute as a resource attribute.
+         *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
          *
          * @return AttributesBuilder
          */
