@@ -270,9 +270,8 @@ public final class HoneycombSdk implements OpenTelemetry {
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
                 .setSampler(sampler)
                 .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
-            for (SpanProcessor spanProcessor : this.additionalSpanProcessors) {
-                tracerProviderBuilder.addSpanProcessor(spanProcessor);
-            }
+
+            this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
             DistroMetadata.getMetadata().forEach(resourceAttributes::put);
             if (StringUtils.isNotEmpty(serviceName)) {
