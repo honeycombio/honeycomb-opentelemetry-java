@@ -59,6 +59,7 @@ public final class HoneycombSdk implements OpenTelemetry {
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
         private SpanProcessor spanProcessor;
+        private AttributesBuilder resourceAttributes = Attributes.builder();
 
         private String apiKey;
         private String dataset;
@@ -157,6 +158,66 @@ public final class HoneycombSdk implements OpenTelemetry {
         }
 
         /**
+         * Add a string attribute as a resource attribute.
+         *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
+         * @return AttributesBuilder
+         */
+        public AttributesBuilder addResourceAttribute(String key, String value) {
+            return this.resourceAttributes.put(key, value);
+        }
+
+        /**
+         * Add a long attribute as a resource attribute.
+         *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
+         * @return AttributesBuilder
+         */
+        public AttributesBuilder addResourceAttribute(String key, long value) {
+            return this.resourceAttributes.put(key, value);
+        }
+
+        /**
+         * Add a double attribute as a resource attribute.
+         *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
+         * @return AttributesBuilder
+         */
+        public AttributesBuilder addResourceAttribute(String key, double value) {
+            return this.resourceAttributes.put(key, value);
+        }
+
+        /**
+         * Add a boolean attribute as a resource attribute.
+         *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
+         * @return AttributesBuilder
+         */
+        public AttributesBuilder addResourceAttribute(String key, boolean value) {
+            return this.resourceAttributes.put(key, value);
+        }
+
+        /**
+         * Add a String array attribute as a resource attribute.
+         *
+         * @param key The key to associate a value with
+         * @param value The value to store as an attribute
+         *
+         * @return AttributesBuilder
+         */
+        public AttributesBuilder addResourceAttribute(String key, String... value) {
+            return this.resourceAttributes.put(key, value);
+        }
+
+        /**
          * Returns a new {@link HoneycombSdk} built with the configuration of this {@link
          * Builder} and registers it as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. An exception will be thrown if this method is attempted to
@@ -210,13 +271,12 @@ public final class HoneycombSdk implements OpenTelemetry {
                 .setSampler(sampler)
                 .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
 
-            AttributesBuilder attributesBuilder = Attributes.builder();
-            DistroMetadata.getMetadata().forEach(attributesBuilder::put);
+            DistroMetadata.getMetadata().forEach(resourceAttributes::put);
             if (StringUtils.isNotEmpty(serviceName)) {
-                attributesBuilder.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
+                resourceAttributes.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
             tracerProviderBuilder.setResource(
-                Resource.create(attributesBuilder.build()));
+                Resource.create(resourceAttributes.build()));
 
             if (propagators == null) {
                 propagators = ContextPropagators.create(W3CTraceContextPropagator.getInstance());
