@@ -23,7 +23,7 @@ subprojects {
                 bytebuddyagent      : dependencies.create(group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy),
                 autoservice         : [
                         dependencies.create(group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc7'),
-                        dependencies.create(group: 'com.google.auto', name: 'auto-common', version: '0.8'),
+                        dependencies.create(group: 'com.google.auto', name: 'auto-common', version: '1.0'),
                         dependencies.create(group: 'com.google.guava', name: 'guava', version: "${versions.guava}"),
                 ],
                 autoValueAnnotations: "com.google.auto.value:auto-value-annotations:${versions.autoValue}",
