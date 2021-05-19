@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
@@ -22,6 +23,8 @@ import io.opentelemetry.sdk.trace.samplers.Sampler;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Honeycomb SDK implementation of {@link OpenTelemetry}.
@@ -54,7 +57,7 @@ public final class HoneycombSdk implements OpenTelemetry {
 
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
-        private SpanProcessor spanProcessor;
+        private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<>();
         private AttributesBuilder resourceAttributes = Attributes.builder();
 
         private String apiKey;
@@ -132,7 +135,7 @@ public final class HoneycombSdk implements OpenTelemetry {
          * <p>Note that if no sampler is specified, AlwaysOnSampler
          * will be used by default.</p>
          *
-         * @param sampler Sampler instance`
+         * @param sampler Sampler instance
          * @return builder
          */
         public Builder setSampler(Sampler sampler) {
@@ -141,15 +144,16 @@ public final class HoneycombSdk implements OpenTelemetry {
         }
 
         /**
-         * Sets the {@link SpanProcessor} to use.
+         * Configures additional {@link SpanProcessor}.
          *
-         * Enables multi-span attributes via a BaggageSpanProcessor
+         * {@link BatchSpanProcessor} is always configured by default. You can specify additional
+         * span processors, such as {@link BaggageSpanProcessor} which enables multi-span attributes.
          *
-         * @param spanProcessor Instance of a BaggageSpanProcessor or custom SpanProcessor
+         * @param spanProcessor Instance of a {@link BaggageSpanProcessor} or custom SpanProcessor
          * @return builder
          */
         public Builder addSpanProcessor(SpanProcessor spanProcessor) {
-            this.spanProcessor = spanProcessor;
+            this.additionalSpanProcessors.add(spanProcessor);
             return this;
         }
 
@@ -266,6 +270,8 @@ public final class HoneycombSdk implements OpenTelemetry {
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
                 .setSampler(sampler)
                 .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
+
+            this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
             DistroMetadata.getMetadata().forEach(resourceAttributes::put);
             if (StringUtils.isNotEmpty(serviceName)) {
