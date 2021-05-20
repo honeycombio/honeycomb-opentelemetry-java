@@ -34,12 +34,12 @@ See the [SDK Usage](/docs/README.md#sdk-usage) instructions for details.
 
 ## Agent Usage
 
-Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/v0.1.1/honeycomb-opentelemetry-javaagent-0.1.1-all.jar).
+Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/0.2.0/honeycomb-opentelemetry-javaagent-0.2.0-all.jar).
 
 The agent is run as a `-javaagent` alongside your application.
 
 ```sh
-java -javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.2.0-all.jar -jar myapp.jar
 ```
 
 ### Configuration
@@ -61,7 +61,7 @@ SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.2.0-all.jar -jar myapp.jar
 ```
 
 Using system properties:
@@ -72,7 +72,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.2.0-all.jar -jar myapp.jar
 ```
 
 ### Enrich the Auto-Instrumented Data
@@ -161,7 +161,7 @@ OTEL_RESOURCE_ATTRIBUTES=ec2.instanceid=i-1234567890abcdef0,build_id=1337 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.2.0-all.jar -jar myapp.jar
 ```
 
 Using system properties:
@@ -172,7 +172,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:honeycomb-opentelemetry-javaagent-0.1.1-all.jar -jar myapp.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.2.0-all.jar -jar myapp.jar
 ```
 
 ## SDK Usage
