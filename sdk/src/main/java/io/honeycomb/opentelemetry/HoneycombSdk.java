@@ -5,12 +5,14 @@ import com.google.common.base.Preconditions;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.resources.Resource;
@@ -118,8 +120,8 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Sets the {@link ContextPropagators} to use.
          *
-         * <p>Note that if none are specified, {@link W3CTraceContextPropagator} will be used
-         * by default.</p>
+         * <p>Note that if none are specified, {@link W3CTraceContextPropagator} and {@link W3CBaggagePropagator}
+         * will be used by default.</p>
          *
          * @param propagators {@link ContextPropagators} to use for context propagation
          * @return builder
@@ -160,9 +162,8 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a string attribute as a resource attribute.
          *
-         * @param key The key to associate a value with
+         * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, String value) {
@@ -172,9 +173,8 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a long attribute as a resource attribute.
          *
-         * @param key The key to associate a value with
+         * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, long value) {
@@ -184,9 +184,8 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a double attribute as a resource attribute.
          *
-         * @param key The key to associate a value with
+         * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, double value) {
@@ -196,9 +195,8 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a boolean attribute as a resource attribute.
          *
-         * @param key The key to associate a value with
+         * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, boolean value) {
@@ -208,9 +206,8 @@ public final class HoneycombSdk implements OpenTelemetry {
         /**
          * Add a String array attribute as a resource attribute.
          *
-         * @param key The key to associate a value with
+         * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         *
          * @return AttributesBuilder
          */
         public AttributesBuilder addResourceAttribute(String key, String... value) {
@@ -281,7 +278,10 @@ public final class HoneycombSdk implements OpenTelemetry {
                 Resource.create(resourceAttributes.build()));
 
             if (propagators == null) {
-                propagators = ContextPropagators.create(W3CTraceContextPropagator.getInstance());
+                propagators = ContextPropagators.create(
+                    TextMapPropagator.composite(
+                        W3CTraceContextPropagator.getInstance(),
+                        W3CBaggagePropagator.getInstance()));
             }
 
             return new HoneycombSdk(tracerProviderBuilder.build(), propagators);
