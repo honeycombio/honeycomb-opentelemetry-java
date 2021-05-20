@@ -34,7 +34,7 @@ See the [SDK Usage](/docs/README.md#sdk-usage) instructions for details.
 
 ## Agent Usage
 
-Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/0.2.0/honeycomb-opentelemetry-javaagent-0.2.0-all.jar).
+Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/v0.2.0/honeycomb-opentelemetry-javaagent-0.2.0-all.jar).
 
 The agent is run as a `-javaagent` alongside your application.
 
