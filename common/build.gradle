@@ -4,6 +4,7 @@ plugins {
 }
 
 def artifactName = "honeycomb-opentelemetry-common"
+description = 'Functionality shared across components of the Honeycomb OpenTelemetry distribution.'
 
 jar {
     archivesBaseName = "${artifactName}"
