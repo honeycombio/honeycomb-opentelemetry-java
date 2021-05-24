@@ -65,6 +65,9 @@ subprojects {
                     pom {
                         name = 'Honeycomb OpenTelemetry Distribution for Java'
                         url = 'https://github.com/honeycombio/honeycomb-opentelemetry-java'
+                        afterEvaluate {
+                            description = project.description
+                        }
                         licenses {
                             license {
                                 name = 'The Apache License, Version 2.0'

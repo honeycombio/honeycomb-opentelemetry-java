@@ -4,6 +4,7 @@ plugins {
 }
 
 def artifactName = "honeycomb-opentelemetry-sdk"
+description = 'Honeycomb SDK for manually configuring OpenTelemetry instrumentation.'
 
 test {
     useJUnitPlatform()

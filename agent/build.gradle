@@ -6,6 +6,7 @@ plugins {
 apply from: "$rootDir/gradle/shadow.gradle"
 
 def artifactName = "honeycomb-opentelemetry-javaagent"
+description = 'Honeycomb distribution of the OpenTelemetry auto-instrumentation agent.'
 def relocatePackages = ext.relocatePackages
 
 configurations {
