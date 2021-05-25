@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.2.1] - 2021-05-25
+
+### Fixed
+
+- Add POM descriptions to pass Nexus validation (#65) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.2.0] - 2021-05-20
 
 ### Added
