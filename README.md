@@ -49,10 +49,10 @@ The Honeycomb Agent has the following configuration options (system properties t
 | System property                      | Environment variable                 | Description                                                                      |
 |--------------------------------------|--------------------------------------|----------------------------------------------------------------------------------|
 | `honeycomb.api.key` | `HONEYCOMB_API_KEY` | [required] Your Honeycomb API key
-| `honeycomb.dataset` | `HONEYCOMB_DATASET` | [required] Honeycomb dataset where events will be sent
+| `honeycomb.dataset` | `HONEYCOMB_DATASET` | [required] Honeycomb dataset where spans will be sent
 | `honeycomb.api.endpoint` | `HONEYCOMB_API_ENDPOINT` | [optional] Honeycomb ingest endpoint (defaults to https://api.honeycomb.io:443)
-| `sample.rate` | `SAMPLE_RATE` | [optional] Sample rate for the deterministic sampler (defaults to 1, no sampling)
-| `service.name` | `SERVICE_NAME` | [optional] service.name attribute to be used for all events (defaults to empty)
+| `sample.rate` | `SAMPLE_RATE` | [optional] Sample rate for the deterministic sampler (defaults to 1, always sample)
+| `service.name` | `SERVICE_NAME` | [optional] `service.name` attribute to be used for all spans (defaults to empty)
 
 Using environment variables:
 
