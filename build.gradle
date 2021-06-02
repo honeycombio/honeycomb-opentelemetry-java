@@ -1,6 +1,6 @@
 allprojects {
     project.group = "io.honeycomb"
-    project.version = "0.2.1"
+    project.version = "0.3.0"
 }
 
 subprojects {

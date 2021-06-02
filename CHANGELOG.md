@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.3.0] - 2021-06-02
+
+### Added
+
+- Add opentelemetry-extension-annotations as API dependency in the sdk (#69) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.2.1] - 2021-05-25
 
 ### Fixed
