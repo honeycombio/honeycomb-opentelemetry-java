@@ -12,6 +12,7 @@ test {
 
 dependencies {
     api "io.opentelemetry:opentelemetry-sdk:${versions.opentelemetry}"
+    api "io.opentelemetry:opentelemetry-extension-annotations:${versions.opentelemetry}"
 
     implementation "io.opentelemetry:opentelemetry-exporter-otlp:${versions.opentelemetry}"
     implementation 'io.grpc:grpc-netty-shaded:1.37.0'
