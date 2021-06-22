@@ -45,7 +45,7 @@ public class DeterministicTraceSamplerTest {
 
     @ParameterizedTest
     @MethodSource("provideStringsForIsBlank")
-    public void test_(String traceID, SamplingDecision expecteDecision) {
+    public void test_trace_IDS_return_expected_result(String traceID, SamplingDecision expecteDecision) {
         Sampler sampler = new DeterministicTraceSampler(2);
         SamplingResult result = sampler.shouldSample(Context.current(), traceID, "span", SpanKind.CLIENT, Attributes.empty(), Collections.emptyList());
         Assertions.assertEquals(expecteDecision, result.getDecision());
