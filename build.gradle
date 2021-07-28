@@ -22,7 +22,7 @@ subprojects {
                 bytebuddy           : dependencies.create(group: 'net.bytebuddy', name: 'byte-buddy', version: versions.bytebuddy),
                 bytebuddyagent      : dependencies.create(group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy),
                 autoservice         : [
-                        dependencies.create(group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc7'),
+                        dependencies.create(group: 'com.google.auto.service', name: 'auto-service', version: '1.0'),
                         dependencies.create(group: 'com.google.auto', name: 'auto-common', version: '1.0.1'),
                         dependencies.create(group: 'com.google.guava', name: 'guava', version: "${versions.guava}"),
                 ],
