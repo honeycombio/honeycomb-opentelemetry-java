@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * The Honeycomb SDK implementation of {@link OpenTelemetry}.
@@ -246,9 +247,18 @@ public final class HoneycombSdk implements OpenTelemetry {
          * @see GlobalOpenTelemetry
          */
         public HoneycombSdk build() {
-            Preconditions.checkNotNull(apiKey, "apiKey must be non-null");
-            Preconditions.checkNotNull(dataset, "dataset must be non-null");
             Preconditions.checkNotNull(sampler, "sampler must be non-null");
+
+            Logger logger = Logger.getLogger(HoneycombSdk.class.getName());
+
+            if (apiKey == null) {
+                logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
+                        EnvironmentConfiguration.HONEYCOMB_API_KEY));
+            }
+            if (dataset == null) {
+                logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
+                        EnvironmentConfiguration.HONEYCOMB_DATASET));
+            }
 
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
 
@@ -258,15 +268,14 @@ public final class HoneycombSdk implements OpenTelemetry {
                 builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
             }
 
-            SpanExporter exporter = builder
-                .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey)
-                .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset)
-                .build();
+            if (apiKey != null && dataset != null) {
+                builder.addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey)
+                        .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset);
+            }
+            SpanExporter exporter = builder.build();
 
-
-            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
-                .setSampler(sampler)
-                .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
+            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder().setSampler(sampler)
+                    .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
 
             this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
