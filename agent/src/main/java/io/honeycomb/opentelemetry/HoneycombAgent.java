@@ -9,8 +9,7 @@ import java.util.logging.Logger;
 /**
  * Honeycomb wrapper around {@link OpenTelemetryAgent}.
  *
- * HoneycombAgent converts honeycomb environment configuration into
- * OpenTelemetry configuration.
+ * HoneycombAgent converts honeycomb environment configuration into OpenTelemetry configuration.
  */
 public class HoneycombAgent {
 
@@ -34,17 +33,17 @@ public class HoneycombAgent {
 
         if (apiKey == null) {
             logger.warning(
-                    EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
+                EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
         }
         if (dataset == null) {
             logger.warning(
-                    EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
+                EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
         }
 
         if (apiKey != null && dataset != null) {
             System.setProperty("otel.exporter.otlp.headers",
-                    String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
-                            EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
+                String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
+                    EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
         }
         System.setProperty("otel.exporter.otlp.endpoint", apiEndpoint);
     }

@@ -253,11 +253,11 @@ public final class HoneycombSdk implements OpenTelemetry {
 
             if (apiKey == null) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
-                        EnvironmentConfiguration.HONEYCOMB_API_KEY));
+                    EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
             if (dataset == null) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
-                        EnvironmentConfiguration.HONEYCOMB_DATASET));
+                    EnvironmentConfiguration.HONEYCOMB_DATASET));
             }
 
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
@@ -269,13 +269,14 @@ public final class HoneycombSdk implements OpenTelemetry {
             }
 
             if (apiKey != null && dataset != null) {
-                builder.addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey)
-                        .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset);
+                builder
+                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey)
+                    .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset);
             }
             SpanExporter exporter = builder.build();
 
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder().setSampler(sampler)
-                    .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
+                .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
 
             this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
