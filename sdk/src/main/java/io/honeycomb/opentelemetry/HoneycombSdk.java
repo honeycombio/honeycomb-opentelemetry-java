@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
+
 /**
  * The Honeycomb SDK implementation of {@link OpenTelemetry}.
  *
@@ -251,11 +253,11 @@ public final class HoneycombSdk implements OpenTelemetry {
 
             Logger logger = Logger.getLogger(HoneycombSdk.class.getName());
 
-            if (apiKey == null) {
+            if (!isPresent(apiKey)) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
                     EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
-            if (dataset == null) {
+            if (!isPresent(dataset)) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
                     EnvironmentConfiguration.HONEYCOMB_DATASET));
             }
@@ -268,7 +270,7 @@ public final class HoneycombSdk implements OpenTelemetry {
                 builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
             }
 
-            if (apiKey != null && dataset != null) {
+            if (isPresent(apiKey) && isPresent(dataset)) {
                 builder
                     .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey)
                     .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset);

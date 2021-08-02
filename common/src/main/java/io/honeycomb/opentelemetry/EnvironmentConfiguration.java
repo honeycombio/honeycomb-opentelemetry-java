@@ -75,6 +75,10 @@ public class EnvironmentConfiguration {
             humanKey, key, getPropertyName(key));
     }
 
+    public static boolean isPresent(String value) {
+        return value != null && !value.isEmpty();
+    }
+
     private static String readVariable(String key, String fallback) {
         final String envValue = System.getenv(key);
         final String propValue = System.getProperty(getPropertyName(key));

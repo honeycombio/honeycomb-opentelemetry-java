@@ -4,6 +4,8 @@ import io.opentelemetry.javaagent.OpenTelemetryAgent;
 
 import java.lang.instrument.Instrumentation;
 
+import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
+
 /**
  * Honeycomb wrapper around {@link OpenTelemetryAgent}.
  *
@@ -27,14 +29,14 @@ public class HoneycombAgent {
         final String apiEndpoint = EnvironmentConfiguration.getHoneycombApiEndpoint();
         final String dataset = EnvironmentConfiguration.getHoneycombDataset();
 
-        if (apiKey == null) {
+        if (!isPresent(apiKey)) {
             System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
         }
-        if (dataset == null) {
+        if (!isPresent(dataset)) {
             System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
         }
 
-        if (apiKey != null && dataset != null) {
+        if (isPresent(apiKey) && isPresent(dataset)) {
             System.setProperty("otel.exporter.otlp.headers",
                 String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
                     EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
