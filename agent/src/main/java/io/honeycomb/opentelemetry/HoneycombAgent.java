@@ -4,8 +4,6 @@ import io.opentelemetry.javaagent.OpenTelemetryAgent;
 
 import java.lang.instrument.Instrumentation;
 
-import java.util.logging.Logger;
-
 /**
  * Honeycomb wrapper around {@link OpenTelemetryAgent}.
  *
@@ -25,19 +23,15 @@ public class HoneycombAgent {
 
     private static void configureEnvironment() {
 
-        Logger logger = Logger.getLogger(HoneycombAgent.class.getName());
-
         final String apiKey = EnvironmentConfiguration.getHoneycombApiKey();
         final String apiEndpoint = EnvironmentConfiguration.getHoneycombApiEndpoint();
         final String dataset = EnvironmentConfiguration.getHoneycombDataset();
 
         if (apiKey == null) {
-            logger.warning(
-                EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
+            System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
         }
         if (dataset == null) {
-            logger.warning(
-                EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
+            System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
         }
 
         if (apiKey != null && dataset != null) {
