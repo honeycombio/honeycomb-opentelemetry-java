@@ -4,6 +4,8 @@ import io.opentelemetry.javaagent.OpenTelemetryAgent;
 
 import java.lang.instrument.Instrumentation;
 
+import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
+
 /**
  * Honeycomb wrapper around {@link OpenTelemetryAgent}.
  *
@@ -12,45 +14,33 @@ import java.lang.instrument.Instrumentation;
 public class HoneycombAgent {
 
     public static void premain(String agentArgs, Instrumentation inst) {
-        try {
-            configureEnvironment();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return;
-        }
-
+        configureEnvironment();
         OpenTelemetryAgent.premain(agentArgs, inst);
     }
 
     public static void agentmain(String agentArgs, Instrumentation inst) {
-        try {
-            configureEnvironment();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return;
-        }
-
+        configureEnvironment();
         OpenTelemetryAgent.agentmain(agentArgs, inst);
     }
 
-    private static void configureEnvironment() throws Exception {
+    private static void configureEnvironment() {
+
         final String apiKey = EnvironmentConfiguration.getHoneycombApiKey();
         final String apiEndpoint = EnvironmentConfiguration.getHoneycombApiEndpoint();
         final String dataset = EnvironmentConfiguration.getHoneycombDataset();
 
-        if (apiKey == null) {
-            throw new Exception("WARN: Could not start Honeycomb agent: "
-                + EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
+        if (!isPresent(apiKey)) {
+            System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
         }
-        if (dataset == null) {
-            throw new Exception("WARN: Could not start Honeycomb agent: "
-                + EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
+        if (!isPresent(dataset)) {
+            System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
         }
 
-        System.setProperty("otel.exporter.otlp.headers",
-            String.format("%s=%s,%s=%s",
-                EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
-                EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
+        if (isPresent(apiKey) && isPresent(dataset)) {
+            System.setProperty("otel.exporter.otlp.headers",
+                String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
+                    EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
+        }
         System.setProperty("otel.exporter.otlp.endpoint", apiEndpoint);
     }
 
