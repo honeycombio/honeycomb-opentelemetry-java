@@ -35,11 +35,11 @@ public class HoneycombAgent {
         if (!isPresent(dataset)) {
             System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
         }
-        
+
         if (isPresent(apiKey) && isPresent(dataset)) {
             System.setProperty("otel.exporter.otlp.headers",
-            String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
-            EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
+                String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
+                    EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
         }
 
         // metrics not currently supported in this distro
