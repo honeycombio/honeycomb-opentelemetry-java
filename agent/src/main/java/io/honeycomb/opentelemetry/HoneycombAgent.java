@@ -41,6 +41,10 @@ public class HoneycombAgent {
                 String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
                     EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
         }
+
+        // metrics not currently supported in this distro
+        System.setProperty("otel.metrics.exporter", "none");
+
         System.setProperty("otel.exporter.otlp.endpoint", apiEndpoint);
     }
 
