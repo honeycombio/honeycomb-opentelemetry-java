@@ -1,6 +1,6 @@
 # Honeycomb OpenTelemetry Distro for Java
 
-[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/multi-git-changer-657635240)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
+[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/honeycomb-opentelemetry-java)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java.svg?style=shield&circle-token=e2f4c30919ecbdbfb095415a6f4114a03dc491a0)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java)
 
 **STATUS: this library is BETA.**
