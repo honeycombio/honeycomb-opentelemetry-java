@@ -6,7 +6,7 @@
 
 - Disabled metrics from the agent by default (#92) (see #96 for the plan to add them back in) | [@JamieDanielson](https://github.com/JamieDanielson)
 - Make API Key and Dataset optional (#89) | [@vreynolds](https://github.com/vreynolds)
-- Add deterministic sampler tests (#73) (7 weeks ago) [Mike Goldsmith]
+- Add deterministic sampler tests (#73) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 
 ### Dependency Updates
 
