@@ -25,7 +25,7 @@ The SDK also provides a deterministic sampler and more span processing options.
         <dependency>
             <groupId>io.honeycomb</groupId>
             <artifactId>honeycomb-opentelemetry-sdk</artifactId>
-            <version>0.3.0</version>
+            <version>0.4.0</version>
         </dependency>
     </dependencies>
 </project>
@@ -35,7 +35,7 @@ The SDK also provides a deterministic sampler and more span processing options.
 
 ```groovy
 dependencies {
-    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.3.0')
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.4.0')
 }
 ```
 
@@ -54,7 +54,7 @@ you can exclude the `grpc-netty-shaded` transitive dependency:
         <dependency>
             <groupId>io.honeycomb</groupId>
             <artifactId>honeycomb-opentelemetry-sdk</artifactId>
-            <version>0.3.0</version>
+            <version>0.4.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.grpc</groupId>
@@ -70,7 +70,7 @@ you can exclude the `grpc-netty-shaded` transitive dependency:
 
 ```groovy
 dependencies {
-    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.3.0') {
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.4.0') {
         exclude group: 'io.grpc', module: 'grpc-netty-shaded'
     }
 }
