@@ -183,7 +183,7 @@ the Honeycomb OpenTelemetry SDK provides convenient setup
 for sending manual OpenTelemetry instrumentation to Honeycomb.
 The SDK also provides a deterministic sampler and more span processing options.
 
-[Set up the Honeycomb OpenTelemetry SDK for Java](/docs/README.md#sdk-usage).
+[Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#adding-manual-instrumentation).
 
 **Note:** For teams using the Honeycomb OpenTelemetry agent for Java,
 you do not need to add the Honeycomb OpenTelemetry SDK as a dependency.
