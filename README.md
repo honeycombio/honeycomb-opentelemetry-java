@@ -31,7 +31,7 @@ you should use the vanilla OpenTelemetry SDK packages with the agent.
 Otherwise, if you're not interested in auto-instrumentation
 and you'd like to start first with manually instrumenting your application,
 you can use the Honeycomb OpenTelemetry SDK.
-See the [SDK Usage](/docs/README.md#sdk-usage) instructions for details.
+See the [SDK Usage](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#adding-manual-instrumentation) instructions for details.
 
 ## Agent Usage
 
