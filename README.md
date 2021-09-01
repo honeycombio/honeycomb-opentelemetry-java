@@ -22,16 +22,9 @@ Honeycomb's OpenTelemetry Java Agent gives you all-in-one,
 easy-to-install auto-instrumentation for your Java application.
 See the [Agent Usage](#agent-usage) section for setup.
 
-**Note:** For teams using the Honeycomb OpenTelemetry agent for Java,
-you do not need to add the Honeycomb OpenTelemetry SDK as a dependency.
-If you would like to enrich the agent's auto-instrumentation with
-[custom instrumentation](#enrich-the-auto-instrumented-data),
-you should use the vanilla OpenTelemetry SDK packages with the agent.
-
-Otherwise, if you're not interested in auto-instrumentation
-and you'd like to start first with manually instrumenting your application,
+Otherwise, if you're not interested in auto-instrumentation, and you'd like to start first with manually instrumenting your application,
 you can use the Honeycomb OpenTelemetry SDK.
-See the [SDK Usage](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#adding-manual-instrumentation) instructions for details.
+See the [SDK Usage](/docs/README.md#sdk-usage) instructions for details.
 
 ## Agent Usage
 
@@ -80,9 +73,9 @@ java \
 
 When using the Honeycomb OpenTelemetry Agent,
 you can add custom instrumentation directly to auto-instrumented trace
-and span contexts using the vanilla OpenTelemetry SDK.
+and span contexts using the OpenTelemetry API.
 
-Add the OpenTelemetry packages to your project's dependencies.
+Honeycomb SDK provides the OpenTelemetry API as a transitive dependency:
 
 For Maven:
 
@@ -90,14 +83,9 @@ For Maven:
 <project>
     <dependencies>
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-api</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-extension-annotations</artifactId>
-            <version>1.2.0</version>
+            <groupId>io.honeycomb</groupId>
+            <artifactId>honeycomb-opentelemetry-sdk</artifactId>
+            <version>0.4.0</version>
         </dependency>
     </dependencies>
 </project>
@@ -107,17 +95,16 @@ For Gradle:
 
 ```groovy
 dependencies {
-    compile('io.opentelemetry:opentelemetry-api:1.2.0')
-    compile('io.opentelemetry:opentelemetry-extension-annotations:1.2.0')
+    compile('io.honeycomb:honeycomb-opentelemetry-sdk:0.4.0')
 }
 ```
 
-Then, import the relevant OpenTelemetry SDK package into your code.
+Then, import the relevant OpenTelemetry API into your code.
 Here's an example adding a custom attribute to a span created by the agent
 for a Spring controller:
 
 ```java
-// import OpenTelemetry package into your code
+// import OpenTelemetry API into your code
 import io.opentelemetry.api.trace.Span;
 
 @RestController
@@ -183,13 +170,7 @@ the Honeycomb OpenTelemetry SDK provides convenient setup
 for sending manual OpenTelemetry instrumentation to Honeycomb.
 The SDK also provides a deterministic sampler and more span processing options.
 
-[Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#adding-manual-instrumentation).
-
-**Note:** For teams using the Honeycomb OpenTelemetry agent for Java,
-you do not need to add the Honeycomb OpenTelemetry SDK as a dependency.
-If you would like to enrich the agent's auto-instrumentation with
-[custom instrumentation](#enrich-the-auto-instrumented-data),
-you should use the vanilla OpenTelemetry SDK packages with the agent.
+[Set up the Honeycomb OpenTelemetry SDK for Java](/docs/README.md#sdk-usage).
 
 ## License
 
