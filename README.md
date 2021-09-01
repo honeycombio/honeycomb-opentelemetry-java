@@ -24,7 +24,7 @@ See the [Agent Usage](#agent-usage) section for setup.
 
 Otherwise, if you're not interested in auto-instrumentation, and you'd like to start first with manually instrumenting your application,
 you can use the Honeycomb OpenTelemetry SDK.
-See the [SDK Usage](/docs/README.md#sdk-usage) instructions for details.
+See the [SDK Usage](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#using-the-honeycomb-sdk-builder) instructions for details.
 
 ## Agent Usage
 
@@ -170,7 +170,7 @@ the Honeycomb OpenTelemetry SDK provides convenient setup
 for sending manual OpenTelemetry instrumentation to Honeycomb.
 The SDK also provides a deterministic sampler and more span processing options.
 
-[Set up the Honeycomb OpenTelemetry SDK for Java](/docs/README.md#sdk-usage).
+[Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#using-the-honeycomb-sdk-builder).
 
 ## License
 
