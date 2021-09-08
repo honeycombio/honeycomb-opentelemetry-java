@@ -12,17 +12,24 @@ import io.opentelemetry.extension.annotations.WithSpan;
 
 @RestController
 public class HelloController {
+    private static final String importantInfo = "Important Information";
 
   @Autowired
   private HoneycombSdk sdk;
 
 	@GetMapping("/")
-    @WithSpan
 	public String index() {
     Tracer tracer = sdk.getTracer("examples");
     Span span = tracer.spanBuilder("greetings").startSpan();
+    span.setAttribute("custom_field", "important value");
+    String intro = getImportantInfo();
+    String finalMessage = String.format("%s: Greetings from Spring Boot!", intro);
     span.end();
-		return "Greetings from Spring Boot!";
+    return finalMessage;
 	}
+
+    public String getImportantInfo() {
+        return importantInfo;
+    }
 
 }
