@@ -5,49 +5,22 @@ plugins {
 }
 
 group = 'io.honeycomb.examples'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-ext {
-	honeycombDistroVersion = '0.4.0';
-}
-
-configurations {
-    agent
-}
 
 repositories {
 	mavenCentral()
-	mavenLocal()
 }
 
 dependencies {
-	agent "io.honeycomb:honeycomb-opentelemetry-javaagent:${honeycombDistroVersion}:all"
-	implementation ("io.honeycomb:honeycomb-opentelemetry-sdk:${honeycombDistroVersion}")
+	// use local sdk
+	implementation project(":sdk")
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-task copyAgentJar(type: Copy) {
-    from configurations.agent {
-        include '**/honeycomb-opentelemetry-javaagent*.jar'
-    }
-    into "agent"
-    rename { fileName -> "honey-javaagent.jar" }
-}
+compileJava.dependsOn ':agent:shadowJar'
+bootRun.dependsOn ':agent:shadowJar'
 
-compileJava.dependsOn copyAgentJar
-bootRun.dependsOn copyAgentJar
-
+// use local agent
 bootRun.doFirst {
-    jvmArgs("-javaagent:agent/honey-javaagent.jar")
-}
-
-clean.doFirst {
-    delete "agent"
-}
-
-test {
-	useJUnitPlatform()
+	jvmArgs("-javaagent:${rootDir}/agent/build/libs/honeycomb-opentelemetry-javaagent-${project.version}-all.jar")
 }

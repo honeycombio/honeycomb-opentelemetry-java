@@ -1,29 +1,19 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.4'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'io.honeycomb.examples'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-ext {
-	honeycombDistroVersion = '0.4.0';
-}
 
 repositories {
-	mavenCentral()
-	mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-	implementation ("io.honeycomb:honeycomb-opentelemetry-sdk:${honeycombDistroVersion}")
-	// implementation 'sdk/src/main/java/io/honeycomb/opentelemetry/HoneycombSdk.java'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
+    // use local sdk
+    implementation project(":sdk")
 
-test {
-	useJUnitPlatform()
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
