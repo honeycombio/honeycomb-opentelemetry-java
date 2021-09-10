@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>common</name>
-	<comment>Project common created by Buildship.</comment>
+	<name>spring-sdk</name>
+	<comment>Project spring-sdk created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1627595967255</id>
+			<id>1631225075603</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
