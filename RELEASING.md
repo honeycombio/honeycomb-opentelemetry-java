@@ -2,7 +2,7 @@
 
 1. First, update the `project.version` in the root build.gradle file. Also update the Changelog, as well as any references to the previous version in the docs.
 
-2. (Maybe) update the OpenTelemetry versions in the readme, if those were upgraded since last release.
+2. If the new release updates the OpenTelemetry SDK and/or agent versions, update the `Latest release built with` section in the [README](./README.md).
 
 3. Once the above changes are merged into `main`, tag `main` with the new version, e.g. `v0.1.1`. Push the tags. This will kick off CI, which will publish a draft GitHub release, and stage the new release in [Sonatype](https://oss.sonatype.org).
 
