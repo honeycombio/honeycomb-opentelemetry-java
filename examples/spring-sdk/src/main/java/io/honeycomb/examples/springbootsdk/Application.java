@@ -19,8 +19,7 @@ public class Application {
 			return new HoneycombSdk.Builder()
 					.addSpanProcessor(new BaggageSpanProcessor())
 					.setApiKey(System.getenv("HONEYCOMB_API_KEY"))
-					.setDataset(System.getenv("HONEYCOMB_DATASET"))
-					// .setServiceName(System.getenv("SERVICE_NAME"))
+                    .setDataset(System.getenv("HONEYCOMB_DATASET"))
 					.setServiceName("example-service")
 					.setEndpoint(System.getenv("HONEYCOMB_API_ENDPOINT"))
 					.buildAndRegisterGlobal();
