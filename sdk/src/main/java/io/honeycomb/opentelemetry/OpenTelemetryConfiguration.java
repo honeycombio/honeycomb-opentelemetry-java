@@ -194,7 +194,7 @@ public final class OpenTelemetryConfiguration {
         }
 
         /**
-         * Returns a new {@link OpenTelemetrySdk} built with the configuration of this {@link
+         * Returns a new {@link OpenTelemetry} built with the configuration of this {@link
          * Builder} and registers it as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. An exception will be thrown if this method is attempted to
          * be called multiple times in the lifecycle of an application - ensure you have only one SDK for
@@ -204,14 +204,14 @@ public final class OpenTelemetryConfiguration {
          * @return {@link OpenTelemetryConfiguration} instance
          * @see GlobalOpenTelemetry
          */
-        public OpenTelemetrySdk buildAndRegisterGlobal() {
-            OpenTelemetrySdk sdk = build();
+        public OpenTelemetry buildAndRegisterGlobal() {
+            OpenTelemetry sdk = build();
             GlobalOpenTelemetry.set(sdk);
             return sdk;
         }
 
         /**
-         * Returns a new {@link OpenTelemetrySdk} built with the configuration of this {@link
+         * Returns a new {@link OpenTelemetry} built with the configuration of this {@link
          * Builder}. This SDK is not registered as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. It is recommended that you register one SDK using {@link
          * Builder#buildAndRegisterGlobal()} for use by instrumentation that requires
@@ -224,7 +224,7 @@ public final class OpenTelemetryConfiguration {
          * @return {@link OpenTelemetryConfiguration} instance
          * @see GlobalOpenTelemetry
          */
-        public OpenTelemetrySdk build() {
+        public OpenTelemetry build() {
             Preconditions.checkNotNull(sampler, "sampler must be non-null");
 
             Logger logger = Logger.getLogger(OpenTelemetryConfiguration.class.getName());

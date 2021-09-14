@@ -3,8 +3,8 @@ package io.honeycomb.opentelemetry;
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 
 import org.junit.jupiter.api.AfterEach;
@@ -26,7 +26,7 @@ public class OpenTelemetryConfigurationTest {
     public void testConfiguration_tracerSettings() {
         Sampler sampler = new DeterministicTraceSampler(5);
         BaggageSpanProcessor baggageSpanProcessor = new BaggageSpanProcessor();
-        OpenTelemetrySdk sdk = OpenTelemetryConfiguration.builder()
+        OpenTelemetry openTelemetry = OpenTelemetryConfiguration.builder()
             .setSampler(sampler)
             .addSpanProcessor(baggageSpanProcessor)
             .setApiKey("foobar")
@@ -39,17 +39,17 @@ public class OpenTelemetryConfigurationTest {
         // of 5.
         Assertions.assertNotNull(sampler);
         Assertions.assertNotNull(baggageSpanProcessor);
-        Assertions.assertNotNull(sdk);
+        Assertions.assertNotNull(openTelemetry);
     }
 
     @Test
     void testConfiguration_headers() {
-        OpenTelemetrySdk sdk = OpenTelemetryConfiguration.builder()
+        OpenTelemetry openTelemetry = OpenTelemetryConfiguration.builder()
             .setApiKey("foobar")
             .setDataset("dataset")
             .build();
 
-        Assertions.assertNotNull(sdk);
+        Assertions.assertNotNull(openTelemetry);
 
         // TODO:
         // Figure out a way to test that the api key and dataset
