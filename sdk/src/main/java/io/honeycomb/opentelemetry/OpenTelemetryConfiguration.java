@@ -1,6 +1,5 @@
 package io.honeycomb.opentelemetry;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
@@ -8,13 +7,12 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
-import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
@@ -24,7 +22,6 @@ import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -37,29 +34,9 @@ import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
  * This class exists to make it easier and more intuitive to use
  * Honeycomb with OpenTelemetry.
  */
-public final class HoneycombSdk implements OpenTelemetry {
-
-    private final SdkTracerProvider tracerProvider;
-    private final ContextPropagators propagators;
-
-    private HoneycombSdk(SdkTracerProvider tracerProvider, ContextPropagators propagators) {
-        this.tracerProvider = tracerProvider;
-        this.propagators = propagators;
-    }
-
-    @Override
-    public TracerProvider getTracerProvider() {
-        return this.tracerProvider;
-    }
-
-    @Override
-    public ContextPropagators getPropagators() {
-        return this.propagators;
-    }
+public final class OpenTelemetryConfiguration {
 
     public static class Builder {
-        public Builder() {}
-
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
         private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<>();
@@ -69,6 +46,8 @@ public final class HoneycombSdk implements OpenTelemetry {
         private String dataset;
         private String endpoint;
         private String serviceName;
+
+        private Builder() {}
 
         /**
          * Sets the Honeycomb API Key to use.
@@ -218,24 +197,24 @@ public final class HoneycombSdk implements OpenTelemetry {
         }
 
         /**
-         * Returns a new {@link HoneycombSdk} built with the configuration of this {@link
+         * Returns a new {@link OpenTelemetrySdk} built with the configuration of this {@link
          * Builder} and registers it as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. An exception will be thrown if this method is attempted to
          * be called multiple times in the lifecycle of an application - ensure you have only one SDK for
          * use as the global instance. If you need to configure multiple SDKs for tests, use {@link
          * GlobalOpenTelemetry#resetForTest()} between them.
          *
-         * @return {@link HoneycombSdk} instance
+         * @return {@link OpenTelemetryConfiguration} instance
          * @see GlobalOpenTelemetry
          */
-        public HoneycombSdk buildAndRegisterGlobal() {
-            HoneycombSdk sdk = build();
+        public OpenTelemetrySdk buildAndRegisterGlobal() {
+            OpenTelemetrySdk sdk = build();
             GlobalOpenTelemetry.set(sdk);
             return sdk;
         }
 
         /**
-         * Returns a new {@link HoneycombSdk} built with the configuration of this {@link
+         * Returns a new {@link OpenTelemetrySdk} built with the configuration of this {@link
          * Builder}. This SDK is not registered as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. It is recommended that you register one SDK using {@link
          * Builder#buildAndRegisterGlobal()} for use by instrumentation that requires
@@ -245,13 +224,13 @@ public final class HoneycombSdk implements OpenTelemetry {
          * {@link SdkTracerProvider} with a {@link BatchSpanProcessor} that has an
          * {@link OtlpGrpcSpanExporter} configured.</p>
          *
-         * @return {@link HoneycombSdk} instance
+         * @return {@link OpenTelemetryConfiguration} instance
          * @see GlobalOpenTelemetry
          */
-        public HoneycombSdk build() {
+        public OpenTelemetrySdk build() {
             Preconditions.checkNotNull(sampler, "sampler must be non-null");
 
-            Logger logger = Logger.getLogger(HoneycombSdk.class.getName());
+            Logger logger = Logger.getLogger(OpenTelemetryConfiguration.class.getName());
 
             if (!isPresent(apiKey)) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
@@ -296,39 +275,14 @@ public final class HoneycombSdk implements OpenTelemetry {
                         W3CBaggagePropagator.getInstance()));
             }
 
-            return new HoneycombSdk(tracerProviderBuilder.build(), propagators);
+            return OpenTelemetrySdk.builder()
+                .setTracerProvider(tracerProviderBuilder.build())
+                .setPropagators(propagators)
+                .build();
         }
     }
 
-    /**
-     * This class allows the SDK to unobfuscate an obfuscated static global provider.
-     *
-     * <p>Static global providers are obfuscated when they are returned from the API to prevent users
-     * from casting them to their SDK specific implementation. For example, we do not want users to
-     * use patterns like {@code (TracerSdkProvider) OpenTelemetry.getGlobalTracerProvider()}.</p>
-     */
-    @ThreadSafe
-    @VisibleForTesting
-    static class ObfuscatedTracerProvider implements TracerProvider {
-
-        private final SdkTracerProvider delegate;
-
-        ObfuscatedTracerProvider(SdkTracerProvider delegate) {
-            this.delegate = delegate;
-        }
-
-        @Override
-        public Tracer get(String instrumentationName) {
-            return delegate.get(instrumentationName);
-        }
-
-        @Override
-        public Tracer get(String instrumentationName, String instrumentationVersion) {
-            return delegate.get(instrumentationName, instrumentationVersion);
-        }
-
-        public SdkTracerProvider unobfuscate() {
-            return delegate;
-        }
+    public static Builder builder() {
+        return new Builder();
     }
 }
