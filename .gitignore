@@ -43,3 +43,9 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+**/bin/
+
+## Eclipse
+**/.settings
+**/.project
+**/.classpath
