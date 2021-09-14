@@ -29,10 +29,7 @@ import java.util.logging.Logger;
 import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
 
 /**
- * The Honeycomb SDK implementation of {@link OpenTelemetry}.
- *
- * This class exists to make it easier and more intuitive to use
- * Honeycomb with OpenTelemetry.
+ * This class exists to make it easier and more intuitive to use Honeycomb with OpenTelemetry.
  */
 public final class OpenTelemetryConfiguration {
 
@@ -282,6 +279,10 @@ public final class OpenTelemetryConfiguration {
         }
     }
 
+    /**
+     * Returns a new instance of a {@link Builder}.
+     * @return {@link Builder} instance
+     */
     public static Builder builder() {
         return new Builder();
     }
