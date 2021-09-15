@@ -30,5 +30,4 @@ public class HelloController {
     public String getImportantInfo() {
         return importantInfo;
     }
-
 }
