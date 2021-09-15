@@ -27,6 +27,7 @@ hs_err_pid*
 
 ### Gradle ###
 .gradle
+bin/
 build/
 
 # Ignore Gradle GUI config
@@ -45,7 +46,29 @@ gradle-app.setting
 **/build/
 **/bin/
 
-## Eclipse
-**/.settings
-**/.project
-**/.classpath
+### IntelliJ ###
+out/
+.idea/
+.idea_modules/
+*.iml
+*.ipr
+*.iws
+
+### Eclipse ###
+.settings/
+bin/
+tmp/
+.metadata
+.classpath
+.project
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.factorypath
+
+### VSCode ###
+.vscode/
+.code-workspace

@@ -1,0 +1,19 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'io.honeycomb.examples'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // use local sdk
+    implementation project(":sdk")
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
