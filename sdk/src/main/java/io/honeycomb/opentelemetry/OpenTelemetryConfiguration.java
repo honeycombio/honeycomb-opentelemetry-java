@@ -201,7 +201,7 @@ public final class OpenTelemetryConfiguration {
          * use as the global instance. If you need to configure multiple SDKs for tests, use {@link
          * GlobalOpenTelemetry#resetForTest()} between them.
          *
-         * @return {@link OpenTelemetryConfiguration} instance
+         * @return {@link OpenTelemetry} instance
          * @see GlobalOpenTelemetry
          */
         public OpenTelemetry buildAndRegisterGlobal() {
@@ -221,7 +221,7 @@ public final class OpenTelemetryConfiguration {
          * {@link SdkTracerProvider} with a {@link BatchSpanProcessor} that has an
          * {@link OtlpGrpcSpanExporter} configured.</p>
          *
-         * @return {@link OpenTelemetryConfiguration} instance
+         * @return {@link OpenTelemetry} instance
          * @see GlobalOpenTelemetry
          */
         public OpenTelemetry build() {
