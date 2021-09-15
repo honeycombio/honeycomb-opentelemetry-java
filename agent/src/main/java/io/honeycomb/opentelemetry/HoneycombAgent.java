@@ -4,8 +4,6 @@ import io.opentelemetry.javaagent.OpenTelemetryAgent;
 
 import java.lang.instrument.Instrumentation;
 
-import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
-
 /**
  * Honeycomb wrapper around {@link OpenTelemetryAgent}.
  *
@@ -24,28 +22,8 @@ public class HoneycombAgent {
     }
 
     private static void configureEnvironment() {
-
-        final String apiKey = EnvironmentConfiguration.getHoneycombApiKey();
-        final String apiEndpoint = EnvironmentConfiguration.getHoneycombApiEndpoint();
-        final String dataset = EnvironmentConfiguration.getHoneycombDataset();
-
-        if (!isPresent(apiKey)) {
-            System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("API key", EnvironmentConfiguration.HONEYCOMB_API_KEY));
-        }
-        if (!isPresent(dataset)) {
-            System.out.printf("WARN: %s%n", EnvironmentConfiguration.getErrorMessage("dataset", EnvironmentConfiguration.HONEYCOMB_DATASET));
-        }
-
-        if (isPresent(apiKey) && isPresent(dataset)) {
-            System.setProperty("otel.exporter.otlp.headers",
-                String.format("%s=%s,%s=%s", EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey,
-                    EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset));
-        }
-
-        // metrics not currently supported in this distro
-        System.setProperty("otel.metrics.exporter", "none");
-
-        System.setProperty("otel.exporter.otlp.endpoint", apiEndpoint);
+        // set sytem properties to configre OTLP exporter to send traces & metrics data
+        EnvironmentConfiguration.enableOTLPTraces();
+        EnvironmentConfiguration.enableOTLPMetrics();
     }
-
 }
