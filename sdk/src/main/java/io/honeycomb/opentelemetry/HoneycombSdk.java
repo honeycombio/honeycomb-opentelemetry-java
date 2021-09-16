@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
@@ -65,10 +66,13 @@ public final class HoneycombSdk implements OpenTelemetry {
         private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<>();
         private AttributesBuilder resourceAttributes = Attributes.builder();
 
-        private String apiKey;
-        private String dataset;
-        private String endpoint;
+        private String tracesApiKey;
+        private String tracesDataset;
+        private String tracesEndpoint;
         private String serviceName;
+        private String metricsApiKey;
+        private String metricsEndpoint;
+        private String metricsDataset;
 
         /**
          * Sets the Honeycomb API Key to use.
@@ -80,7 +84,36 @@ public final class HoneycombSdk implements OpenTelemetry {
          * @return builder
          */
         public Builder setApiKey(String apiKey) {
-            this.apiKey = apiKey;
+            setTracesApiKey(apiKey);
+            setMetricsApiKey(apiKey);
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb API key to send trace data.
+         *
+         * <p>This value is sent to Honeycomb on every request and is used to identify
+         * the team making a request.</p>
+         *
+         * @param apiKey a String to use as the API key. See team settings in Honeycomb.
+         * @return builder
+         */
+        public Builder setTracesApiKey(String apiKey) {
+            this.tracesApiKey = apiKey;
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb API Key to send metrics data.
+         *
+         * <p>This value is sent to Honeycomb on every request and is used to identify
+         * the team making a request.</p>
+         *
+         * @param apiKey a String to use as the API key. See team settings in Honeycomb.
+         * @return builder
+         */
+        public Builder setMetricsApiKey(String apiKey) {
+            this.metricsApiKey = apiKey;
             return this;
         }
 
@@ -94,7 +127,34 @@ public final class HoneycombSdk implements OpenTelemetry {
          * @return builder
          */
         public Builder setDataset(String dataset) {
-            this.dataset = dataset;
+            setTracesDataset(dataset);
+            // don't set metrics dataset, we want them to go to different places
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb dataset to store trace data.
+         *
+         * <p>This value is sent to Honeycomb on every request and is used to identify
+         * the dataset that metrics data is being written to.</p>
+         * @param dataset a String to use as the metrics dataset name.
+         * @return builder
+         */
+        public Builder setTracesDataset(String dataset) {
+            this.tracesDataset = dataset;
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb dataset to store metics data.
+         *
+         * <p>This value is sent to Honeycomb on every request and is used to identify
+         * the dataset that metrics data is being written to.</p>
+         * @param dataset a String to use as the metrics dataset name.
+         * @return builder
+         */
+        public Builder setMetricsDataset(String dataset) {
+            this.metricsDataset = dataset;
             return this;
         }
 
@@ -105,7 +165,30 @@ public final class HoneycombSdk implements OpenTelemetry {
          * @return builder
          */
         public Builder setEndpoint(String endpoint) {
-            this.endpoint = endpoint;
+            setTracesEndpoint(endpoint);
+            setMetricsEndpoint(endpoint);
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb endpoint to send trace data. Optional, defaults to the Honeycomb ingest API.
+         *
+         * @param endpoint a String to use as the endpoint URI. Must begin with https or http.
+         * @return builder
+         */
+        public Builder setTracesEndpoint(String endpoint) {
+            this.tracesEndpoint = endpoint;
+            return this;
+        }
+
+        /**
+         * Sets the Honeycomb endpoint to send metrics data.. Optional, defaults to the Honeycomb ingest API.
+         *
+         * @param endpoint a String to use as the endpoint URI. Must begin with https or http.
+         * @return builder
+         */
+        public Builder setMetricsEndpoint(String endpoint) {
+            this.metricsEndpoint = endpoint;
             return this;
         }
 
@@ -253,27 +336,27 @@ public final class HoneycombSdk implements OpenTelemetry {
 
             Logger logger = Logger.getLogger(HoneycombSdk.class.getName());
 
-            if (!isPresent(apiKey)) {
+            if (!isPresent(tracesApiKey)) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
                     EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
-            if (!isPresent(dataset)) {
+            if (!isPresent(tracesDataset)) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
                     EnvironmentConfiguration.HONEYCOMB_DATASET));
             }
 
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
 
-            if (endpoint != null) {
-                builder.setEndpoint(endpoint);
+            if (tracesEndpoint != null) {
+                builder.setEndpoint(tracesEndpoint);
             } else {
                 builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
             }
 
-            if (isPresent(apiKey) && isPresent(dataset)) {
+            if (isPresent(tracesApiKey) && isPresent(tracesDataset)) {
                 builder
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, apiKey)
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, dataset);
+                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey)
+                    .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
             }
             SpanExporter exporter = builder.build();
 
@@ -296,6 +379,7 @@ public final class HoneycombSdk implements OpenTelemetry {
                         W3CBaggagePropagator.getInstance()));
             }
 
+            EnvironmentConfiguration.enableOTLPMetrics(metricsEndpoint, metricsApiKey, metricsDataset);
             return new HoneycombSdk(tracerProviderBuilder.build(), propagators);
         }
     }

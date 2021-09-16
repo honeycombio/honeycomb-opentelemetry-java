@@ -177,9 +177,19 @@ public class EnvironmentConfiguration {
     }
 
     public static void enableOTLPMetrics() {
-        final String endpoint = getHoneycombMetricsApiEndpoint();
-        final String apiKey = getHoneycombMetricsApiKey();
-        final String dataset = getHoneycombMetricsDataset();
+        enableOTLPMetrics(null, null, null);
+    }
+
+    public static void enableOTLPMetrics(String endpoint, String apiKey, String dataset) {
+        if (Strings.isNullOrEmpty(endpoint)) {
+            endpoint = getHoneycombMetricsApiEndpoint();
+        }
+        if (Strings.isNullOrEmpty(apiKey)) {
+            apiKey = getHoneycombMetricsApiKey();
+        }
+        if (Strings.isNullOrEmpty(dataset)) {
+            dataset = getHoneycombMetricsDataset();
+        }
 
         if (!Strings.isNullOrEmpty(dataset)) {
             System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
