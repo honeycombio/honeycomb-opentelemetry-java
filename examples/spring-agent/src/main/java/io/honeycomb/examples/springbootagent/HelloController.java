@@ -3,10 +3,7 @@ package io.honeycomb.examples.springbootagent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.extension.annotations.WithSpan;
 
 @RestController
@@ -26,5 +23,4 @@ public class HelloController {
     public String getImportantInfo() {
         return importantInfo;
     }
-
 }
