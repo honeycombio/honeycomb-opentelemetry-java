@@ -44,9 +44,6 @@ public final class OpenTelemetryConfiguration {
         private String tracesDataset;
         private String tracesEndpoint;
         private String serviceName;
-        private String metricsApiKey;
-        private String metricsEndpoint;
-        private String metricsDataset;
 
         private Builder() {}
 
@@ -61,7 +58,6 @@ public final class OpenTelemetryConfiguration {
          */
         public Builder setApiKey(String apiKey) {
             setTracesApiKey(apiKey);
-            setMetricsApiKey(apiKey);
             return this;
         }
 
@@ -76,20 +72,6 @@ public final class OpenTelemetryConfiguration {
          */
         public Builder setTracesApiKey(String apiKey) {
             this.tracesApiKey = apiKey;
-            return this;
-        }
-
-        /**
-         * Sets the Honeycomb API Key to send metrics data.
-         *
-         * <p>This value is sent to Honeycomb on every request and is used to identify
-         * the team making a request.</p>
-         *
-         * @param apiKey a String to use as the API key. See team settings in Honeycomb.
-         * @return builder
-         */
-        public Builder setMetricsApiKey(String apiKey) {
-            this.metricsApiKey = apiKey;
             return this;
         }
 
@@ -122,19 +104,6 @@ public final class OpenTelemetryConfiguration {
         }
 
         /**
-         * Sets the Honeycomb dataset to store metics data.
-         *
-         * <p>This value is sent to Honeycomb on every request and is used to identify
-         * the dataset that metrics data is being written to.</p>
-         * @param dataset a String to use as the metrics dataset name.
-         * @return builder
-         */
-        public Builder setMetricsDataset(String dataset) {
-            this.metricsDataset = dataset;
-            return this;
-        }
-
-        /**
          * Sets the Honeycomb endpoint to use. Optional, defaults to the Honeycomb ingest API.
          *
          * @param endpoint a String to use as the endpoint URI. Must begin with https or http.
@@ -142,7 +111,6 @@ public final class OpenTelemetryConfiguration {
          */
         public Builder setEndpoint(String endpoint) {
             setTracesEndpoint(endpoint);
-            setMetricsEndpoint(endpoint);
             return this;
         }
 
@@ -154,17 +122,6 @@ public final class OpenTelemetryConfiguration {
          */
         public Builder setTracesEndpoint(String endpoint) {
             this.tracesEndpoint = endpoint;
-            return this;
-        }
-
-        /**
-         * Sets the Honeycomb endpoint to send metrics data.. Optional, defaults to the Honeycomb ingest API.
-         *
-         * @param endpoint a String to use as the endpoint URI. Must begin with https or http.
-         * @return builder
-         */
-        public Builder setMetricsEndpoint(String endpoint) {
-            this.metricsEndpoint = endpoint;
             return this;
         }
 
@@ -355,7 +312,6 @@ public final class OpenTelemetryConfiguration {
                         W3CBaggagePropagator.getInstance()));
             }
 
-            EnvironmentConfiguration.enableOTLPMetrics(metricsEndpoint, metricsApiKey, metricsDataset);
             return OpenTelemetrySdk.builder()
                 .setTracerProvider(tracerProviderBuilder.build())
                 .setPropagators(propagators)
