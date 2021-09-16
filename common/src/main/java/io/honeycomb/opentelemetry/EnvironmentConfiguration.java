@@ -10,8 +10,8 @@ import com.google.common.base.Strings;
 public class EnvironmentConfiguration {
 
     public static final String HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY";
-    public static final String HONEYCOMB_TRACES_API_KEY = "HONEYCOMB_TRACES_APIKEY";
-    public static final String HONEYCOMB_METRICS_API_KEY = "HONEYCOMB_METRICS_APIKEY";
+    public static final String HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY";
+    public static final String HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY";
     public static final String HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT";
     public static final String HONEYCOMB_TRACES_ENDPOINT = "HONEYCOMB_TRACES_ENDPOINT";
     public static final String HONEYCOMB_METRICS_ENDPOINT = "HONEYCOMB_METRICS_ENDPOINT";
@@ -37,19 +37,19 @@ public class EnvironmentConfiguration {
     /**
      * Reads the Honeycomb API key to send trace data.
      *
-     * @return honeycomb.api.key system property or HONEYCOMB_API_KEY environment variable
+     * @return honeycomb.traces.apikey system property or HONEYCOMB_TRACES_APIKEY environment variable
      */
     public static String getHoneycombTracesApiKey() {
-        return readVariable(HONEYCOMB_API_KEY, getHoneycombApiKey());
+        return readVariable(HONEYCOMB_TRACES_APIKEY, getHoneycombApiKey());
     }
 
     /**
      * Reads the Honeycomb API key to send metrics data.
      *
-     * @return honeycomb.api.key system property or HONEYCOMB_API_KEY environment variable
+     * @return honeycomb.metrics.apikey system property or HONEYCOMB_METRICS_APIKEY environment variable
      */
     public static String getHoneycombMetricsApiKey() {
-        return readVariable(HONEYCOMB_METRICS_API_KEY, getHoneycombApiKey());
+        return readVariable(HONEYCOMB_METRICS_APIKEY, getHoneycombApiKey());
     }
 
     /**
@@ -64,7 +64,7 @@ public class EnvironmentConfiguration {
     /**
      * Reads the Honeycomb API endpoint to send trace data.
      *
-     * @return honeycomb.api.key system property or HONEYCOMB_API_KEY environment variable
+     * @return honeycomb.traces.endpoint system property or HONEYCOMB_TRACES_ENDPOINT environment variable
      */
     public static String getHoneycombTracesApiEndpoint() {
         return readVariable(HONEYCOMB_TRACES_ENDPOINT, getHoneycombApiEndpoint());
@@ -73,7 +73,7 @@ public class EnvironmentConfiguration {
     /**
      * Reads the Honeycomb API endpoint to send metrics data.
      *
-     * @return honeycomb.api.key system property or HONEYCOMB_API_KEY environment variable
+     * @return honeycomb.metrics.endpoint system property or HONEYCOMB_METRICS_ENDPOINT environment variable
      */
     public static String getHoneycombMetricsApiEndpoint() {
         return readVariable(HONEYCOMB_METRICS_ENDPOINT, getHoneycombApiEndpoint());
@@ -91,7 +91,7 @@ public class EnvironmentConfiguration {
     /**
      * Read the Honeycomb dataset to store trace data.
      *
-     * @return honeycomb.metrics.dataset system property or HONEYCOMB_METRICS_DATASET environment variable
+     * @return honeycomb.traces.dataset system property or HONEYCOMB_TRACES_DATASET environment variable
      */
     public static String getHoneycombTracesDataset() {
         return readVariable(HONEYCOMB_TRACES_DATASET, getHoneycombDataset());
@@ -103,7 +103,7 @@ public class EnvironmentConfiguration {
      * @return honeycomb.metrics.dataset system property or HONEYCOMB_METRICS_DATASET environment variable
      */
     public static String getHoneycombMetricsDataset() {
-        return readVariable(HONEYCOMB_DATASET, null); // don't default to generic dataset like we do for apikey and endpoint
+        return readVariable(HONEYCOMB_METRICS_DATASET, null); // don't default to generic dataset like we do for apikey and endpoint
     }
 
     /**
