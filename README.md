@@ -10,8 +10,8 @@ This is Honeycomb's distribution of OpenTelemetry for Java.
 It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
-- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.5.0) version 1.5.0
-- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.5.3) version 1.5.3
+- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.2.0) version 1.2.0
+- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.2.0) version 1.2.0
 
 ## Why would I want to use this?
 
