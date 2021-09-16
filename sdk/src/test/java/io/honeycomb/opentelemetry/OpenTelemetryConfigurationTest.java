@@ -3,11 +3,8 @@ package io.honeycomb.opentelemetry;
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.context.Context;
-import io.opentelemetry.sdk.trace.ReadWriteSpan;
-import io.opentelemetry.sdk.trace.ReadableSpan;
-import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-public class HoneycombSdkTest {
+public class OpenTelemetryConfigurationTest {
 
     @Mock
     private Tracer tracer;
@@ -29,7 +26,7 @@ public class HoneycombSdkTest {
     public void testConfiguration_tracerSettings() {
         Sampler sampler = new DeterministicTraceSampler(5);
         BaggageSpanProcessor baggageSpanProcessor = new BaggageSpanProcessor();
-        HoneycombSdk honeycomb = new HoneycombSdk.Builder()
+        OpenTelemetry openTelemetry = OpenTelemetryConfiguration.builder()
             .setSampler(sampler)
             .addSpanProcessor(baggageSpanProcessor)
             .setApiKey("foobar")
@@ -42,17 +39,17 @@ public class HoneycombSdkTest {
         // of 5.
         Assertions.assertNotNull(sampler);
         Assertions.assertNotNull(baggageSpanProcessor);
-        Assertions.assertNotNull(honeycomb);
+        Assertions.assertNotNull(openTelemetry);
     }
 
     @Test
     void testConfiguration_headers() {
-        HoneycombSdk honeycomb = new HoneycombSdk.Builder()
+        OpenTelemetry openTelemetry = OpenTelemetryConfiguration.builder()
             .setApiKey("foobar")
             .setDataset("dataset")
             .build();
 
-        Assertions.assertNotNull(honeycomb);
+        Assertions.assertNotNull(openTelemetry);
 
         // TODO:
         // Figure out a way to test that the api key and dataset
