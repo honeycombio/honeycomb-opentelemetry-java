@@ -42,7 +42,7 @@ jobs:
           steps:
             - run:
                 name: "Publish Artifacts to Maven"
-                command: ./gradlew publish
+                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 
 filters_always: &filters_always
   filters:
