@@ -1,5 +1,7 @@
 package io.honeycomb.opentelemetry;
 
+import com.google.common.base.Strings;
+
 /**
  * This is a utility class that helps read Honeycomb environment variables and system properties.
  * <p>
@@ -8,8 +10,14 @@ package io.honeycomb.opentelemetry;
 public class EnvironmentConfiguration {
 
     public static final String HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY";
+    public static final String HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY";
+    public static final String HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY";
     public static final String HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT";
+    public static final String HONEYCOMB_TRACES_ENDPOINT = "HONEYCOMB_TRACES_ENDPOINT";
+    public static final String HONEYCOMB_METRICS_ENDPOINT = "HONEYCOMB_METRICS_ENDPOINT";
     public static final String HONEYCOMB_DATASET = "HONEYCOMB_DATASET";
+    public static final String HONEYCOMB_TRACES_DATASET = "HONEYCOMB_TRACES_DATASET";
+    public static final String HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET";
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String SAMPLE_RATE = "SAMPLE_RATE";
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
@@ -27,6 +35,24 @@ public class EnvironmentConfiguration {
     }
 
     /**
+     * Reads the Honeycomb API key to send trace data.
+     *
+     * @return honeycomb.traces.apikey system property or HONEYCOMB_TRACES_APIKEY environment variable
+     */
+    public static String getHoneycombTracesApiKey() {
+        return readVariable(HONEYCOMB_TRACES_APIKEY, getHoneycombApiKey());
+    }
+
+    /**
+     * Reads the Honeycomb API key to send metrics data.
+     *
+     * @return honeycomb.metrics.apikey system property or HONEYCOMB_METRICS_APIKEY environment variable
+     */
+    public static String getHoneycombMetricsApiKey() {
+        return readVariable(HONEYCOMB_METRICS_APIKEY, getHoneycombApiKey());
+    }
+
+    /**
      * Read the Honeycomb API endpoint.
      *
      * @return honeycomb.api.endpoint system property or HONEYCOMB_API_ENDPOINT environment variable
@@ -36,12 +62,48 @@ public class EnvironmentConfiguration {
     }
 
     /**
+     * Reads the Honeycomb API endpoint to send trace data.
+     *
+     * @return honeycomb.traces.endpoint system property or HONEYCOMB_TRACES_ENDPOINT environment variable
+     */
+    public static String getHoneycombTracesApiEndpoint() {
+        return readVariable(HONEYCOMB_TRACES_ENDPOINT, getHoneycombApiEndpoint());
+    }
+
+    /**
+     * Reads the Honeycomb API endpoint to send metrics data.
+     *
+     * @return honeycomb.metrics.endpoint system property or HONEYCOMB_METRICS_ENDPOINT environment variable
+     */
+    public static String getHoneycombMetricsApiEndpoint() {
+        return readVariable(HONEYCOMB_METRICS_ENDPOINT, getHoneycombApiEndpoint());
+    }
+
+    /**
      * Read the Honeycomb dataset name.
      *
      * @return honeycomb.dataset system property or HONEYCOMB_DATASET environment variable
      */
     public static String getHoneycombDataset() {
         return readVariable(HONEYCOMB_DATASET, null);
+    }
+
+    /**
+     * Read the Honeycomb dataset to store trace data.
+     *
+     * @return honeycomb.traces.dataset system property or HONEYCOMB_TRACES_DATASET environment variable
+     */
+    public static String getHoneycombTracesDataset() {
+        return readVariable(HONEYCOMB_TRACES_DATASET, getHoneycombDataset());
+    }
+
+    /**
+     * Read the Honeycomb dataset to store metrics data.
+     *
+     * @return honeycomb.metrics.dataset system property or HONEYCOMB_METRICS_DATASET environment variable
+     */
+    public static String getHoneycombMetricsDataset() {
+        return readVariable(HONEYCOMB_METRICS_DATASET, null); // don't default to generic dataset like we do for apikey and endpoint
     }
 
     /**
@@ -93,5 +155,41 @@ public class EnvironmentConfiguration {
 
     private static String getPropertyName(String envKey) {
         return envKey.toLowerCase().replace('_', '.');
+    }
+
+    public static void enableOTLPTraces() {
+        final String endpoint = getHoneycombTracesApiEndpoint();
+        final String apiKey = getHoneycombTracesApiKey();
+        final String dataset = getHoneycombTracesDataset();
+
+        if (!isPresent(apiKey)) {
+            System.out.printf("WARN: %s%n", getErrorMessage("API key", HONEYCOMB_API_KEY));
+        }
+        if (!isPresent(dataset)) {
+            System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
+        }
+
+        System.setProperty("otel.exporter.otlp.traces.endpoint", endpoint);
+        System.setProperty("otel.exporter.otlp.traces.headers",
+            String.format("%s=%s,%s=%s",
+                HONEYCOMB_TEAM_HEADER, apiKey,
+                HONEYCOMB_DATASET_HEADER, dataset));
+    }
+
+    public static void enableOTLPMetrics() {
+        final String endpoint = getHoneycombMetricsApiEndpoint();
+        final String apiKey = getHoneycombMetricsApiKey();
+        final String dataset = getHoneycombMetricsDataset();
+
+        if (!Strings.isNullOrEmpty(dataset)) {
+            System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
+            System.setProperty("otel.exporter.otlp.metrics.headers",
+                String.format("%s=%s,%s=%s",
+                    HONEYCOMB_TEAM_HEADER, apiKey,
+                    HONEYCOMB_DATASET_HEADER, dataset));
+        } else {
+            // setting to "none" disables metrics
+            System.setProperty("otel.metrics.exporter", "none");
+        }
     }
 }

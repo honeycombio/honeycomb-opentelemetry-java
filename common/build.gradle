@@ -6,6 +6,10 @@ plugins {
 def artifactName = "honeycomb-opentelemetry-common"
 description = 'Functionality shared across components of the Honeycomb OpenTelemetry distribution.'
 
+dependencies {
+    implementation 'com.google.guava:guava:30.1.1-jre'
+}
+
 jar {
     archivesBaseName = "${artifactName}"
 }
