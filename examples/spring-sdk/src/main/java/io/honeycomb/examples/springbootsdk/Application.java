@@ -14,31 +14,32 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Application {
-	@Bean
-	public OpenTelemetry honeycomb() {
+    @Bean
+    public OpenTelemetry honeycomb() {
         return OpenTelemetryConfiguration.builder()
             .addSpanProcessor(new BaggageSpanProcessor())
             .setApiKey(System.getenv("HONEYCOMB_API_KEY"))
             .setDataset(System.getenv("HONEYCOMB_DATASET"))
-            .setServiceName("example-service")
+            .setServiceName(System.getenv("SERVICE_NAME"))
             .setEndpoint(System.getenv("HONEYCOMB_API_ENDPOINT"))
             .buildAndRegisterGlobal();
-	}
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) {
 
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-			System.out.println("Let's inspect the beans provided by Spring Boot:");
+        SpringApplication.run(Application.class, args);
+    }
 
-			String[] beanNames = ctx.getBeanDefinitionNames();
-			Arrays.sort(beanNames);
-			for (String beanName : beanNames) {
-				System.out.println(beanName);
-			}
-		};
-	}
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+            System.out.println("Let's inspect the beans provided by Spring Boot:");
+
+            String[] beanNames = ctx.getBeanDefinitionNames();
+            Arrays.sort(beanNames);
+            for (String beanName : beanNames) {
+                System.out.println(beanName);
+            }
+        };
+    }
 }
