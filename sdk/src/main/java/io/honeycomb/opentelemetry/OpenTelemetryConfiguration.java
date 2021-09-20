@@ -303,7 +303,7 @@ public final class OpenTelemetryConfiguration {
                 resourceAttributes.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
             tracerProviderBuilder.setResource(
-                Resource.create(resourceAttributes.build()));
+                Resource.getDefault().merge(Resource.create(resourceAttributes.build())));
 
             if (propagators == null) {
                 propagators = ContextPropagators.create(
