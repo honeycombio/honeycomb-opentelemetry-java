@@ -167,6 +167,11 @@ java \
 -javaagent:honeycomb-opentelemetry-javaagent-0.4.0-all.jar -jar myapp.jar
 ```
 
+## Troubleshooting
+
+To enable debugging when running with the OpenTelemetry Java Agent, you can set the `otel.javaagent.debug` system property or `OTEL_JAVAAGENT_DEBUG` environment variable to `true`.
+When this setting is provided, the Agent configures a [LoggingSpanExporter](https://github.com/open-telemetry/opentelemetry-java/tree/main/exporters/logging) that logs traces & metrics data.
+
 ## SDK Usage
 
 For teams that opt not to use the agent for auto-instrumentation,
