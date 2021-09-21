@@ -11,6 +11,7 @@ import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.context.propagation.TextMapPropagator;
+import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -19,6 +20,7 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,7 @@ public final class OpenTelemetryConfiguration {
         private Sampler sampler = Sampler.alwaysOn();
         private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<>();
         private AttributesBuilder resourceAttributes = Attributes.builder();
+        private Boolean enableDebug = false;
 
         private String tracesApiKey;
         private String tracesDataset;
@@ -179,6 +182,16 @@ public final class OpenTelemetryConfiguration {
         }
 
         /**
+         * Enables debug mode. When set to {@code true} a {@link LoggingSpanExporter} is added to the export pipeline
+         * that will output traces and metrics data.
+         * @return Builder
+         */
+        public Builder enableDebug(boolean enabled) {
+            this.enableDebug = enabled;
+            return this;
+        }
+
+        /**
          * Add a string attribute as a resource attribute.
          *
          * @param key   The key to associate a value with
@@ -293,8 +306,13 @@ public final class OpenTelemetryConfiguration {
             }
             SpanExporter exporter = builder.build();
 
-            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder().setSampler(sampler)
+            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
+                .setSampler(sampler)
                 .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
+
+            if (this.enableDebug) {
+                tracerProviderBuilder.addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()));
+            }
 
             this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
