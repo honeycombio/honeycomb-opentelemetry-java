@@ -1,3 +1,7 @@
+plugins {
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+}
+
 allprojects {
     project.group = "io.honeycomb"
     project.version = "0.4.0"
@@ -18,8 +22,8 @@ subprojects {
         versions.opentelemetryJavaagentAlpha = "${versions.opentelemetryJavaagent}-alpha"
 
         deps = [
-                bytebuddy           : dependencies.create(group: 'net.bytebuddy', name: 'byte-buddy', version: versions.bytebuddy),
-                bytebuddyagent      : dependencies.create(group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy),
+                bytebuddy     : dependencies.create(group: 'net.bytebuddy', name: 'byte-buddy', version: versions.bytebuddy),
+                bytebuddyagent: dependencies.create(group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy),
         ]
     }
 
@@ -84,17 +88,6 @@ subprojects {
                     }
                 }
             }
-            repositories {
-                maven {
-                    def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-                    def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
-                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                    credentials {
-                        username = System.getenv("OSSRH_USERNAME")
-                        password = System.getenv("OSSRH_PASSWORD")
-                    }
-                }
-            }
         }
 
         if (!project.hasProperty("skip.signing")) {
@@ -114,5 +107,14 @@ subprojects {
             }
         }
 
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username.set(System.getenv("OSSRH_USERNAME"))
+            password.set(System.getenv("OSSRH_PASSWORD"))
+        }
     }
 }
