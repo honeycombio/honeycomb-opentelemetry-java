@@ -316,7 +316,7 @@ public final class OpenTelemetryConfiguration {
 
             this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
-            DistroMetadata.getMetadata().forEach(resourceAttributes::put);
+            DistroMetadata.getMetadata(DistroMetadata.SDK_SOURCE).forEach(resourceAttributes::put);
             if (StringUtils.isNotEmpty(serviceName)) {
                 resourceAttributes.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }

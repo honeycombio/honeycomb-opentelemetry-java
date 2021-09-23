@@ -23,17 +23,22 @@ public class DistroMetadata {
     private static final String LANGUAGE_VALUE = "java";
     private static final String RUNTIME_VERSION_FIELD = "honeycomb.distro.runtime_version";
     private static final String RUNTIME_VERSION_VALUE = System.getProperty("java.version");
+    private static final String SOURCE = "honeycomb.distro.source";
+
+    public static final String SDK_SOURCE = "sdk";
+    public static final String AGENT_SOURCE = "agent";
 
     /**
      * Get Metadata as a map of strings to strings.
      *
      * @return map of metadata to include as resource attributes.
      */
-    public static Map<String, String> getMetadata() {
+    public static Map<String, String> getMetadata(String source) {
         Map<String, String> metadata = new HashMap<String, String>();
         metadata.put(VERSION_FIELD, VERSION_VALUE);
         metadata.put(LANGUAGE_FIELD, LANGUAGE_VALUE);
         metadata.put(RUNTIME_VERSION_FIELD, RUNTIME_VERSION_VALUE);
+        metadata.put(SOURCE, source);
         return metadata;
     }
 }
