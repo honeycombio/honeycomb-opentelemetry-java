@@ -19,10 +19,6 @@ public class DistroMetadata {
      * Java agent.
      */
     private static final String VERSION_VALUE = "0.4.0";
-    private static final String LANGUAGE_FIELD = "honeycomb.distro.language";
-    private static final String LANGUAGE_VALUE = "java";
-    private static final String RUNTIME_VERSION_FIELD = "honeycomb.distro.runtime_version";
-    private static final String RUNTIME_VERSION_VALUE = System.getProperty("java.version");
 
     /**
      * Get Metadata as a map of strings to strings.
@@ -32,8 +28,6 @@ public class DistroMetadata {
     public static Map<String, String> getMetadata() {
         Map<String, String> metadata = new HashMap<String, String>();
         metadata.put(VERSION_FIELD, VERSION_VALUE);
-        metadata.put(LANGUAGE_FIELD, LANGUAGE_VALUE);
-        metadata.put(RUNTIME_VERSION_FIELD, RUNTIME_VERSION_VALUE);
         return metadata;
     }
 }
