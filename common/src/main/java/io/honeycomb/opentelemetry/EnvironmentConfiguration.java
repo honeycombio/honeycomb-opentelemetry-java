@@ -129,7 +129,7 @@ public class EnvironmentConfiguration {
      * Get a friendly error message for missing variable.
      *
      * @param humanKey human-friendly variable description
-     * @param key environment variable key
+     * @param key      environment variable key
      * @return missing variable error message
      */
     public static String getErrorMessage(String humanKey, String key) {
@@ -182,14 +182,12 @@ public class EnvironmentConfiguration {
         final String dataset = getHoneycombMetricsDataset();
 
         if (!Strings.isNullOrEmpty(dataset)) {
+            System.setProperty("otel.metrics.exporter", "otlp");
             System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
             System.setProperty("otel.exporter.otlp.metrics.headers",
                 String.format("%s=%s,%s=%s",
                     HONEYCOMB_TEAM_HEADER, apiKey,
                     HONEYCOMB_DATASET_HEADER, dataset));
-        } else {
-            // setting to "none" disables metrics
-            System.setProperty("otel.metrics.exporter", "none");
         }
     }
 }
