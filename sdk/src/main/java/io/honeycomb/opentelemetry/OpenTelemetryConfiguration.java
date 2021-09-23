@@ -184,6 +184,8 @@ public final class OpenTelemetryConfiguration {
         /**
          * Enables debug mode. When set to {@code true} a {@link LoggingSpanExporter} is added to the export pipeline
          * that will output traces and metrics data.
+         *
+         * @param enabled defaults to {@code false}
          * @return Builder
          */
         public Builder enableDebug(boolean enabled) {
