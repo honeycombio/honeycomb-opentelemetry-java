@@ -2,12 +2,9 @@ package io.honeycomb.opentelemetry;
 
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
-import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.common.AttributesBuilder;
-import io.opentelemetry.sdk.autoconfigure.spi.SdkTracerProviderConfigurer;
-import io.opentelemetry.sdk.resources.Resource;
+import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
+import io.opentelemetry.sdk.autoconfigure.spi.traces.SdkTracerProviderConfigurer;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Honeycomb implementation of {@link SdkTracerProviderConfigurer} SPI.
@@ -16,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderConfigurer {
     @Override
-    public void configure(SdkTracerProviderBuilder tracerProvider) {
+    public void configure(SdkTracerProviderBuilder tracerProvider, ConfigProperties config) {
         int sampleRate;
         try {
             sampleRate = EnvironmentConfiguration.getSampleRate();
