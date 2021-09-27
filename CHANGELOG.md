@@ -1,5 +1,40 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.5.0] - 2021-09-27
+
+### !!! Breaking Changes !!!
+
+- Replace HoneycombSdk with OpenTelemetryConfiguration.Builder (#132)
+
+### Added
+
+- Support for enabling OTel metrics (#135)
+- `telemetry.sdk.*` resource attributes in the SDK (#139)
+
+### Removed
+
+- `honeycomb.distro.language` and `honeycomb.distro.runtime_version` resource attributes (#148)
+
+### Maintenance
+
+- Add javadoc for method param (#145)
+- Automate nexus publish/close/release (#136)
+- Adds example apps (#124, #137)
+- docs: agent debug (#138)
+- docs: add OTEL version to readme (#126)
+- Add NOTICE (#123)
+- Link to public dosc for SDK setup (#121)
+- Add Stalebot (#119, #122, #125)
+- Update docs around SDK use. (#120)
+- Spruce up CI (#106)
+- Update link (#100)
+- Add issue and PR templates (#98)
+- Bump OTEL to 1.6.0 (#134, #146, #149)
+- Bump junit-jupiter-engine from 5.7.2 to 5.8.1 (#129, #142)
+- Bump junit-bom from 5.7.1 to 5.8.1 (#86, #143)
+- Bump grpc-netty-shaded from 1.39.0 to 1.41.0 (#103, #144)
+- Bump mockito-core from 3.11.2 to 3.12.4 (#102, #118)
+
 ## [0.4.0] - 2021-08-12
 
 ### Changes

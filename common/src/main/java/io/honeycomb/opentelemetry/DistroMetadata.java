@@ -18,7 +18,7 @@ public class DistroMetadata {
      * with the version number and read it, but that isn't possible from the
      * Java agent.
      */
-    private static final String VERSION_VALUE = "0.4.0";
+    private static final String VERSION_VALUE = "0.5.0";
 
     /**
      * Get Metadata as a map of strings to strings.
