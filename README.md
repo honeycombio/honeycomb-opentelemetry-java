@@ -10,8 +10,8 @@ This is Honeycomb's distribution of OpenTelemetry for Java.
 It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
-- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.2.0) version 1.2.0
-- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.2.0) version 1.2.0
+- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.6.0) version 1.6.0
+- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.6.0) version 1.6.0
 
 ## Why would I want to use this?
 
@@ -32,12 +32,12 @@ See the [SDK Usage](https://docs.honeycomb.io/getting-data-in/java/opentelemetry
 
 ## Agent Usage
 
-Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/v0.4.0/honeycomb-opentelemetry-javaagent-0.4.0-all.jar).
+Download the [latest version](https://github.com/honeycombio/honeycomb-opentelemetry-java/releases/download/v0.5.0/honeycomb-opentelemetry-javaagent-0.5.0-all.jar).
 
 The agent is run as a `-javaagent` alongside your application.
 
 ```sh
-java -javaagent:honeycomb-opentelemetry-javaagent-0.4.0-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.5.0-all.jar -jar myapp.jar
 ```
 
 ### Configuration
@@ -47,8 +47,14 @@ The Honeycomb Agent has the following configuration options (system properties t
 | System property                      | Environment variable                 | Description                                                                      |
 |--------------------------------------|--------------------------------------|----------------------------------------------------------------------------------|
 | `honeycomb.api.key` | `HONEYCOMB_API_KEY` | [optional] Your Honeycomb API key
-| `honeycomb.dataset` | `HONEYCOMB_DATASET` | [optional] Honeycomb dataset where spans will be sent
+| `honeycomb.traces.apikey` | `HONEYCOMB_TRACES_APIKEY` | [optional] Your Honeycomb traces API key (defaults to the value of `HONEYCOMB_API_KEY`)
+| `honeycomb.metrics.apikey` | `HONEYCOMB_METRICS_APIKEY` | [optional] Your Honeycomb metrics API key (defaults to the value of `HONEYCOMB_API_KEY`)
+| `honeycomb.dataset` | `HONEYCOMB_DATASET` | [optional] Honeycomb dataset where data will be sent
+| `honeycomb.traces.dataset` | `HONEYCOMB_TRACES_DATASET` | [optional] Honeycomb dataset where traces will be sent (defaults to the value of `HONEYCOMB_DATASET`)
+| `honeycomb.metrics.dataset` | `HONEYCOMB_METRICS_DATASET` | [optional] Honeycomb dataset where metrics will be sent (defaults to null - metrics will not be exported if dataset is not defined)
 | `honeycomb.api.endpoint` | `HONEYCOMB_API_ENDPOINT` | [optional] Honeycomb ingest endpoint (defaults to https://api.honeycomb.io:443)
+| `honeycomb.traces.endpoint` | `HONEYCOMB_TRACES_ENDPOINT` | [optional] Honeycomb traces ingest endpoint (defaults to the value of `HONEYCOMB_API_ENDPOINT`)
+| `honeycomb.metrics.endpoint` | `HONEYCOMB_METRICS_ENDPOINT` | [optional] Honeycomb metrics ingest endpoint (defaults to the value of `HONEYCOMB_API_ENDPOINT`)
 | `sample.rate` | `SAMPLE_RATE` | [optional] Sample rate for the deterministic sampler (defaults to 1, always sample)
 | `service.name` | `SERVICE_NAME` | [optional] `service.name` attribute to be used for all spans (defaults to empty)
 
@@ -59,7 +65,7 @@ SAMPLE_RATE=2 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:honeycomb-opentelemetry-javaagent-0.4.0-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.5.0-all.jar -jar myapp.jar
 ```
 
 Using system properties:
@@ -70,7 +76,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:honeycomb-opentelemetry-javaagent-0.4.0-all.jar -jar myapp.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.5.0-all.jar -jar myapp.jar
 ```
 
 ### Enrich the Auto-Instrumented Data
@@ -89,7 +95,7 @@ For Maven:
         <dependency>
             <groupId>io.honeycomb</groupId>
             <artifactId>honeycomb-opentelemetry-sdk</artifactId>
-            <version>0.4.0</version>
+            <version>0.5.0</version>
         </dependency>
     </dependencies>
 </project>
@@ -99,7 +105,7 @@ For Gradle:
 
 ```groovy
 dependencies {
-    compile('io.honeycomb:honeycomb-opentelemetry-sdk:0.4.0')
+    compile('io.honeycomb:honeycomb-opentelemetry-sdk:0.5.0')
 }
 ```
 
@@ -153,7 +159,7 @@ OTEL_RESOURCE_ATTRIBUTES=ec2.instanceid=i-1234567890abcdef0,build_id=1337 \
 SERVICE_NAME=my-favorite-service \
 HONEYCOMB_API_KEY=my-api-key \
 HONEYCOMB_DATASET=my-dataset \
-java -javaagent:honeycomb-opentelemetry-javaagent-0.4.0-all.jar -jar myapp.jar
+java -javaagent:honeycomb-opentelemetry-javaagent-0.5.0-all.jar -jar myapp.jar
 ```
 
 Using system properties:
@@ -164,7 +170,7 @@ java \
 -Dservice.name=my-favorite-service \
 -Dhoneycomb.api.key=my-api-key \
 -Dhoneycomb.dataset=my-dataset \
--javaagent:honeycomb-opentelemetry-javaagent-0.4.0-all.jar -jar myapp.jar
+-javaagent:honeycomb-opentelemetry-javaagent-0.5.0-all.jar -jar myapp.jar
 ```
 
 ## Troubleshooting

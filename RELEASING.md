@@ -1,6 +1,6 @@
 # Creating a new release
 
-1. First, update the `project.version` in the root build.gradle file. Also update the Changelog, as well as any references to the previous version in the docs.
+1. First, update the `project.version` in the root build.gradle file. Update the version in `DistroMetadata.java`. Also update the Changelog, as well as any references to the previous version in the docs.
 
 2. If the new release updates the OpenTelemetry SDK and/or agent versions, update the `Latest release built with` section in the [README](./README.md).
 
