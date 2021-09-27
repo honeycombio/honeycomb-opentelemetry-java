@@ -7,7 +7,7 @@ jobs:
   build:
     executor:
       name: gradle/default
-      tag: "16.0"
+      tag: "17.0"
     steps:
       - checkout
       - gradle/with_cache:
@@ -65,7 +65,7 @@ matrix_executors: &matrix_executors
         - name: gradle/default
           tag: "11.0"
         - name: gradle/default
-          tag: "16.0"
+          tag: "17.0"
 
 workflows:
   version: 2
