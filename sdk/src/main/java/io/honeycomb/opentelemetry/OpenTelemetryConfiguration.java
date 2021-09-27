@@ -14,6 +14,8 @@ import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
+import io.opentelemetry.sdk.extension.resources.OsResource;
+import io.opentelemetry.sdk.extension.resources.ProcessRuntimeResource;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -323,7 +325,10 @@ public final class OpenTelemetryConfiguration {
                 resourceAttributes.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
             tracerProviderBuilder.setResource(
-                Resource.getDefault().merge(Resource.create(resourceAttributes.build())));
+                Resource.getDefault()
+                    .merge(OsResource.get())
+                    .merge(ProcessRuntimeResource.get())
+                    .merge(Resource.create(resourceAttributes.build())));
 
             if (propagators == null) {
                 propagators = ContextPropagators.create(
