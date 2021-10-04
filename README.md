@@ -129,25 +129,6 @@ public class ExampleController {
 }
 ```
 
-### Multi-span Attributes
-
-Sometimes you'll want to add the same attribute to many spans
-within the same trace.
-We'll leverage the OpenTelemetry concept of
-[Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal)
-to do that.
-
-Use this to add a `key` with a `value` as an attribute
-to every subsequent child span of the current application context.
-
-```java
-Baggage.current()
-    .toBuilder()
-    .put(key, value)
-    .build()
-    .makeCurrent();
-```
-
 ### Resource Attributes
 
 Sometimes you'll want one or more attributes set on all spans within a service.
@@ -186,6 +167,47 @@ for sending manual OpenTelemetry instrumentation to Honeycomb.
 The SDK also provides a deterministic sampler and more span processing options.
 
 [Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#using-the-honeycomb-sdk-builder).
+
+### Multi-span Attributes
+
+Sometimes you'll want to add the same attribute to many spans
+within the same trace.
+We'll leverage the OpenTelemetry concept of
+[Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal)
+to do that.
+
+Use this to add a `key` with a `value` as an attribute
+to every subsequent child span of the current application context.
+
+Be sure to initialize the `OpenTelemetryConfiguration.builder()`
+with a `BaggageSpanProcessor`:
+
+```java
+import io.honeycomb.opentelemetry.OpenTelemetryConfiguration;
+import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
+
+@Bean
+public OpenTelemetry honeycomb() {
+    return OpenTelemetryConfiguration.builder()
+        .addSpanProcessor(new BaggageSpanProcessor())
+        .setApiKey(System.getenv("HONEYCOMB_API_KEY"))
+        .setDataset(System.getenv("HONEYCOMB_DATASET"))
+        .setServiceName(System.getenv("SERVICE_NAME"))
+        .setEndpoint(System.getenv("HONEYCOMB_API_ENDPOINT"))
+        .buildAndRegisterGlobal();
+    }
+```
+
+In your code, import `io.opentelemetry.api.baggage.Baggage`
+to allow use of the `Baggage` class.
+
+```java
+Baggage.current()
+    .toBuilder()
+    .put(key, value)
+    .build()
+    .makeCurrent();
+```
 
 ### gRPC transport customization
 
