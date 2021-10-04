@@ -187,6 +187,43 @@ The SDK also provides a deterministic sampler and more span processing options.
 
 [Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#using-the-honeycomb-sdk-builder).
 
+### gRPC transport customization
+
+A gRPC transport is required to transmit OpenTelemetry data.
+HoneycombSDK includes `grpc-netty-shaded`.
+If you'd like to use another gRPC transport,
+you can exclude the `grpc-netty-shaded` transitive dependency:
+
+#### Maven, excluding `grpc-netty-shaded`
+
+```xml
+<project>
+    <dependencies>
+        <dependency>
+            <groupId>io.honeycomb</groupId>
+            <artifactId>honeycomb-opentelemetry-sdk</artifactId>
+            <version>0.5.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-netty-shaded</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+#### Gradle, excluding `grpc-netty-shaded`
+
+```groovy
+dependencies {
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.5.0') {
+        exclude group: 'io.grpc', module: 'grpc-netty-shaded'
+    }
+}
+```
+
 ## License
 
 [Apache 2.0 License](./LICENSE).
