@@ -154,6 +154,28 @@ java \
 -javaagent:honeycomb-opentelemetry-javaagent-0.5.0-all.jar -jar myapp.jar
 ```
 
+### Multi-span Attributes
+
+Sometimes you'll want to add the same attribute to many spans
+within the same trace.
+We'll leverage the OpenTelemetry concept of
+[Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal)
+to do that.
+
+Use this to add a `key` with a `value` as an attribute
+to every subsequent child span of the current application context.
+
+In your code, import `io.opentelemetry.api.baggage.Baggage`
+to allow use of the `Baggage` class.
+
+```java
+Baggage.current()
+    .toBuilder()
+    .put(key, value)
+    .build()
+    .makeCurrent();
+```
+
 ## Troubleshooting
 
 To enable debugging when running with the OpenTelemetry Java Agent, you can set the `otel.javaagent.debug` system property or `OTEL_JAVAAGENT_DEBUG` environment variable to `true`.
@@ -168,18 +190,9 @@ The SDK also provides a deterministic sampler and more span processing options.
 
 [Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#using-the-honeycomb-sdk-builder).
 
-### Multi-span Attributes
+### Multi-span Attributes with the Baggage Span Processor
 
-Sometimes you'll want to add the same attribute to many spans
-within the same trace.
-We'll leverage the OpenTelemetry concept of
-[Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal)
-to do that.
-
-Use this to add a `key` with a `value` as an attribute
-to every subsequent child span of the current application context.
-
-Be sure to initialize the `OpenTelemetryConfiguration.builder()`
+When using the SDK without the Agent, be sure to initialize the `OpenTelemetryConfiguration.builder()`
 with a `BaggageSpanProcessor`:
 
 ```java
@@ -196,17 +209,6 @@ public OpenTelemetry honeycomb() {
         .setEndpoint(System.getenv("HONEYCOMB_API_ENDPOINT"))
         .buildAndRegisterGlobal();
     }
-```
-
-In your code, import `io.opentelemetry.api.baggage.Baggage`
-to allow use of the `Baggage` class.
-
-```java
-Baggage.current()
-    .toBuilder()
-    .put(key, value)
-    .build()
-    .makeCurrent();
 ```
 
 ### gRPC transport customization
