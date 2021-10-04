@@ -179,7 +179,7 @@ public class EnvironmentConfiguration {
         final String apiKey = getHoneycombMetricsApiKey();
         final String dataset = getHoneycombMetricsDataset();
 
-        if (dataset != null) {
+        if (isPresent(dataset)) {
             System.setProperty("otel.metrics.exporter", "otlp");
             System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
             System.setProperty("otel.exporter.otlp.metrics.headers",
