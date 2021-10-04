@@ -1,7 +1,5 @@
 package io.honeycomb.opentelemetry;
 
-import com.google.common.base.Strings;
-
 /**
  * This is a utility class that helps read Honeycomb environment variables and system properties.
  * <p>
@@ -181,11 +179,11 @@ public class EnvironmentConfiguration {
         final String apiKey = getHoneycombMetricsApiKey();
         final String dataset = getHoneycombMetricsDataset();
 
-        if (!Strings.isNullOrEmpty(dataset)) {
+        if (isPresent(dataset)) {
             System.setProperty("otel.metrics.exporter", "otlp");
             System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
             System.setProperty("otel.exporter.otlp.metrics.headers",
-                String.format("%s=%s,%s=%s",
+                    String.format("%s=%s,%s=%s",
                     HONEYCOMB_TEAM_HEADER, apiKey,
                     HONEYCOMB_DATASET_HEADER, dataset));
         }
