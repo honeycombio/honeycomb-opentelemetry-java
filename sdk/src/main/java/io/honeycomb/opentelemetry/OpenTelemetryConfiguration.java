@@ -41,9 +41,9 @@ public final class OpenTelemetryConfiguration {
     public static class Builder {
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
-        private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<>(
-            List.of(new BaggageSpanProcessor())
-        );
+        private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<SpanProcessor>() {{
+            add(new BaggageSpanProcessor());
+        }};
         private AttributesBuilder resourceAttributes = Attributes.builder();
         private Boolean enableDebug = false;
 
