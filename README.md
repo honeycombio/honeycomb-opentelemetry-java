@@ -176,11 +176,6 @@ Baggage.current()
     .makeCurrent();
 ```
 
-## Troubleshooting
-
-To enable debugging when running with the OpenTelemetry Java Agent, you can set the `otel.javaagent.debug` system property or `OTEL_JAVAAGENT_DEBUG` environment variable to `true`.
-When this setting is provided, the Agent configures a [LoggingSpanExporter](https://github.com/open-telemetry/opentelemetry-java/tree/main/exporters/logging) that logs traces & metrics data.
-
 ## SDK Usage
 
 For teams that opt not to use the agent for auto-instrumentation,
@@ -211,10 +206,25 @@ public OpenTelemetry honeycomb() {
     }
 ```
 
+## Troubleshooting
+
+### Debug Mode
+
+To enable debugging when running with the OpenTelemetry Java Agent, you can set the `otel.javaagent.debug` system property or `OTEL_JAVAAGENT_DEBUG` environment variable to `true`.
+When this setting is provided, the Agent configures a [LoggingSpanExporter](https://github.com/open-telemetry/opentelemetry-java/tree/main/exporters/logging) that logs traces & metrics data.
+
 ### gRPC transport customization
 
 A gRPC transport is required to transmit OpenTelemetry data.
 HoneycombSDK includes `grpc-netty-shaded`.
+
+If you're using another gRPC dependency, version conflicts can come up with an error like this:
+
+```cmd
+io/grpc/ClientStreamTracer$StreamInfo$Builder.setPreviousAttempts(I)Lio/grpc/ClientStreamTracer$StreamInfo$Builder; (loaded from file:/app.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51) called from class io.grpc.internal.GrpcUtil (loaded from file:/io.grpc/grpc-core/1.41.0/882b6572f7d805b9b32e3993b1d7d3e022791b3a/grpc-core-1.41.0.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51).
+java.lang.NoSuchMethodError: io/grpc/ClientStreamTracer$StreamInfo$Builder.setPreviousAttempts(I)Lio/grpc/ClientStreamTracer$StreamInfo$Builder; (loaded from file:/app.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51) called from class io.grpc.internal.GrpcUtil (loaded from file:/io.grpc/grpc-core/1.41.0/882b6572f7d805b9b32e3993b1d7d3e022791b3a/grpc-core-1.41.0.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51).
+```
+
 If you'd like to use another gRPC transport,
 you can exclude the `grpc-netty-shaded` transitive dependency:
 
