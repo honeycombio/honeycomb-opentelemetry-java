@@ -185,19 +185,12 @@ The SDK also provides a deterministic sampler and more span processing options.
 
 [Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#using-the-honeycomb-sdk-builder).
 
-### Multi-span Attributes with the Baggage Span Processor
-
-When using the SDK without the Agent, be sure to initialize the `OpenTelemetryConfiguration.builder()`
-with a `BaggageSpanProcessor`:
-
 ```java
 import io.honeycomb.opentelemetry.OpenTelemetryConfiguration;
-import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 
 @Bean
 public OpenTelemetry honeycomb() {
     return OpenTelemetryConfiguration.builder()
-        .addSpanProcessor(new BaggageSpanProcessor())
         .setApiKey(System.getenv("HONEYCOMB_API_KEY"))
         .setDataset(System.getenv("HONEYCOMB_DATASET"))
         .setServiceName(System.getenv("SERVICE_NAME"))
