@@ -41,7 +41,9 @@ public final class OpenTelemetryConfiguration {
     public static class Builder {
         private ContextPropagators propagators;
         private Sampler sampler = Sampler.alwaysOn();
-        private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<>();
+        private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<SpanProcessor>() {{
+            add(new BaggageSpanProcessor());
+        }};
         private AttributesBuilder resourceAttributes = Attributes.builder();
         private Boolean enableDebug = false;
 
@@ -172,10 +174,9 @@ public final class OpenTelemetryConfiguration {
         /**
          * Configures additional {@link SpanProcessor}.
          *
-         * {@link BatchSpanProcessor} is always configured by default. You can specify additional
-         * span processors, such as {@link BaggageSpanProcessor} which enables multi-span attributes.
+         * {@link BaggageSpanProcessor} and {@link BatchSpanProcessor} are always configured by default.
          *
-         * @param spanProcessor Instance of a {@link BaggageSpanProcessor} or custom SpanProcessor
+         * @param spanProcessor Instance of a {@link SpanProcessor}.
          * @return builder
          */
         public Builder addSpanProcessor(SpanProcessor spanProcessor) {
