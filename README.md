@@ -129,25 +129,6 @@ public class ExampleController {
 }
 ```
 
-### Multi-span Attributes
-
-Sometimes you'll want to add the same attribute to many spans
-within the same trace.
-We'll leverage the OpenTelemetry concept of
-[Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal)
-to do that.
-
-Use this to add a `key` with a `value` as an attribute
-to every subsequent child span of the current application context.
-
-```java
-Baggage.current()
-    .toBuilder()
-    .put(key, value)
-    .build()
-    .makeCurrent();
-```
-
 ### Resource Attributes
 
 Sometimes you'll want one or more attributes set on all spans within a service.
@@ -173,10 +154,27 @@ java \
 -javaagent:honeycomb-opentelemetry-javaagent-0.5.0-all.jar -jar myapp.jar
 ```
 
-## Troubleshooting
+### Multi-span Attributes
 
-To enable debugging when running with the OpenTelemetry Java Agent, you can set the `otel.javaagent.debug` system property or `OTEL_JAVAAGENT_DEBUG` environment variable to `true`.
-When this setting is provided, the Agent configures a [LoggingSpanExporter](https://github.com/open-telemetry/opentelemetry-java/tree/main/exporters/logging) that logs traces & metrics data.
+Sometimes you'll want to add the same attribute to many spans
+within the same trace.
+We'll leverage the OpenTelemetry concept of
+[Baggage](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md#baggage-signal)
+to do that.
+
+Use this to add a `key` with a `value` as an attribute
+to every subsequent child span of the current application context.
+
+In your code, import `io.opentelemetry.api.baggage.Baggage`
+to allow use of the `Baggage` class.
+
+```java
+Baggage.current()
+    .toBuilder()
+    .put(key, value)
+    .build()
+    .makeCurrent();
+```
 
 ## SDK Usage
 
@@ -186,6 +184,72 @@ for sending manual OpenTelemetry instrumentation to Honeycomb.
 The SDK also provides a deterministic sampler and more span processing options.
 
 [Set up the Honeycomb OpenTelemetry SDK for Java](https://docs.honeycomb.io/getting-data-in/java/opentelemetry-distro/#using-the-honeycomb-sdk-builder).
+
+```java
+import io.honeycomb.opentelemetry.OpenTelemetryConfiguration;
+
+@Bean
+public OpenTelemetry honeycomb() {
+    return OpenTelemetryConfiguration.builder()
+        .setApiKey(System.getenv("HONEYCOMB_API_KEY"))
+        .setDataset(System.getenv("HONEYCOMB_DATASET"))
+        .setServiceName(System.getenv("SERVICE_NAME"))
+        .setEndpoint(System.getenv("HONEYCOMB_API_ENDPOINT"))
+        .buildAndRegisterGlobal();
+    }
+```
+
+## Troubleshooting
+
+### Debug Mode
+
+To enable debugging when running with the OpenTelemetry Java Agent, you can set the `otel.javaagent.debug` system property or `OTEL_JAVAAGENT_DEBUG` environment variable to `true`.
+When this setting is provided, the Agent configures a [LoggingSpanExporter](https://github.com/open-telemetry/opentelemetry-java/tree/main/exporters/logging) that logs traces & metrics data.
+
+### gRPC transport customization
+
+A gRPC transport is required to transmit OpenTelemetry data.
+HoneycombSDK includes `grpc-netty-shaded`.
+
+If you're using another gRPC dependency, version conflicts can come up with an error like this:
+
+```cmd
+io/grpc/ClientStreamTracer$StreamInfo$Builder.setPreviousAttempts(I)Lio/grpc/ClientStreamTracer$StreamInfo$Builder; (loaded from file:/app.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51) called from class io.grpc.internal.GrpcUtil (loaded from file:/io.grpc/grpc-core/1.41.0/882b6572f7d805b9b32e3993b1d7d3e022791b3a/grpc-core-1.41.0.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51).
+java.lang.NoSuchMethodError: io/grpc/ClientStreamTracer$StreamInfo$Builder.setPreviousAttempts(I)Lio/grpc/ClientStreamTracer$StreamInfo$Builder; (loaded from file:/app.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51) called from class io.grpc.internal.GrpcUtil (loaded from file:/io.grpc/grpc-core/1.41.0/882b6572f7d805b9b32e3993b1d7d3e022791b3a/grpc-core-1.41.0.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@193b9e51).
+```
+
+If you'd like to use another gRPC transport,
+you can exclude the `grpc-netty-shaded` transitive dependency:
+
+#### Maven, excluding `grpc-netty-shaded`
+
+```xml
+<project>
+    <dependencies>
+        <dependency>
+            <groupId>io.honeycomb</groupId>
+            <artifactId>honeycomb-opentelemetry-sdk</artifactId>
+            <version>0.5.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-netty-shaded</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+#### Gradle, excluding `grpc-netty-shaded`
+
+```groovy
+dependencies {
+    implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.5.0') {
+        exclude group: 'io.grpc', module: 'grpc-netty-shaded'
+    }
+}
+```
 
 ## License
 
