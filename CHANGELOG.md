@@ -1,5 +1,24 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.6.0] - 2021-10-08
+
+### Enhancements
+
+- Always add baggage processor to SDK processors (#169) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Fixes
+
+- Remove google guava dep that suppressed gRPC (#162) | [@JamieDanielson](https://github.com/JamieDanielson)
+- re-add java runtime version distro metadata (#160) | [@vreynolds](https://github.com/vreynolds)
+
+### Maintenance
+
+- Clear the way; docs are in docs now (#171) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Update notes around SDK and gRPC usage (#166) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Add example app for testing agent-only usage (#165) | [@JamieDanielson](https://github.com/JamieDanielson)
+- add Java 17 to test matrix (#156) | [@vreynolds](https://github.com/vreynolds)
+- sonatype release is automated (#155) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.5.0] - 2021-09-27
 
 ### !!! Breaking Changes !!!
