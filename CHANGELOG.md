@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.6.1] - 2021-10-14
+
+### Fixes
+
+- Fixing package associated with auto-configuration for HoneycombSdkTracerProviderConfigurer (#176) | [@mveitas](https://github.com/mveitas)
+
 ## [0.6.0] - 2021-10-08
 
 ### Enhancements
