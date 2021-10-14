@@ -35,7 +35,7 @@ jobs:
             - run: mkdir -p ~/artifacts
             - run:
                 name: "Publish Artifacts to Maven"
-                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository --dry-run
+                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
             - run: cp **/build/libs/*.jar ~/artifacts
             - persist_to_workspace:
                 root: ~/
@@ -98,6 +98,4 @@ workflows:
           context: java_beeline
           requires:
             - build
-          filters:
-            branches:
-              only: vera.jars-jars-jars
+          <<: *filters_publish
