@@ -1,4 +1,4 @@
-rootProject.name = 'opentelemetry-java-instrumentation-distro-demo'
+rootProject.name = 'honeycomb-opentelemetry-java-distro-demo'
 
 include "agent"
 include "custom"

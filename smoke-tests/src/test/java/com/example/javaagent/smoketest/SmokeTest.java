@@ -75,6 +75,9 @@ abstract class SmokeTest {
             .withEnv("OTEL_BSP_MAX_EXPORT_BATCH", "1")
             .withEnv("OTEL_BSP_SCHEDULE_DELAY", "10")
             .withEnv("OTEL_PROPAGATORS", "tracecontext,baggage,demo")
+            // .withEnv("HONEYCOMB_API_KEY", "apikey")
+            // .withEnv("HONEYCOMB_DATASET", "dataset")
+            // .withEnv("HONEYCOMB_API_ENDPOINT", String.format("http://localhost:%d", backend.getMappedPort(8080)))
             .withEnv(getExtraEnv());
     target.start();
   }

@@ -50,6 +50,11 @@ class SpringBootSmokeTest extends SmokeTest {
         0, countResourcesByValue(traces, "telemetry.auto.version", currentAgentVersion));
     Assertions.assertNotEquals(0, countResourcesByValue(traces, "custom.resource", "demo"));
 
+    for (ExportTraceServiceRequest trace : traces) {
+        System.out.println(trace);
+    }
+    Assertions.assertEquals(2, countSpansByAttributeValue(traces, "honeycomb.distro.version", "0.6.1"));
+
     stopTarget();
   }
 }

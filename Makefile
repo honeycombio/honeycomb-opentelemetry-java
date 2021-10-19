@@ -12,4 +12,4 @@ publish_local:
 
 .PHONY: smoke_test
 smoke_test:
-	./gradlew -p examples/distro/smoke-tests test
+	./gradlew -p smoke-tests test
