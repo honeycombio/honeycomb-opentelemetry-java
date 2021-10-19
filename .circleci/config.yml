@@ -12,15 +12,7 @@ jobs:
       - checkout
       - gradle/with_cache:
           steps:
-            - run: mkdir -p ~/artifacts
             - run: ./gradlew build -x test
-            - run: cp **/build/libs/*.jar ~/artifacts
-            - persist_to_workspace:
-                root: ~/
-                paths:
-                  - artifacts
-            - store_artifacts:
-                path: ~/artifacts
   publish_github:
     docker:
       - image: cibuilds/github:0.13.0
@@ -40,9 +32,17 @@ jobs:
       - checkout
       - gradle/with_cache:
           steps:
+            - run: mkdir -p ~/artifacts
             - run:
                 name: "Publish Artifacts to Maven"
                 command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+            - run: cp **/build/libs/*.jar ~/artifacts
+            - persist_to_workspace:
+                root: ~/
+                paths:
+                  - artifacts
+            - store_artifacts:
+                path: ~/artifacts
 
 filters_always: &filters_always
   filters:
@@ -92,7 +92,7 @@ workflows:
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
-            - build
+            - publish_maven
           <<: *filters_publish
       - publish_maven:
           context: java_beeline
