@@ -1,0 +1,17 @@
+plugins {
+  id "java"
+}
+
+dependencies {
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+  testImplementation("com.squareup.okhttp3:okhttp:3.12.12")
+  testImplementation("org.testcontainers:testcontainers:1.15.3")
+  testImplementation("org.slf4j:slf4j-api")
+}
+
+tasks.test {
+  useJUnitPlatform()
+
+  testLogging.showStandardStreams = true
+}
