@@ -4,6 +4,25 @@ orbs:
   gradle: circleci/gradle@2.2.0
 
 jobs:
+  test:
+    docker:
+      - image: cimg/openjdk:<<parameters.java_version>>
+    parameters:
+      java_version:
+        default: "17.0"
+        type: string
+        description: What version of the Java?
+    steps:
+      - checkout
+      - setup_remote_docker
+      # - gradle/with_cache:
+      #     steps:
+      #       - run: ./gradlew test -x smoke-tests:test
+      - run: sudo docker ps
+      - gradle/with_cache:
+          steps:
+            - run: sudo ./gradlew smoke-tests:test --stacktrace --debug
+
   build:
     executor:
       name: gradle/default
@@ -56,6 +75,14 @@ filters_publish: &filters_publish
     branches:
       ignore: /.*/
 
+matrix_java_versions: &matrix_java_versions
+  matrix:
+    parameters:
+      java_version:
+        - "8.0"
+        - "11.0"
+        - "17.0"
+
 matrix_executors: &matrix_executors
   matrix:
     parameters:
@@ -82,6 +109,9 @@ workflows:
           <<: *matrix_executors
   build:
     jobs:
+      - test:
+          <<: *matrix_java_versions
+          <<: *filters_always
       - gradle/test:
           <<: *matrix_executors
           <<: *filters_always
