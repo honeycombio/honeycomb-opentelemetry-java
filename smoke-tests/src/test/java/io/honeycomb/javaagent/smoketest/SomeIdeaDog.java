@@ -9,17 +9,19 @@ import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class NoIdeaDog extends SmokeTest {
+public class SomeIdeaDog extends SmokeTest {
     protected static OkHttpClient client = OkHttpUtils.client();
 
     @Test
     public void smokeTestTheSmokeTest() throws IOException {
-        String url = String.format("http://localhost:%d/otlp-requests", backend.getMappedPort(5678));
+        startAgentOnlyApp();
+        String url = String.format("http://localhost:%d/", agentOnlyApp.getMappedPort(5002));
         Request request = new Request.Builder().url(url).get().build();
         Response response = client.newCall(request).execute();
 
-        System.out.println(response.headers());
+        String body = response.body().string();
 
-        Assertions.assertEquals("application/json", response.headers("Content-Type").get(0));
+        Assertions.assertEquals("Important Information: Greetings from Spring Boot!", body);
+        stopAgentOnlyApp();
     }
 }

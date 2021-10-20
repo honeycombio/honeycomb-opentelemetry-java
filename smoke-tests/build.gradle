@@ -14,4 +14,16 @@ tasks.test {
   useJUnitPlatform()
 
   testLogging.showStandardStreams = true
+
+  def shadowTask = project(":agent").tasks.shadowJar
+  dependsOn(shadowTask)
+  inputs.files(layout.files(shadowTask))
+
+  def appAgentOnlyAppTask = project(":examples:spring-agent-only").tasks.jar
+  dependsOn(appAgentOnlyAppTask)
+
+  doFirst {
+    jvmArgs("-Dio.honeycomb.smoketest.agent.shadowJar.path=${shadowTask.archiveFile.get()}")
+    jvmArgs("-Dio.honeycomb.smoketest.agentOnlyApp.bootJar.path=${rootDir}/examples/spring-agent-only/build/libs/spring-agent-only-${project.version}.jar")
+  }
 }

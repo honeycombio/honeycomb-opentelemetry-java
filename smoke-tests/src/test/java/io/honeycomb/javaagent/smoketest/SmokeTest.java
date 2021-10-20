@@ -17,8 +17,8 @@ abstract class SmokeTest {
     // CHECK THIS OUT FOR INSPO YAY
     // https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/examples/distro/smoke-tests/src/test/java/com/example/javaagent/smoketest
 
-    // TODO - IS THIS WHERE THE JAR IS?
-    protected static final String agentPath = System.getProperty("io.opentelemetry.smoketest.agent.shadowJar.path");
+    protected static final String agentPath = System.getProperty("io.honeycomb.smoketest.agent.shadowJar.path");
+    protected static final String agentOnlyAppPath = System.getProperty("io.honeycomb.smoketest.agentOnlyApp.bootJar.path");
 
     // The a fake backend to receive OTLP data
     protected static GenericContainer<?> backend;
@@ -38,12 +38,22 @@ abstract class SmokeTest {
 
     protected static GenericContainer<?> agentOnlyApp;
 
-    // TODO - WHATS THE REST?
     static void startAgentOnlyApp() {
-        agentOnlyApp = new GenericContainer<>(
-            "openjdk:17-jdk-alpine")
-            .withCopyFileToContainer(
-                MountableFile.forHostPath(agentPath), "/spring-agent-only*.jar")
+        agentOnlyApp = new GenericContainer<>("openjdk:17-jdk-alpine")
+            .withExposedPorts(5002)
+            .waitingFor(Wait.forHttp("/").forPort(5002))
+            .withNetwork(network)
+            .withEnv("HONEYCOMB_API_ENDPOINT", "http://backend:1234")
+            .withEnv("HONEYCOMB_API_KEY", "bogus_key")
+            .withEnv("HONEYCOMB_DATASET", "bogus_dataset")
+            .withCopyFileToContainer(MountableFile.forHostPath(agentPath), "/agent.jar")
+            .withCopyFileToContainer(MountableFile.forHostPath(agentOnlyAppPath), "/app.jar")
+            .withCommand("java -javaagent:/agent.jar -jar /app.jar");
+        agentOnlyApp.start();
+    }
+
+    static void stopAgentOnlyApp() {
+        agentOnlyApp.stop();
     }
 
     @AfterAll
