@@ -18,7 +18,6 @@ jobs:
       # - gradle/with_cache:
       #     steps:
       #       - run: ./gradlew test -x smoke-tests:test
-      - run: sudo docker ps
       - gradle/with_cache:
           steps:
             - run: sudo ./gradlew smoke-tests:test --stacktrace --debug
