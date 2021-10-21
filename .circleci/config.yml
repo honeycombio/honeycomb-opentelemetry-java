@@ -21,7 +21,11 @@ jobs:
       #       - run: ./gradlew test -x smoke-tests:test
       - gradle/with_cache:
           steps:
-            - run: ./gradlew smoke-tests:test --stacktrace --debug
+            - run:
+                name: Run Smoke Test
+                command: ./gradlew smoke-tests:test --stacktrace --debug
+                environment:
+                  TESTCONTAINERS_RYUK_DISABLED: true
 
   build:
     executor:
