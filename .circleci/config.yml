@@ -7,6 +7,7 @@ jobs:
   test:
     docker:
       - image: cimg/openjdk:<<parameters.java_version>>
+        user: root
     parameters:
       java_version:
         default: "17.0"
@@ -20,7 +21,7 @@ jobs:
       #       - run: ./gradlew test -x smoke-tests:test
       - gradle/with_cache:
           steps:
-            - run: sudo ./gradlew smoke-tests:test --stacktrace --debug
+            - run: ./gradlew smoke-tests:test --stacktrace --debug
 
   build:
     executor:
