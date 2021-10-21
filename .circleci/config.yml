@@ -5,9 +5,8 @@ orbs:
 
 jobs:
   test:
-    docker:
-      - image: cimg/openjdk:<<parameters.java_version>>
-        user: root
+    machine:
+      image: ubuntu-2004:202107-02
     parameters:
       java_version:
         default: "17.0"
@@ -15,7 +14,6 @@ jobs:
         description: What version of the Java?
     steps:
       - checkout
-      - setup_remote_docker
       # - gradle/with_cache:
       #     steps:
       #       - run: ./gradlew test -x smoke-tests:test
@@ -24,8 +22,6 @@ jobs:
             - run:
                 name: Run Smoke Test
                 command: ./gradlew smoke-tests:test --stacktrace --debug
-                environment:
-                  TESTCONTAINERS_RYUK_DISABLED: true
 
   build:
     executor:
