@@ -19,19 +19,18 @@ jobs:
       tag: "17.0"
     environment:
       APP_ENDPOINT: http://localhost:5002
-      AGENT_JAR: "${CIRCLE_WORKING_DIRECTORY}/agent/build/libs/*-all.jar"
-      APP_JAR: "${CIRCLE_WORKING_DIRECTORY}/examples/spring-agent-only/build/libs/spring-agent-only-?.?.?.jar"
+      AGENT_JAR: "./agent/build/libs/*-all.jar"
+      APP_JAR: "./examples/spring-agent-only/build/libs/spring-agent-only-?.?.?.jar"
     steps:
       - checkout
       - gradle/with_cache:
           steps:
+            - run: ./gradlew examples:spring-agent-only:build -x test
             - run:
                 command: |
                   echo "JARS!!!"
-                  echo $AGENT_JAR
-                  echo $APP_JAR
-                  echo $CIRCLE_WORKING_DIRECTORY
-#            - run: ./gradlew examples:spring-agent-only:build -x test
+                  ll $AGENT_JAR
+                  ll $APP_JAR
 
   publish_github:
     docker:
