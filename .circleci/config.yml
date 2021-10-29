@@ -108,7 +108,7 @@ workflows:
           requires:
             - gradle/test
           <<: *filters_always
-      - smoke_test
+      - smoke_test:
           <<: *filters_always
       - publish_github:
           context: Honeycomb Secrets for Public Repos
