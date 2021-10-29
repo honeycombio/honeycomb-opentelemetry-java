@@ -22,7 +22,7 @@ services:
       HONEYCOMB_API_KEY: bogus_key
       HONEYCOMB_DATASET: bogus_dataset
     volumes:
-      - "../agent/build/libs/honeycomb-opentelemetry-javaagent-0.6.1-all.jar:/agent.jar"
-      - "../examples/spring-agent-only/build/libs/spring-agent-only-0.6.1.jar:/app.jar"
+      - "${AGENT_JAR}:/agent.jar"
+      - "${APP_JAR}:/app.jar"
     command: "java -javaagent:/agent.jar -jar /app.jar"
 

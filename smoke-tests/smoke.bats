@@ -11,6 +11,13 @@ setup_file() {
 	done
 }
 
+setup_file() {
+    if [[ -z "${APP_ENDPOINT}" ]]; then
+      echo "APP_ENDPOINT is not defined, bailing."
+      exit 1
+    fi
+}
+
 setup() {
 	docker compose up --detach
 }
@@ -33,7 +40,7 @@ wait_for_data() {
 }
 
 poke() {
-	curl --silent http://localhost:5002
+	curl $APP_ENDPOINT
 }
 
 span_names_for() {

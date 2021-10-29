@@ -13,6 +13,25 @@ jobs:
       - gradle/with_cache:
           steps:
             - run: ./gradlew build -x test
+  smoke_test:
+    executor:
+      name: gradle/default
+      tag: "17.0"
+    environment:
+      APP_ENDPOINT: http://localhost:5002
+      AGENT_JAR: $CIRCLE_WORKING_DIRECTORY/agent/build/libs/*-all.jar
+      APP_JAR: $CIRCLE_WORKING_DIRECTORY/examples/spring-agent-only/build/libs/spring-agent-only-?.?.?.jar
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run:
+                command: |
+                  echo "JARS!!!"
+                  echo $AGENT_JAR
+                  echo $APP_JAR
+#            - run: ./gradlew examples:spring-agent-only:build -x test
+
   publish_github:
     docker:
       - image: cibuilds/github:0.13.0
@@ -88,6 +107,8 @@ workflows:
       - build:
           requires:
             - gradle/test
+          <<: *filters_always
+      - smoke_test
           <<: *filters_always
       - publish_github:
           context: Honeycomb Secrets for Public Repos
