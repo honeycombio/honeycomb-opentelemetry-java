@@ -30,6 +30,7 @@ jobs:
                   echo "JARS!!!"
                   echo $AGENT_JAR
                   echo $APP_JAR
+                  echo $CIRCLE_WORKING_DIRECTORY
 #            - run: ./gradlew examples:spring-agent-only:build -x test
 
   publish_github:
