@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   gradle: circleci/gradle@2.2.0
+  bats: circleci/bats@1.0
 
 jobs:
   build:
@@ -33,11 +34,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run:
-          command: |
-            echo "JARS!!!"
-            ls $AGENT_JAR
-            ls $APP_JAR
+      - checkout
+      - bats/install
+      - run: bats smoke-tests
 
   publish_github:
     docker:
