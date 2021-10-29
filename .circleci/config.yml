@@ -10,27 +10,31 @@ jobs:
       tag: "17.0"
     steps:
       - checkout
+      - run: mkdir -p ~/build-artifacts
       - gradle/with_cache:
           steps:
             - run: ./gradlew build -x test
+      - run: cp **/build/libs/*.jar ~/build-artifacts
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - build-artifacts
   smoke_test:
     executor:
       name: gradle/default
       tag: "17.0"
     environment:
       APP_ENDPOINT: http://localhost:5002
-      AGENT_JAR: "./agent/build/libs/*-all.jar"
-      APP_JAR: "./examples/spring-agent-only/build/libs/spring-agent-only-?.?.?.jar"
+      AGENT_JAR: "build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar"
+      APP_JAR: "build-artifacts/spring-agent-only-?.?.?.jar"
     steps:
-      - checkout
-      - gradle/with_cache:
-          steps:
-            - run: ./gradlew examples:spring-agent-only:build -x test
-            - run:
-                command: |
-                  echo "JARS!!!"
-                  ls $AGENT_JAR
-                  ls $APP_JAR
+      - attach_workspace:
+          at: ~/
+      - run:
+          command: |
+            echo "JARS!!!"
+            ls $AGENT_JAR
+            ls $APP_JAR
 
   publish_github:
     docker:
