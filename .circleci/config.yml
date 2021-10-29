@@ -14,7 +14,10 @@ jobs:
       - gradle/with_cache:
           steps:
             - run: ./gradlew build -x test
-      - run: cp **/build/libs/*.jar ~/build-artifacts
+      - run:
+          command: |
+            shopt -s globstar
+            cp **/build/libs/*.jar ~/build-artifacts
       - persist_to_workspace:
           root: ~/
           paths:
@@ -59,7 +62,10 @@ jobs:
             - run:
                 name: "Publish Artifacts to Maven"
                 command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-            - run: cp **/build/libs/*.jar ~/publish-artifacts
+            - run:
+                command: |
+                  shopt -s globstar
+                  cp **/build/libs/*.jar ~/publish-artifacts
             - persist_to_workspace:
                 root: ~/
                 paths:
