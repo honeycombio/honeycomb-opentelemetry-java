@@ -42,26 +42,26 @@ jobs:
           name: "Publish Release on GitHub"
           command: |
             echo "about to publish to tag ${CIRCLE_TAG}"
-            ls -l ~/artifacts/*
-            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/artifacts
+            ls -l ~/publish-artifacts/*
 
+            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/publish-artifacts
   publish_maven:
     executor: gradle/default
     steps:
       - checkout
       - gradle/with_cache:
           steps:
-            - run: mkdir -p ~/artifacts
+            - run: mkdir -p ~/publish-artifacts
             - run:
                 name: "Publish Artifacts to Maven"
                 command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-            - run: cp **/build/libs/*.jar ~/artifacts
+            - run: cp **/build/libs/*.jar ~/publish-artifacts
             - persist_to_workspace:
                 root: ~/
                 paths:
-                  - artifacts
+                  - publish-artifacts
             - store_artifacts:
-                path: ~/artifacts
+                path: ~/publish-artifacts
 
 filters_always: &filters_always
   filters:
