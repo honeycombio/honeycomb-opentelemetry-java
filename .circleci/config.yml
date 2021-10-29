@@ -29,8 +29,8 @@ jobs:
             - run:
                 command: |
                   echo "JARS!!!"
-                  ll $AGENT_JAR
-                  ll $APP_JAR
+                  ls $AGENT_JAR
+                  ls $APP_JAR
 
   publish_github:
     docker:
