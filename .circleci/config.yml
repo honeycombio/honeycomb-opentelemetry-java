@@ -114,6 +114,8 @@ workflows:
           <<: *filters_always
       - smoke_test:
           <<: *filters_always
+          requires:
+            - build
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
