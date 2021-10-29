@@ -19,8 +19,8 @@ jobs:
       tag: "17.0"
     environment:
       APP_ENDPOINT: http://localhost:5002
-      AGENT_JAR: $CIRCLE_WORKING_DIRECTORY/agent/build/libs/*-all.jar
-      APP_JAR: $CIRCLE_WORKING_DIRECTORY/examples/spring-agent-only/build/libs/spring-agent-only-?.?.?.jar
+      AGENT_JAR: "${CIRCLE_WORKING_DIRECTORY}/agent/build/libs/*-all.jar"
+      APP_JAR: "${CIRCLE_WORKING_DIRECTORY}/examples/spring-agent-only/build/libs/spring-agent-only-?.?.?.jar"
     steps:
       - checkout
       - gradle/with_cache:
