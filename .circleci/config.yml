@@ -120,8 +120,8 @@ workflows:
 #          <<: *matrix_executors
 #          <<: *filters_always
       - build:
-          requires:
-            - gradle/test
+#          requires:
+#            - gradle/test
           <<: *filters_always
       - smoke_test:
           <<: *filters_always
