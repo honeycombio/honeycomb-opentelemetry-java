@@ -1,6 +1,14 @@
 #!/usr/bin/env bats
 
+# TEST SETUP
+
+# before_all
 setup_file() {
+    if [[ -z "${APP_ENDPOINT}" ]]; then
+      echo "APP_ENDPOINT is not defined, bailing."
+      exit 1
+    fi
+
 	echo "# Starting up containers for test ..." >&3
 
 	docker compose up --detach
@@ -11,17 +19,12 @@ setup_file() {
 	done
 }
 
-setup_file() {
-    if [[ -z "${APP_ENDPOINT}" ]]; then
-      echo "APP_ENDPOINT is not defined, bailing."
-      exit 1
-    fi
-}
-
+# before_each
 setup() {
 	docker compose up --detach
 }
 
+# after_each
 teardown() {
 	docker compose restart collector
 	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -eq 0 ]
@@ -31,13 +34,27 @@ teardown() {
 	done
 }
 
-wait_for_data() {
-	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -ne 0 ]
-	do
-		echo "Waiting for collector to receive data."
-		sleep 0.1
-	done
+# after_all
+teardown_file() {
+	docker compose down
 }
+
+
+# TESTS
+
+@test "Auto instrumentation produces a Spring controller span" {
+	poke
+	wait_for_data
+	span_names_for "io.opentelemetry.spring-webmvc-3.1" | grep "HelloController.index"
+}
+
+@test "Auto instrumentation produces an incoming web request span" {
+	poke
+	wait_for_data
+	span_names_for "io.opentelemetry.tomcat-7.0" | grep "/"
+}
+
+# UTILITY FUNCS
 
 poke() {
 	curl $APP_ENDPOINT
@@ -50,14 +67,10 @@ span_names_for() {
 		output/data.json
 }
 
-@test "Auto instrumentation produces a Spring controller span" {
-	poke
-	wait_for_data
-	span_names_for "io.opentelemetry.spring-webmvc-3.1" | grep "HelloController.index"
-}
-
-@test "Auto instrumentation produces an incoming web request span" {
-	poke
-	wait_for_data
-	span_names_for "io.opentelemetry.tomcat-7.0" | grep "/"
+wait_for_data() {
+	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -ne 0 ]
+	do
+		echo "Waiting for collector to receive data."
+		sleep 0.1
+	done
 }
