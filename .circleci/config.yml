@@ -39,8 +39,8 @@ jobs:
       - bats/install
       - run:
           command: |
-            AGENT_JAR=$(eval $AGENT_JAR_GLOB) \
-            APP_JAR=$(eval $APP_JAR_GLOB) \
+            AGENT_JAR=$(eval "echo $AGENT_JAR_GLOB") \
+            APP_JAR=$(eval "echo $APP_JAR_GLOB") \
             bats smoke-tests
 
   publish_github:
