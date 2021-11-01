@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-# TEST SETUP
+# TEST SETUP
 
 # before_all
 setup_file() {
@@ -54,7 +54,7 @@ teardown_file() {
 }
 
 
-# TESTS
+# TESTS
 
 @test "Auto instrumentation produces a Spring controller span" {
 	poke
@@ -68,7 +68,7 @@ teardown_file() {
 	span_names_for "io.opentelemetry.tomcat-7.0" | grep "/"
 }
 
-# UTILITY FUNCS
+# UTILITY FUNCS
 
 poke() {
 	curl $APP_ENDPOINT
