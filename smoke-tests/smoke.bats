@@ -25,8 +25,8 @@ setup_file() {
 
 	echo "# Starting up containers for test ..." >&3
 
-	docker compose up --detach
-	until [[ $(docker compose logs app | grep "OK I'm ready now") ]]
+	docker-compose up --detach
+	until [[ $(docker-compose logs app | grep "OK I'm ready now") ]]
 	do
 		echo "# Waiting for instrumented app to become ready." >&3
 		sleep 0.1
@@ -35,12 +35,12 @@ setup_file() {
 
 # before_each
 setup() {
-	docker compose up --detach
+	docker-compose up --detach
 }
 
 # after_each
 teardown() {
-	docker compose restart collector
+	docker-compose restart collector
 	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -eq 0 ]
 	do
 		echo "# Waiting for collector data flush." >&3
@@ -54,7 +54,7 @@ teardown() {
 # after_all
 teardown_file() {
 	echo "# Shutting down test containers ..." >&3
-	docker compose down
+	docker-compose down
 }
 
 
