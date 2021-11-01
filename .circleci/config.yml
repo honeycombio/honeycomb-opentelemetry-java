@@ -29,8 +29,8 @@ jobs:
       tag: "17.0"
     environment:
       APP_ENDPOINT: http://localhost:5002
-      AGENT_JAR: $(eval "$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar")
-      APP_JAR: $(eval "$HOME/build-artifacts/spring-agent-only-?.?.?.jar")
+      AGENT_JAR_GLOB: $HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar
+      APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
     steps:
       - attach_workspace:
           at: ~/
@@ -39,10 +39,9 @@ jobs:
       - bats/install
       - run:
           command: |
+            AGENT_JAR=$(eval $AGENT_JAR_GLOB) \
+            APP_JAR=$(eval $APP_JAR_GLOB) \
             bats smoke-tests
-#            APP_ENDPOINT="http://localhost:5002" \
-#            AGENT_JAR="$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar" \
-#            APP_JAR="$HOME/build-artifacts/spring-agent-only-?.?.?.jar" \
 
   publish_github:
     docker:
