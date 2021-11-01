@@ -32,10 +32,14 @@ teardown() {
 		echo "Waiting for collector data flush."
 		sleep 0.1
 	done
+
+	echo "# Removing output files"
+	rm -rf ./output
 }
 
 # after_all
 teardown_file() {
+	echo "# Shutting down test containers ..." >&3
 	docker compose down
 }
 
