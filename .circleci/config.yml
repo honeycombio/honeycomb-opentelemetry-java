@@ -42,7 +42,7 @@ jobs:
           command: |
             AGENT_JAR=$(eval "echo $AGENT_JAR_GLOB") \
             APP_JAR=$(eval "echo $APP_JAR_GLOB") \
-            bats smoke-tests
+            bats smoke.bats
 
   publish_github:
     docker:
