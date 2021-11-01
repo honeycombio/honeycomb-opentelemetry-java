@@ -46,9 +46,6 @@ teardown() {
 		echo "# Waiting for collector data flush." >&3
 		sleep 0.1
 	done
-
-	echo "# Removing output files"
-	rm -rf ./output
 }
 
 # after_all
