@@ -34,7 +34,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.7
       - checkout
       - bats/install
       - run:
