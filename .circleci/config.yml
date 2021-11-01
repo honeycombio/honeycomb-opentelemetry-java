@@ -39,10 +39,10 @@ jobs:
       - bats/install
       - run:
           command: |
+            bats smoke-tests
 #            APP_ENDPOINT="http://localhost:5002" \
 #            AGENT_JAR="$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar" \
 #            APP_JAR="$HOME/build-artifacts/spring-agent-only-?.?.?.jar" \
-            bats smoke-tests
 
   publish_github:
     docker:
