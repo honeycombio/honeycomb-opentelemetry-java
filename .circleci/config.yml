@@ -34,6 +34,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - setup_remote_docker
       - checkout
       - bats/install
       - run: bats smoke-tests
