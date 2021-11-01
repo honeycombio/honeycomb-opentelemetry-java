@@ -28,7 +28,7 @@ setup_file() {
 	docker compose up --detach
 	until [[ $(docker compose logs app | grep "OK I'm ready now") ]]
 	do
-		echo "Waiting for instrumented app to become ready."
+		echo "# Waiting for instrumented app to become ready." >&3
 		sleep 0.1
 	done
 }
@@ -43,7 +43,7 @@ teardown() {
 	docker compose restart collector
 	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -eq 0 ]
 	do
-		echo "Waiting for collector data flush."
+		echo "# Waiting for collector data flush." >&3
 		sleep 0.1
 	done
 
@@ -88,7 +88,7 @@ span_names_for() {
 wait_for_data() {
 	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -ne 0 ]
 	do
-		echo "Waiting for collector to receive data."
+		echo "# Waiting for collector to receive data." >&3
 		sleep 0.1
 	done
 }
