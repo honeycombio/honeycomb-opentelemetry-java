@@ -4,6 +4,10 @@
 
 # before_all
 setup_file() {
+    echo "# APP_ENDPOINT: $APP_ENDPOINT" >&3
+    echo "# AGENT_JAR: $AGENT_JAR" >&3
+    echo "# APP_JAR: $APP_JAR" >&3
+
 	if [[ -z "${APP_ENDPOINT}" ]]; then
 		echo "# APP_ENDPOINT is not defined, bailing." >&3
 		exit 1

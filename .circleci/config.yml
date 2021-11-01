@@ -39,9 +39,9 @@ jobs:
       - bats/install
       - run:
           command: |
-            export APP_ENDPOINT="http://localhost:5002"
-            export AGENT_JAR="$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar"
-            export APP_JAR="$HOME/build-artifacts/spring-agent-only-?.?.?.jar"
+            APP_ENDPOINT="http://localhost:5002" \
+            AGENT_JAR="$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar" \
+            APP_JAR="$HOME/build-artifacts/spring-agent-only-?.?.?.jar" \
             bats smoke-tests
 
   publish_github:
@@ -116,9 +116,9 @@ workflows:
           <<: *matrix_executors
   build:
     jobs:
-      - gradle/test:
-          <<: *matrix_executors
-          <<: *filters_always
+#      - gradle/test:
+#          <<: *matrix_executors
+#          <<: *filters_always
       - build:
           requires:
             - gradle/test
