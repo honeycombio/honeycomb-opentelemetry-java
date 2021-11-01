@@ -27,17 +27,22 @@ jobs:
     executor:
       name: gradle/default
       tag: "17.0"
-    environment:
-      APP_ENDPOINT: http://localhost:5002
-      AGENT_JAR: "$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar"
-      APP_JAR: "$HOME/build-artifacts/spring-agent-only-?.?.?.jar"
+#    environment:
+#      APP_ENDPOINT: http://localhost:5002
+#      AGENT_JAR: "$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar"
+#      APP_JAR: "$HOME/build-artifacts/spring-agent-only-?.?.?.jar"
     steps:
       - attach_workspace:
           at: ~/
       - setup_remote_docker
       - checkout
       - bats/install
-      - run: bats smoke-tests
+      - run:
+          command: |
+            export APP_ENDPOINT="http://localhost:5002"
+            export AGENT_JAR="$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar"
+            export APP_JAR="$HOME/build-artifacts/spring-agent-only-?.?.?.jar"
+            bats smoke-tests
 
   publish_github:
     docker:
