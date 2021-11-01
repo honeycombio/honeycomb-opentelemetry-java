@@ -22,7 +22,7 @@ services:
       HONEYCOMB_API_KEY: bogus_key
       HONEYCOMB_DATASET: bogus_dataset
     volumes:
-      - "${AGENT_JAR}:/agent.jar"
-      - "${APP_JAR}:/app.jar"
+      - "${AGENT_JAR:?Must be set as path to hny-otel agent}:/agent.jar"
+      - "${APP_JAR:?Must be set as path to instrumented app}:/app.jar"
     command: "java -javaagent:/agent.jar -jar /app.jar"
 
