@@ -31,6 +31,7 @@ jobs:
       APP_ENDPOINT: http://localhost:5002
       AGENT_JAR_GLOB: $HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar
       APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
+    working_directory: ~/project/smoke-tests
     steps:
       - attach_workspace:
           at: ~/
