@@ -27,10 +27,10 @@ jobs:
     executor:
       name: gradle/default
       tag: "17.0"
-#    environment:
-#      APP_ENDPOINT: http://localhost:5002
-#      AGENT_JAR: "$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar"
-#      APP_JAR: "$HOME/build-artifacts/spring-agent-only-?.?.?.jar"
+    environment:
+      APP_ENDPOINT: http://localhost:5002
+      AGENT_JAR: $(eval "$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar")
+      APP_JAR: $(eval "$HOME/build-artifacts/spring-agent-only-?.?.?.jar")
     steps:
       - attach_workspace:
           at: ~/
@@ -39,9 +39,9 @@ jobs:
       - bats/install
       - run:
           command: |
-            APP_ENDPOINT="http://localhost:5002" \
-            AGENT_JAR="$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar" \
-            APP_JAR="$HOME/build-artifacts/spring-agent-only-?.?.?.jar" \
+#            APP_ENDPOINT="http://localhost:5002" \
+#            AGENT_JAR="$HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar" \
+#            APP_JAR="$HOME/build-artifacts/spring-agent-only-?.?.?.jar" \
             bats smoke-tests
 
   publish_github:
