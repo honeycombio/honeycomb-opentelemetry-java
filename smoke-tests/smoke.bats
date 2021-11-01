@@ -2,23 +2,22 @@
 
 # TEST SETUP
 
-if [[ -z "${APP_ENDPOINT}" ]]; then
-	echo "# APP_ENDPOINT is not defined, bailing."
-	exit 1
-fi
-
-if [[ -z "${AGENT_JAR}" ]]; then
-	echo "# AGENT_JAR is not defined, bailing."
-	exit 1
-fi
-
-if [[ -z "${APP_JAR}" ]]; then
-	echo "# APP_JAR is not defined, bailing."
-	exit 1
-fi
-
 # before_all
 setup_file() {
+	if [[ -z "${APP_ENDPOINT}" ]]; then
+		echo "# APP_ENDPOINT is not defined, bailing." >&3
+		exit 1
+	fi
+
+	if [[ -z "${AGENT_JAR}" ]]; then
+		echo "# AGENT_JAR is not defined, bailing." >&3
+		exit 1
+	fi
+
+	if [[ -z "${APP_JAR}" ]]; then
+		echo "# APP_JAR is not defined, bailing." >&3
+		exit 1
+	fi
 
 	echo "# Starting up containers for test ..." >&3
 
