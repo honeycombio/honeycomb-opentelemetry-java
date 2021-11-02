@@ -4,7 +4,7 @@ build:
 test:
 	./gradlew test
 
-dc=docker compose --file ./smoke-tests/docker-compose.yml
+dc=docker-compose --file ./smoke-tests/docker-compose.yml
 smoke:
 	${dc} up --detach --build collector app
 	until [[ $$(${dc} logs app | grep "OK I'm ready now") ]]; do sleep 1; done

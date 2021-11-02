@@ -44,7 +44,7 @@ jobs:
             cp $(eval "echo $APP_JAR_GLOB") ./app.jar
             docker-compose up --build collector app
             until [[ $(docker-compose logs app | grep "OK I'm ready now") ]]; do sleep 1; done
-            docker compose up bats
+            docker-compose up bats
 
   smoke_test_ci:
     docker:
