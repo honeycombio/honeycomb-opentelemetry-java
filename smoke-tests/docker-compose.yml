@@ -28,6 +28,7 @@ services:
     command: "smoke.bats"
     volumes:
       - "data-volume:/var/lib"
+      - "/tmp"
     depends_on:
       - "app"
 
