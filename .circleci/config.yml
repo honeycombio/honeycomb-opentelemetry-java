@@ -34,8 +34,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - setup_remote_docker:
-          version: 20.10.7
+      - setup_remote_docker
       - checkout
       - bats/install
       - run:
@@ -43,11 +42,25 @@ jobs:
             cd smoke-tests
             cp $(eval "echo $AGENT_JAR_GLOB") ./agent.jar
             cp $(eval "echo $APP_JAR_GLOB") ./app.jar
-            docker build -t coll_with_config -f collector.dockerfile .
-            docker build -t app_with_config -f app.dockerfile .
-            AGENT_JAR=$(eval "echo $AGENT_JAR_GLOB") \
-            APP_JAR=$(eval "echo $APP_JAR_GLOB") \
-            bats smoke.bats
+            docker-compose up --build collector app
+            until [[ $(docker-compose logs app | grep "OK I'm ready now") ]]; do sleep 1; done
+            docker compose up bats
+
+  smoke_test_ci:
+    executor: cimg/base
+    environment:
+      AGENT_JAR_GLOB: $HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar
+      APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - checkout
+      - run:
+          command: |
+            cp $(eval "echo $AGENT_JAR_GLOB") ./smoke-tests/agent.jar
+            cp $(eval "echo $APP_JAR_GLOB") ./smoke-tests/app.jar
+            make smoke
 
   publish_github:
     docker:
@@ -128,7 +141,7 @@ workflows:
 #          requires:
 #            - gradle/test
           <<: *filters_always
-      - smoke_test:
+      - smoke_test_ci:
           <<: *filters_always
           requires:
             - build

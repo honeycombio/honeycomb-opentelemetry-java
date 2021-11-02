@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: collector.dockerfile
+    image: smoke-collector
     volumes:
       - "data-volume:/var/lib"
 
@@ -12,6 +13,7 @@ services:
     build:
       context: .
       dockerfile: app.dockerfile
+    image: smoke-app
     ports:
       - '5002:5002'
     depends_on:
@@ -21,6 +23,7 @@ services:
     build:
       context: .
       dockerfile: bats.dockerfile
+    image: smoke-bats
     volumes:
       - "data-volume:/var/lib"
     depends_on:

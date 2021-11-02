@@ -9,7 +9,7 @@ processors:
 
 exporters:
   file:
-    path: data-volume:/var/lib/data.json
+    path: /var/lib/data.json
   logging:
     loglevel: debug
 
