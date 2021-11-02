@@ -2,10 +2,10 @@ version: '2.4'
 
 services:
   collector:
-    image: otel/opentelemetry-collector:latest
-    volumes:
-      - ./config:/etc/otel
-      - ./output:/output
+    image: coll_with_config
+    # volumes:
+    #   - ./config:/etc/otel
+    #   - ./output:/output
 
   # backend:
   #   image: honeycombio/fake-otlp-backend:latest
@@ -14,15 +14,15 @@ services:
   #     - '127.0.0.1:5678:5678'
 
   app:
-    image: openjdk:17-jdk-alpine
-    ports:
-      - '127.0.0.1:5002:5002'
-    environment:
-      HONEYCOMB_API_ENDPOINT: http://collector:4317
-      HONEYCOMB_API_KEY: bogus_key
-      HONEYCOMB_DATASET: bogus_dataset
-    volumes:
-      - "${AGENT_JAR:?Must be set as path to hny otel agent}:/agent.jar"
-      - "${APP_JAR:?Must be set as path to instrumented app}:/app.jar"
-    command: "java -javaagent:/agent.jar -jar /app.jar"
+    image: app_with_config
+    # ports:
+    #   - '127.0.0.1:5002:5002'
+    # environment:
+    #   HONEYCOMB_API_ENDPOINT: http://collector:4317
+    #   HONEYCOMB_API_KEY: bogus_key
+    #   HONEYCOMB_DATASET: bogus_dataset
+    # volumes:
+    #   - "${AGENT_JAR:?Must be set as path to hny otel agent}:/agent.jar"
+    #   - "${APP_JAR:?Must be set as path to instrumented app}:/app.jar"
+    # command: "java -javaagent:/agent.jar -jar /app.jar"
 
