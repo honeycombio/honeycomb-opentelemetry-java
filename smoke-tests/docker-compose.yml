@@ -24,11 +24,8 @@ services:
       context: .
       dockerfile: bats.dockerfile
     image: smoke-bats
-    entrypoint: "bats"
-    command: "smoke.bats"
     volumes:
       - "data-volume:/var/lib"
-      - "/tmp"
     depends_on:
       - "app"
 
