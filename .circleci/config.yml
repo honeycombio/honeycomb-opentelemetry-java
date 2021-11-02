@@ -44,7 +44,7 @@ jobs:
             cp $(eval "echo $AGENT_JAR_GLOB") ./agent.jar
             cp $(eval "echo $APP_JAR_GLOB") ./app.jar
             docker build -t coll_with_config -f collector.dockerfile .
-            docker build -t app_with_config -f aoo.dockerfile .
+            docker build -t app_with_config -f app.dockerfile .
             AGENT_JAR=$(eval "echo $AGENT_JAR_GLOB") \
             APP_JAR=$(eval "echo $APP_JAR_GLOB") \
             bats smoke.bats
