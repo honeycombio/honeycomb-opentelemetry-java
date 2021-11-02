@@ -1,6 +1,5 @@
 FROM bats/bats:latest
 RUN apk add --no-cache curl jq
-COPY smoke.bats /code/bats/smoke.bats
-WORKDIR /code/bats
-# bats entrypoint will execute everything in a directory named in CMD
-CMD [ "." ]
+COPY smoke.bats /code/smoke.bats
+# bats entrypoint will pass the value of CMD to the bats command
+CMD [ "smoke.bats" ]
