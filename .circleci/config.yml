@@ -55,7 +55,6 @@ jobs:
           command: |
             echo "about to publish to tag ${CIRCLE_TAG}"
             ls -l ~/publish-artifacts/*
-
             ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/publish-artifacts
   publish_maven:
     executor: gradle/default
@@ -117,8 +116,8 @@ workflows:
   build:
     jobs:
       - gradle/test:
-         <<: *matrix_executors
-         <<: *filters_always
+          <<: *matrix_executors
+          <<: *filters_always
       - build:
           requires:
             - gradle/test
