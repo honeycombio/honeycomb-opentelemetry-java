@@ -16,6 +16,7 @@ jobs:
           steps:
             - run: ./gradlew build -x test
       - run:
+          name: Copy JARs to build-artifacts
           command: |
             shopt -s globstar
             cp **/build/libs/*.jar ~/build-artifacts
@@ -23,30 +24,8 @@ jobs:
           root: ~/
           paths:
             - build-artifacts
-  smoke_test:
-    executor:
-      name: gradle/default
-      tag: "17.0"
-    environment:
-      APP_ENDPOINT: http://localhost:5002
-      AGENT_JAR_GLOB: $HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar
-      APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
-    steps:
-      - attach_workspace:
-          at: ~/
-      - setup_remote_docker
-      - checkout
-      - bats/install
-      - run:
-          command: |
-            cd smoke-tests
-            cp $(eval "echo $AGENT_JAR_GLOB") ./agent.jar
-            cp $(eval "echo $APP_JAR_GLOB") ./app.jar
-            docker-compose up --build collector app
-            until [[ $(docker-compose logs app | grep "OK I'm ready now") ]]; do sleep 1; done
-            docker-compose up bats
 
-  smoke_test_ci:
+  smoke_test:
     docker:
       - image: cimg/base:stable
     environment:
@@ -59,6 +38,7 @@ jobs:
           version: 20.10.7
       - checkout
       - run:
+          name: Smoke Tests
           command: |
             cp $(eval "echo $AGENT_JAR_GLOB") ./smoke-tests/agent.jar
             cp $(eval "echo $APP_JAR_GLOB") ./smoke-tests/app.jar
@@ -136,14 +116,14 @@ workflows:
           <<: *matrix_executors
   build:
     jobs:
-#      - gradle/test:
-#          <<: *matrix_executors
-#          <<: *filters_always
+      - gradle/test:
+         <<: *matrix_executors
+         <<: *filters_always
       - build:
-#          requires:
-#            - gradle/test
+          requires:
+            - gradle/test
           <<: *filters_always
-      - smoke_test_ci:
+      - smoke_test:
           <<: *filters_always
           requires:
             - build
