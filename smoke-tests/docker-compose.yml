@@ -13,7 +13,9 @@ services:
       context: .
       dockerfile: app.dockerfile
     ports:
-      - '127.0.0.1:5002:5002'
+      - '5002:5002'
+    depends_on:
+      - "collector"
 
   bats:
     build:
@@ -21,6 +23,8 @@ services:
       dockerfile: bats.dockerfile
     volumes:
       - "data-volume:/var/lib"
+    depends_on:
+      - "app"
 
 volumes:
   data-volume:

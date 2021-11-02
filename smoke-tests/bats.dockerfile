@@ -1,3 +1,5 @@
 FROM bats/bats:latest
-COPY smoke.bats /code/smoke.bats
-# CMD ["bats", "smoke.bats"]
+RUN apk add --no-cache curl
+COPY smoke.bats /code/bats/smoke.bats
+WORKDIR /code/bats
+CMD [ "." ]

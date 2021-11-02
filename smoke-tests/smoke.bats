@@ -39,14 +39,14 @@
 # }
 
 # after_each
-teardown() {
-	docker-compose restart collector
-	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -eq 0 ]
-	do
-		echo "# Waiting for collector data flush." >&3
-		sleep 0.1
-	done
-}
+# teardown() {
+# 	docker-compose restart collector
+# 	until [ "$(wc -l output/data.json | awk '{ print $1 }')" -eq 0 ]
+# 	do
+# 		echo "# Waiting for collector data flush." >&3
+# 		sleep 0.1
+# 	done
+# }
 
 # after_all
 # teardown_file() {
@@ -72,7 +72,7 @@ teardown() {
 # UTILITY FUNCS
 
 poke() {
-	curl $APP_ENDPOINT
+	curl "http://app:5002"
 }
 
 span_names_for() {
