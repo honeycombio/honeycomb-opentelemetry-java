@@ -47,7 +47,8 @@ jobs:
             docker compose up bats
 
   smoke_test_ci:
-    executor: cimg/base
+    docker:
+      - image: cimg/base
     environment:
       AGENT_JAR_GLOB: $HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar
       APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
