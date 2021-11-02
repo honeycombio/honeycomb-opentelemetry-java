@@ -4,7 +4,7 @@ services:
   collector:
     image: otel/opentelemetry-collector:latest
     volumes:
-      - ./otel-collector-config.yaml:/etc/otel/config.yaml
+      - ./config:/etc/otel
       - ./output:/output
 
   # backend:
