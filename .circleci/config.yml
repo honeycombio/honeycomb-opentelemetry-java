@@ -112,6 +112,12 @@ workflows:
     jobs:
       - gradle/test:
           <<: *matrix_executors
+      - build:
+          requires:
+            - gradle/test
+      - smoke_test:
+          requires:
+            - build
   build:
     jobs:
       - gradle/test:
