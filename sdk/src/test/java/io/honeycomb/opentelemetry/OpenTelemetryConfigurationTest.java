@@ -5,6 +5,7 @@ import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 
 import org.junit.jupiter.api.AfterEach;
@@ -57,4 +58,22 @@ public class OpenTelemetryConfigurationTest {
         // sent as gRPC metadata.
     }
 
+    @Test
+    void testConfiguration_addAttributes() {
+        // NOTE: this does not verify the attributes are added correctly to
+        // the resource, but does exercise the interface to ensure it is
+        // can be used fluently (eg chain OpenTelemetryconfiguration.Builder calls)
+        OpenTelemetry openTelemetry = OpenTelemetryConfiguration.builder()
+            .addResourceAttribute("str", "str")
+            .addResourceAttribute("bool", true)
+            .addResourceAttribute("int", 123)
+            .addResourceAttribute("str-array", "str1", "str2", "str3")
+            .build();
+
+        Assertions.assertNotNull(openTelemetry);
+        // TODO: Figure out way to retrieve configured Resource from TracerProvider
+        // to verify resource attributes have been added correctly
+        // eg it might be possible using reflection
+        // https://stackoverflow.com/questions/8267964/how-to-access-package-private-class-from-a-class-in-some-other-package
+    }
 }
