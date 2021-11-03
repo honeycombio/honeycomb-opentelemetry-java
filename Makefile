@@ -8,7 +8,7 @@ build:
 test:
 	./gradlew test
 
-project_version:=$(shell ./gradlew --quiet --console=plain project_version)
+project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ print $$2 }')
 #: display the project's version
 project_version:
 	@echo ${project_version}
