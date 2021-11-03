@@ -201,10 +201,11 @@ public final class OpenTelemetryConfiguration {
          *
          * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         * @return AttributesBuilder
+         * @return Builder
          */
-        public AttributesBuilder addResourceAttribute(String key, String value) {
-            return this.resourceAttributes.put(key, value);
+        public Builder addResourceAttribute(String key, String value) {
+            this.resourceAttributes.put(key, value);
+            return this;
         }
 
         /**
@@ -212,10 +213,11 @@ public final class OpenTelemetryConfiguration {
          *
          * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         * @return AttributesBuilder
+         * @return Builder
          */
-        public AttributesBuilder addResourceAttribute(String key, long value) {
-            return this.resourceAttributes.put(key, value);
+        public Builder addResourceAttribute(String key, long value) {
+            this.resourceAttributes.put(key, value);
+            return this;
         }
 
         /**
@@ -223,10 +225,11 @@ public final class OpenTelemetryConfiguration {
          *
          * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         * @return AttributesBuilder
+         * @return Builder
          */
-        public AttributesBuilder addResourceAttribute(String key, double value) {
-            return this.resourceAttributes.put(key, value);
+        public Builder addResourceAttribute(String key, double value) {
+            this.resourceAttributes.put(key, value);
+            return this;
         }
 
         /**
@@ -234,10 +237,11 @@ public final class OpenTelemetryConfiguration {
          *
          * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         * @return AttributesBuilder
+         * @return Builder
          */
-        public AttributesBuilder addResourceAttribute(String key, boolean value) {
-            return this.resourceAttributes.put(key, value);
+        public Builder addResourceAttribute(String key, boolean value) {
+            this.resourceAttributes.put(key, value);
+            return this;
         }
 
         /**
@@ -245,10 +249,11 @@ public final class OpenTelemetryConfiguration {
          *
          * @param key   The key to associate a value with
          * @param value The value to store as an attribute
-         * @return AttributesBuilder
+         * @return Builder
          */
-        public AttributesBuilder addResourceAttribute(String key, String... value) {
-            return this.resourceAttributes.put(key, value);
+        public Builder addResourceAttribute(String key, String... value) {
+            this.resourceAttributes.put(key, value);
+            return this;
         }
 
         /**
