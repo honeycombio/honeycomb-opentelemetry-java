@@ -7,6 +7,12 @@ allprojects {
     project.version = "0.6.1"
 }
 
+tasks.register('project_version') {
+    doLast {
+        println project.version
+    }
+}
+
 subprojects {
     version = rootProject.version
 

@@ -6,6 +6,11 @@ build:
 test:
 	./gradlew test
 
+project_version:=$(shell ./gradlew --quiet --console=plain project_version)
+#: display the project's version
+project_version:
+	@echo ${project_version}
+
 dc=docker-compose --file ./smoke-tests/docker-compose.yml
 smoke:
 	${dc} up --detach --build collector app
@@ -23,4 +28,4 @@ logs:
 publish_local:
 	./gradlew publishToMavenLocal -Pskip.signing
 
-.PHONY: build test publish_local smoke unsmoke resmoke logs
+.PHONY: build test publish_local project_version smoke unsmoke resmoke logs
