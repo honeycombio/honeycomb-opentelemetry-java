@@ -20,6 +20,12 @@
 	span_names_for "io.opentelemetry.opentelemetry-annotations-1.0" | grep "importantSpan"
 }
 
+@test "Manual instrumentation adds custom attribute" {
+	poke
+	wait_for_data
+	span_attributes_for "custom_field" | grep "important value"
+}
+
 # UTILITY FUNCS
 
 poke() {
@@ -31,6 +37,16 @@ span_names_for() {
 	jq ".resourceSpans[] |
 			.instrumentationLibrarySpans[] |
 			select(.instrumentationLibrary.name == \"$1\").spans[].name" \
+		/var/lib/data.json
+}
+
+# test span attributes
+span_attributes_for() {
+	jq ".resourceSpans[] |
+			.instrumentationLibrarySpans[] |
+			.spans[] |
+			.attributes[] |
+			select(.key == \"$1\").value[]" \
 		/var/lib/data.json
 }
 
