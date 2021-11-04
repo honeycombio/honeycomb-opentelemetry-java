@@ -14,12 +14,19 @@
 	span_names_for "io.opentelemetry.tomcat-7.0" | grep "/"
 }
 
+@test "Manual instrumentation produces span from @WithSpan annotation" {
+	poke
+	wait_for_data
+	span_names_for "io.opentelemetry.opentelemetry-annotations-1.0" | grep "importantSpan"
+}
+
 # UTILITY FUNCS
 
 poke() {
 	curl "http://app:5000"
 }
 
+# test span name
 span_names_for() {
 	jq ".resourceSpans[] |
 			.instrumentationLibrarySpans[] |
