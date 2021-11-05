@@ -1,4 +1,4 @@
-package io.honeycomb.examples.springbootagent;
+package io.honeycomb.examples.springbootagentmanual;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -29,7 +29,8 @@ jobs:
       - image: cimg/base:stable
     environment:
       AGENT_JAR_GLOB: $HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar
-      APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
+      AGENT_ONLY_APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
+      AGENT_MANUAL_APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-manual-?.?.?.jar
     steps:
       - attach_workspace:
           at: ~/
@@ -37,10 +38,12 @@ jobs:
           version: 20.10.7
       - checkout
       - run:
-          name: Smoke Tests
+          name: Smoke Test
           command: |
-            cp $(eval "echo $AGENT_JAR_GLOB") ./smoke-tests/agent.jar
-            cp $(eval "echo $APP_JAR_GLOB") ./smoke-tests/app.jar
+            cp $(eval "echo $AGENT_JAR_GLOB") ./smoke-tests/smoke-tests-agent-only/agent.jar
+            cp $(eval "echo $AGENT_ONLY_APP_JAR_GLOB") ./smoke-tests/smoke-tests-agent-only/app.jar
+            cp $(eval "echo $AGENT_JAR_GLOB") ./smoke-tests/smoke-tests-agent-manual/agent.jar
+            cp $(eval "echo $AGENT_MANUAL_APP_JAR_GLOB") ./smoke-tests/smoke-tests-agent-manual/app.jar
             make smoke
 
   publish_github:
