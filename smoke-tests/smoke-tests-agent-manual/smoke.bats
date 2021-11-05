@@ -1,28 +1,26 @@
 #!/usr/bin/env bats
 
+setup_file() {
+	echo "# setting up the tests ..." >&3
+	poke
+	wait_for_data
+}
+
 # TESTS
 
 @test "Auto instrumentation produces a Spring controller span" {
-	poke
-	wait_for_data
 	span_names_for "io.opentelemetry.spring-webmvc-3.1" | grep "HelloController.index"
 }
 
 @test "Auto instrumentation produces an incoming web request span" {
-	poke
-	wait_for_data
 	span_names_for "io.opentelemetry.tomcat-7.0" | grep "/"
 }
 
 @test "Manual instrumentation produces span from @WithSpan annotation" {
-	poke
-	wait_for_data
 	span_names_for "io.opentelemetry.opentelemetry-annotations-1.0" | grep "importantSpan"
 }
 
 @test "Manual instrumentation adds custom attribute" {
-	poke
-	wait_for_data
 	span_attributes_for "custom_field" | grep "important value"
 }
 
