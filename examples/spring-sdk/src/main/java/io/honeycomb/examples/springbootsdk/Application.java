@@ -1,15 +1,11 @@
 package io.honeycomb.examples.springbootsdk;
 
-import java.util.Arrays;
-
 import io.honeycomb.opentelemetry.OpenTelemetryConfiguration;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.OpenTelemetry;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
