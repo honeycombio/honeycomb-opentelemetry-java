@@ -6,6 +6,11 @@ build:
 test:
 	./gradlew test
 
+project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ print $$2 }')
+#: display the project's version
+project_version:
+	@echo ${project_version}
+
 dc-agent-only=docker-compose --file ./smoke-tests/smoke-tests-agent-only/docker-compose.yml
 dc-agent-manual=docker-compose --file ./smoke-tests/smoke-tests-agent-manual/docker-compose.yml
 
