@@ -9,11 +9,15 @@ setup_file() {
 # TESTS
 
 @test "Auto instrumentation produces a Spring controller span" {
-	span_names_for "io.opentelemetry.spring-webmvc-3.1" | grep "HelloController.index"
+	result=$(span_names_for "io.opentelemetry.spring-webmvc-3.1")
+	echo "# result: $result" >&3
+	[ "$result" = '"HelloController.index"' ]
 }
 
 @test "Auto instrumentation produces an incoming web request span" {
-	span_names_for "io.opentelemetry.tomcat-7.0" | grep "/"
+	result=$(span_names_for "io.opentelemetry.tomcat-7.0")
+	echo "# result: $result" >&3
+	[ "$result" = '"/"' ]
 }
 
 # UTILITY FUNCS
@@ -22,11 +26,16 @@ poke() {
 	curl "http://app:5002"
 }
 
-span_names_for() {
+spans_from_library_named() {
 	jq ".resourceSpans[] |
 			.instrumentationLibrarySpans[] |
-			select(.instrumentationLibrary.name == \"$1\").spans[].name" \
+			select(.instrumentationLibrary.name == \"$1\").spans[]" \
 		/var/lib/data.json
+}
+
+# test span name
+span_names_for() {
+	spans_from_library_named $1 | jq '.name'
 }
 
 wait_for_data() {

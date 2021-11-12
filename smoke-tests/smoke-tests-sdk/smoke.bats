@@ -9,24 +9,15 @@ setup_file() {
 # TESTS
 
 @test "Manual instrumentation produces span with name of span" {
-	span_names_for "examples" | grep "greetings"
-}
-
-@test 'string comparison works' {
 	result=$(span_names_for 'examples')
 	echo "# result: $result" >&3
 	[ "$result" = '"greetings"' ]
-
-	# On failure, the expected and actual values are displayed.
-	# -- values do not equal --
-	# expected : want
-	# actual   : have
-	# --
 }
 
-# @test "Manual instrumentation adds custom attribute" {
-# 	span_attributes_for "examples" | jq "select(.key == \"custom_field\").value.stringValue" | grep "important value"
-# }
+@test "Manual instrumentation adds custom attribute" {
+	result=$(span_attributes_for "examples" | jq "select(.key == \"custom_field\").value.stringValue")
+	[ "$result" = '"important value"' ]
+}
 
 # UTILITY FUNCS
 
@@ -48,7 +39,6 @@ span_names_for() {
 # test span attributes
 span_attributes_for() {
 	# $1 - library name
-	# $2 - attribute key
 
 	spans_from_library_named $1 | \
 		jq ".attributes[]"
