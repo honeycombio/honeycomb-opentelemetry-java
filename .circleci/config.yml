@@ -26,11 +26,11 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - attach_workspace:
           at: ./
       - setup_remote_docker:
           version: 20.10.7
-      - checkout
       - run:
           name: Show the JARs
           command: ls -l build-artifacts
@@ -44,29 +44,29 @@ jobs:
       - image: cibuilds/github:0.13.0
     steps:
       - attach_workspace:
-          at: ~/
+          at: ./
       - run:
           name: "Publish Release on GitHub"
           command: |
             echo "about to publish to tag ${CIRCLE_TAG}"
-            ls -l ~/publish-artifacts/*
-            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/publish-artifacts
+            ls -l ./publish-artifacts/*
+            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ./publish-artifacts
   publish_maven:
     executor: gradle/default
     steps:
       - checkout
       - gradle/with_cache:
           steps:
-            - run: mkdir -p ~/publish-artifacts
+            - run: mkdir -p ./publish-artifacts
             - run:
                 name: "Publish Artifacts to Maven"
                 command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
             - run:
                 command: |
                   shopt -s globstar
-                  cp **/build/libs/*.jar ~/publish-artifacts
+                  cp **/build/libs/*.jar ./publish-artifacts
             - persist_to_workspace:
-                root: ~/
+                root: ./
                 paths:
                   - publish-artifacts
             - store_artifacts:
