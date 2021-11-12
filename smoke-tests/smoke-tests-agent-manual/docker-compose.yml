@@ -13,7 +13,7 @@ services:
     build:
       context: .
       dockerfile: app.dockerfile
-    image: smoke-app
+    image: smoke-app-agent-manual
     ports:
       - '5000:5000'
     depends_on:
@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: bats.dockerfile
-    image: smoke-bats
+    image: smoke-bats-agent-manual
     volumes:
       - "data-volume:/var/lib"
     depends_on:
