@@ -3,7 +3,7 @@ version: '3.0'
 services:
   collector:
     build:
-      context: .
+      context: ../collector
       dockerfile: collector.dockerfile
     image: smoke-collector
     volumes:
