@@ -15,17 +15,39 @@ dc-agent-only=docker-compose --file ./smoke-tests/smoke-tests-agent-only/docker-
 dc-agent-manual=docker-compose --file ./smoke-tests/smoke-tests-agent-manual/docker-compose.yml
 dc-sdk=docker-compose --file ./smoke-tests/smoke-tests-sdk/docker-compose.yml
 
-smoke-agent-only:
+build-artifacts:
+	mkdir -p ./build-artifacts
+
+smoke-tests/smoke-tests-agent-only/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar
+	cp $< $@
+
+smoke-tests/smoke-tests-agent-only/app.jar: build-artifacts/spring-agent-only-$(project_version).jar
+	cp $< $@
+
+smoke-agent-only: smoke-tests/smoke-tests-agent-only/app.jar smoke-tests/smoke-tests-agent-only/agent.jar
 	${dc-agent-only} up --detach --build collector app
 	until [[ $$(${dc-agent-only} logs app | grep "OK I'm ready now") ]]; do sleep 1; done
 	${dc-agent-only} up --build --exit-code-from bats bats
 
-smoke-agent-manual:
+smoke-tests/smoke-tests-agent-manual/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar
+	cp $< $@
+
+smoke-tests/smoke-tests-agent-manual/app.jar: build-artifacts/spring-agent-manual-$(project_version).jar
+	cp $< $@
+
+smoke-agent-manual: smoke-tests/smoke-tests-agent-manual/agent.jar smoke-tests/smoke-tests-agent-manual/app.jar
 	${dc-agent-manual} up --detach --build collector app
 	until [[ $$(${dc-agent-manual} logs app | grep "OK I'm ready now") ]]; do sleep 1; done
 	${dc-agent-manual} up --build --exit-code-from bats bats
 
-smoke-sdk:
+
+smoke-tests/smoke-tests-sdk/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar
+	cp $< $@
+
+smoke-tests/smoke-tests-sdk/app.jar: build-artifacts/spring-sdk-$(project_version).jar
+	cp $< $@
+
+smoke-sdk: smoke-tests/smoke-tests-sdk/agent.jar smoke-tests/smoke-tests-sdk/app.jar
 	${dc-sdk} up --detach --build collector app
 	until [[ $$(${dc-sdk} logs app | grep "OK I'm ready now") ]]; do sleep 1; done
 	${dc-sdk} up --build --exit-code-from bats bats
