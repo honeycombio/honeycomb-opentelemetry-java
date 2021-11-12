@@ -2,8 +2,7 @@ version: '3.0'
 
 x-bats-base: &bats_base
     build:
-      context: .
-      dockerfile: bats.dockerfile
+      context: ./tests
     image: smoke-bats
     volumes:
       - "data-volume:/var/lib"
@@ -19,8 +18,7 @@ services:
 
   app-agent-manual:
     build:
-      context: .
-      dockerfile: app.dockerfile
+      context: ./apps
       target: agent-manual
     image: smoke-app-agent-manual
     depends_on:
@@ -28,8 +26,7 @@ services:
 
   app-agent-only:
     build:
-      context: .
-      dockerfile: app.dockerfile
+      context: ./apps
       target: agent-only
     image: smoke-app-agent-only
     depends_on:
@@ -37,8 +34,7 @@ services:
 
   app-sdk:
     build:
-      context: .
-      dockerfile: app.dockerfile
+      context: ./apps
       target: sdk
     image: smoke-app-sdk
     depends_on:

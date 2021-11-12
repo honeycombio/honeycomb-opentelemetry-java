@@ -8,7 +8,7 @@ test:
 
 clean:
 	rm -rf ./build-artifacts/*
-	rm -rf ./smoke-tests/jars/*
+	rm -rf ./smoke-tests/apps/*.jar
 	./gradlew clean
 
 project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ print $$2 }')
@@ -24,32 +24,29 @@ dc-sdk=${dc-smoke-tests} --project-name smoke-tests-sdk
 build-artifacts:
 	mkdir -p ./build-artifacts
 
-smoke-tests/jars:
-	mkdir -p ./smoke-tests/jars
-
-smoke-tests/jars/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar smoke-tests/jars
+smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar
 	cp $< $@
 
-smoke-tests/jars/spring-agent-manual.jar: build-artifacts/spring-agent-manual-$(project_version).jar smoke-tests/jars
+smoke-tests/apps/spring-agent-manual.jar: build-artifacts/spring-agent-manual-$(project_version).jar
 	cp $< $@
 
-smoke-tests/jars/spring-agent-only.jar: build-artifacts/spring-agent-only-$(project_version).jar smoke-tests/jars
+smoke-tests/apps/spring-agent-only.jar: build-artifacts/spring-agent-only-$(project_version).jar
 	cp $< $@
 
-smoke-tests/jars/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).jar smoke-tests/jars
+smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).jar
 	cp $< $@
 
-smoke-agent-only: smoke-tests/jars/spring-agent-only.jar smoke-tests/jars/agent.jar
+smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar
 	${dc-agent-only} up --detach --build collector app-agent-only
 	until [[ $$(${dc-agent-only} logs app-agent-only | grep "OK I'm ready now") ]]; do sleep 1; done
 	${dc-agent-only} up --build --exit-code-from bats-agent-only bats-agent-only
 
-smoke-agent-manual: smoke-tests/jars/agent.jar smoke-tests/jars/spring-agent-manual.jar
+smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar
 	${dc-agent-manual} up --detach --build collector app-agent-manual
 	until [[ $$(${dc-agent-manual} logs app-agent-manual | grep "OK I'm ready now") ]]; do sleep 1; done
 	${dc-agent-manual} up --build --exit-code-from bats-agent-manual bats-agent-manual
 
-smoke-sdk: smoke-tests/jars/agent.jar smoke-tests/jars/spring-sdk.jar
+smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar
 	${dc-sdk} up --detach --build collector app-sdk
 	until [[ $$(${dc-sdk} logs app-sdk | grep "OK I'm ready now") ]]; do sleep 1; done
 	${dc-sdk} up --build --exit-code-from bats-sdk bats-sdk
