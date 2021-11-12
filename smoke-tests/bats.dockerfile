@@ -1,5 +1,6 @@
 FROM bats/bats:latest AS base
 RUN apk add --no-cache curl jq
+COPY test_helpers /code/test_helpers
 COPY *.bats /code/
 # bats entrypoint will pass the value of CMD to the bats command
 
