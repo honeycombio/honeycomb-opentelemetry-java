@@ -10,7 +10,7 @@ jobs:
       tag: "17.0"
     steps:
       - checkout
-      - run: mkdir -p ~/build-artifacts
+      - run: mkdir -p ./build-artifacts
       - gradle/with_cache:
           steps:
             - run: ./gradlew build -x test
@@ -18,7 +18,7 @@ jobs:
           name: Show the JARs
           command: ls -l build-artifacts
       - persist_to_workspace:
-          root: ~/
+          root: ./
           paths:
             - build-artifacts
 
@@ -27,7 +27,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - attach_workspace:
-          at: ~/
+          at: ./
       - setup_remote_docker:
           version: 20.10.7
       - checkout
