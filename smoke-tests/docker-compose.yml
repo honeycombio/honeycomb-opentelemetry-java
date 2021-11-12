@@ -1,0 +1,66 @@
+version: '3.0'
+
+x-bats-base: &bats_base
+    build:
+      context: .
+      dockerfile: bats.dockerfile
+    image: smoke-bats
+    volumes:
+      - "data-volume:/var/lib"
+
+services:
+  collector:
+    build:
+      context: ./collector
+      dockerfile: collector.dockerfile
+    image: smoke-collector
+    volumes:
+      - "data-volume:/var/lib"
+
+  app-agent-manual:
+    build:
+      context: .
+      dockerfile: app.dockerfile
+      target: agent-manual
+    image: smoke-app-agent-manual
+    depends_on:
+      - "collector"
+
+  app-agent-only:
+    build:
+      context: .
+      dockerfile: app.dockerfile
+      target: agent-only
+    image: smoke-app-agent-only
+    depends_on:
+      - "collector"
+
+  app-sdk:
+    build:
+      context: .
+      dockerfile: app.dockerfile
+      target: sdk
+    image: smoke-app-sdk
+    depends_on:
+      - "collector"
+
+  bats-agent-manual:
+    <<: *bats_base
+    depends_on:
+      - app-agent-manual
+    command: smoke-agent-manual.bats
+
+  bats-agent-only:
+    <<: *bats_base
+    depends_on:
+      - app-agent-only
+    command: smoke-agent-only.bats
+
+  bats-sdk:
+    <<: *bats_base
+    depends_on:
+      - app-sdk
+    command: smoke-sdk.bats
+
+volumes:
+  data-volume:
