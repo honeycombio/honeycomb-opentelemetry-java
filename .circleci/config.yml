@@ -37,6 +37,9 @@ jobs:
       - run:
           name: Smoke Test
           command: make smoke
+          environment:
+            DOCKER_BUILDKIT: 1
+            BUILDKIT_PROGRESS: plain
       - run:
           name: Extinguish the Flames
           command: make unsmoke
