@@ -44,6 +44,24 @@ jobs:
           name: Extinguish the Flames
           command: make unsmoke
 
+  smoke_machine:
+    machine:
+      image: ubuntu-2004:202107-02
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Smoke Test
+          command: make smoke
+          environment:
+            DOCKER_BUILDKIT: 1
+            BUILDKIT_PROGRESS: plain
+      - run:
+          name: Extinguish the Flames
+          command: make unsmoke
+
+
   publish_github:
     docker:
       - image: cibuilds/github:0.13.0
@@ -128,7 +146,7 @@ workflows:
           requires:
             - gradle/test
           <<: *filters_always
-      - smoke_test:
+      - smoke_machine:
           <<: *filters_always
           requires:
             - build
