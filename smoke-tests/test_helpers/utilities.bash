@@ -20,7 +20,7 @@ span_attributes_for() {
 }
 
 wait_for_data() {
-	echo -n "# Waiting for collector to receive data" >&3
+	echo -n "# ⏳ Waiting for collector to receive data" >&3
 	NEXT_WAIT_TIME=0
 	until [ $NEXT_WAIT_TIME -eq 5 ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -ne 0 ]
 	do
@@ -32,7 +32,7 @@ wait_for_data() {
 }
 
 wait_for_flush() {
-	echo -n "# Waiting for collector data flush" >&3
+	echo -n "# ⏳ Waiting for collector data flush" >&3
 	NEXT_WAIT_TIME=0
 	until [ $NEXT_WAIT_TIME -eq 5 ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -eq 0 ]
 	do
@@ -51,7 +51,7 @@ assert_equal() {
 	if [[ $1 != "$2" ]]; then
 		{
 			echo
-			echo "-- values are not equal --"
+			echo "-- 💥 values are not equal 💥 --"
 			echo "expected : $2"
 			echo "actual   : $1"
 			echo "--"

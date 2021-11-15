@@ -3,13 +3,15 @@
 load test_helpers/utilities
 
 setup_file() {
-	echo "# setting up the tests ..." >&3
+	echo "# 🚧" >&3
+	echo -n "# 🍿 Setting up smoke-agent-only ..." >&3
 	docker-compose up --detach collector app-agent-only
 	until [[ $(docker-compose logs app-agent-only | grep "OK I'm ready now") ]]; do sleep 1; done
+	echo " ready. ✨"  >&3
 }
 
 setup() {
-	curl "http://localhost:5002"
+	curl --silent "http://localhost:5002"
 	wait_for_data
 }
 

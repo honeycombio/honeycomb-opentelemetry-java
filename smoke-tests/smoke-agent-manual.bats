@@ -3,9 +3,11 @@
 load test_helpers/utilities
 
 setup_file() {
-	echo "# setting up the tests ..." >&3
+	echo "# 🚧" >&3
+	echo -n "# 🍿 Setting up smoke-agent-manual ..." >&3
 	docker-compose up --detach collector app-agent-manual
 	until [[ $(docker-compose logs app-agent-manual | grep "OK I'm ready now") ]]; do sleep 1; done
+	echo " ready. ✨"  >&3
 }
 
 setup() {
