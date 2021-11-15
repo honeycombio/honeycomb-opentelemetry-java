@@ -1,5 +1,16 @@
 version: '3.0'
 
+x-app-base: &app_base
+  image: openjdk:17-jdk-alpine
+  environment:
+    HONEYCOMB_API_ENDPOINT: http://collector:4317
+    HONEYCOMB_API_KEY: bogus_key
+    HONEYCOMB_DATASET: bogus_dataset
+  command: "java -javaagent:/agent.jar -jar /app.jar"
+  depends_on:
+    - collector
+
+
 x-bats-base: &bats_base
     build:
       context: ./tests
@@ -14,49 +25,28 @@ services:
       dockerfile: collector.dockerfile
     image: smoke-collector
     volumes:
-      - "data-volume:/var/lib"
+      - "./collector:/var/lib"
 
   app-agent-manual:
-    build:
-      context: ./apps
-      target: agent-manual
-    image: smoke-app-agent-manual
-    depends_on:
-      - "collector"
+    <<: *app_base
+    volumes:
+      - "./apps/agent.jar:/agent.jar"
+      - "./apps/spring-agent-manual.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5000:5000"
 
   app-agent-only:
-    build:
-      context: ./apps
-      target: agent-only
-    image: smoke-app-agent-only
-    depends_on:
-      - "collector"
+    <<: *app_base
+    volumes:
+      - "./apps/agent.jar:/agent.jar"
+      - "./apps/spring-agent-only.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5002:5002"
 
   app-sdk:
-    build:
-      context: ./apps
-      target: sdk
-    image: smoke-app-sdk
-    depends_on:
-      - "collector"
-
-  bats-agent-manual:
-    <<: *bats_base
-    depends_on:
-      - app-agent-manual
-    command: smoke-agent-manual.bats
-
-  bats-agent-only:
-    <<: *bats_base
-    depends_on:
-      - app-agent-only
-    command: smoke-agent-only.bats
-
-  bats-sdk:
-    <<: *bats_base
-    depends_on:
-      - app-sdk
-    command: smoke-sdk.bats
-
-volumes:
-  data-volume:
+    <<: *app_base
+    volumes:
+      - "./apps/agent.jar:/agent.jar"
+      - "./apps/spring-sdk.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5001:5001"

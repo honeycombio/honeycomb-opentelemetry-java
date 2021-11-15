@@ -16,11 +16,6 @@ project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ pri
 project_version:
 	@echo ${project_version}
 
-dc-smoke-tests=docker-compose --file ./smoke-tests/docker-compose.yml
-dc-agent-only=${dc-smoke-tests} --project-name smoke-tests-agent-only
-dc-agent-manual=${dc-smoke-tests} --project-name smoke-tests-agent-manual
-dc-sdk=${dc-smoke-tests} --project-name smoke-tests-sdk
-
 build-artifacts:
 	mkdir -p ./build-artifacts
 
@@ -49,58 +44,27 @@ smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).j
 	cp $< $@
 
 smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar
-	@echo ""
-	@echo "+++ Smoking the auto-instrumentation"
-	@echo ""
-	${dc-agent-only} up --detach --build collector app-agent-only
-	until [[ $$(${dc-agent-only} logs app-agent-only | grep "OK I'm ready now") ]]; do sleep 1; done
-	${dc-agent-only} up --build --exit-code-from bats-agent-only bats-agent-only
+	cd smoke-tests && bats ./smoke-agent-only.bats --formatter junit > test_results.xml
 
 smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar
-	@echo ""
-	@echo "+++ Smoking the auto and manual instrumentation"
-	@echo ""
-	${dc-agent-manual} up --detach --build collector app-agent-manual
-	until [[ $$(${dc-agent-manual} logs app-agent-manual | grep "OK I'm ready now") ]]; do sleep 1; done
-	${dc-agent-manual} up --build --exit-code-from bats-agent-manual bats-agent-manual
+	cd smoke-tests && bats ./smoke-agent-manual.bats --formatter junit > test_results.xml
 
 smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar
-	@echo ""
-	@echo "+++ Smoking the manual instrumentation"
-	@echo ""
-	${dc-sdk} up --detach --build collector app-sdk
-	until [[ $$(${dc-sdk} logs app-sdk | grep "OK I'm ready now") ]]; do sleep 1; done
-	${dc-sdk} up --build --exit-code-from bats-sdk bats-sdk
+	cd smoke-tests && bats ./smoke-sdk.bats --formatter junit > test_results.xml
 
-smoke: smoke-agent-only smoke-agent-manual smoke-sdk
+smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar
+	cd smoke-tests && bats . --formatter junit > test_results.xml
 
-unsmoke-agent-only:
-	${dc-agent-only} down --volumes
+unsmoke:
+	cd smoke-tests && docker-compose down --volumes
 
-unsmoke-agent-manual:
-	${dc-agent-manual} down --volumes
+resmoke-agent-only: unsmoke smoke-agent-only
 
-unsmoke-sdk:
-	${dc-sdk} down --volumes
+resmoke-agent-manual: unsmoke smoke-agent-manual
 
-unsmoke: unsmoke-agent-only unsmoke-agent-manual unsmoke-sdk
+resmoke-sdk: unsmoke smoke-sdk
 
-resmoke-agent-only: unsmoke-agent-only smoke-agent-only
-
-resmoke-agent-manual: unsmoke-agent-manual smoke-agent-manual
-
-resmoke-sdk: unsmoke-sdk smoke-sdk
-
-resmoke: resmoke-agent-only resmoke-agent-manual resmoke-sdk
-
-logs-agent-only:
-	${dc-agent-only} logs
-
-logs-agent-manual:
-	${dc-agent-manual} logs
-
-logs-sdk:
-	${dc-sdk} logs
+resmoke: unsmoke smoke
 
 publish_local:
 	./gradlew publishToMavenLocal -Pskip.signing
