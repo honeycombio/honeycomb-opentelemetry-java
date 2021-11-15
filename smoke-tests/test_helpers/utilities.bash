@@ -20,17 +20,21 @@ span_attributes_for() {
 }
 
 wait_for_data() {
-	until [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -ne 0 ]
+	NEXT_WAIT_TIME=0
+	until [ $NEXT_WAIT_TIME -eq 5 ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -ne 0 ]
 	do
-		echo "# Waiting for collector to receive data." >&3
-		sleep 1
+		echo "# Waiting $(( NEXT_WAIT_TIME++ ))s for collector to receive data." >&3
+		sleep $NEXT_WAIT_TIME
 	done
+	[ $NEXT_WAIT_TIME -lt 5 ]
 }
 
 wait_for_flush() {
-	until [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -eq 0 ]
+	NEXT_WAIT_TIME=0
+	until [ $NEXT_WAIT_TIME -eq 5 ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -eq 0 ]
 	do
-		echo "Waiting for collector data flush."
-		sleep 0.1
+		echo "Waiting $(( NEXT_WAIT_TIME++ ))s for collector data flush."
+		sleep $NEXT_WAIT_TIME
 	done
+	[ $NEXT_WAIT_TIME -lt 5 ]
 }
