@@ -9,6 +9,7 @@ test:
 clean:
 	rm -rf ./build-artifacts/*
 	rm -rf ./smoke-tests/apps/*.jar
+	rm -rf ./smoke-tests/collector/data.json
 	./gradlew clean
 
 project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ print $$2 }')
@@ -18,6 +19,10 @@ project_version:
 
 build-artifacts:
 	mkdir -p ./build-artifacts
+
+smoke-tests/collector/data.json:
+	touch $@
+	chmod o+w $@
 
 smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar
 	@echo ""
@@ -43,16 +48,16 @@ smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).j
 	@echo ""
 	cp $< $@
 
-smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar
+smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
 	cd smoke-tests && bats ./smoke-agent-only.bats --formatter junit > test_results.xml
 
-smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar
+smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/collector/data.json
 	cd smoke-tests && bats ./smoke-agent-manual.bats --formatter junit > test_results.xml
 
-smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar
+smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-tests/collector/data.json
 	cd smoke-tests && bats ./smoke-sdk.bats --formatter junit > test_results.xml
 
-smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar
+smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
 	cd smoke-tests && bats .
 
 unsmoke:
