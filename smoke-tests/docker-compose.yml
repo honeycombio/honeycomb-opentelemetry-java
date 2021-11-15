@@ -43,8 +43,8 @@ services:
 
   app-sdk:
     <<: *app_base
+    command: "java -jar /app.jar"
     volumes:
-      - "./apps/agent.jar:/agent.jar"
       - "./apps/spring-sdk.jar:/app.jar"
     ports:
       - "127.0.0.1:5001:5001"
