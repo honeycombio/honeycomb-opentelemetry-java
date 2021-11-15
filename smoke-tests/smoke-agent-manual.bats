@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helpers/utilities.bash
+load test_helpers/utilities
 
 setup_file() {
 	echo "# setting up the tests ..." >&3
@@ -14,7 +14,7 @@ setup() {
 }
 
 teardown() {
-	docker compose restart collector
+	docker-compose restart collector
 	wait_for_flush
 }
 
