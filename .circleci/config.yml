@@ -60,6 +60,8 @@ jobs:
           environment:
             DOCKER_BUILDKIT: 1
             BUILDKIT_PROGRESS: plain
+      - store_test_results:
+          path: ./smoke-tests/
       - run:
           name: Extinguish the Flames
           command: make unsmoke
