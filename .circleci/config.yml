@@ -62,6 +62,8 @@ jobs:
             BUILDKIT_PROGRESS: plain
       - store_test_results:
           path: ./smoke-tests/
+      - store_artifacts:
+          path: ./smoke-tests/test_results.xml
       - run:
           name: Extinguish the Flames
           command: make unsmoke
