@@ -50,19 +50,19 @@ smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).j
 	cp $< $@
 
 smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
-	cd smoke-tests && bats ./smoke-agent-only.bats --formatter junit > test_results.xml
+	cd smoke-tests && bats ./smoke-agent-only.bats --report-formatter junit --output ./
 
 smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/collector/data.json
-	cd smoke-tests && bats ./smoke-agent-manual.bats --formatter junit > test_results.xml
+	cd smoke-tests && bats ./smoke-agent-manual.bats --report-formatter junit --output ./
 
 smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-tests/collector/data.json
-	cd smoke-tests && bats ./smoke-sdk.bats --formatter junit > test_results.xml
+	cd smoke-tests && bats ./smoke-sdk.bats --report-formatter junit --output ./
 
 smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Smoking all the tests."
 	@echo ""
-	cd smoke-tests && bats . --formatter junit > test_results.xml
+	cd smoke-tests && bats . --report-formatter junit --output ./
 
 unsmoke:
 	@echo ""
