@@ -20,11 +20,9 @@ x-bats-base: &bats_base
 
 services:
   collector:
-    build:
-      context: ./collector
-      dockerfile: collector.dockerfile
-    image: smoke-collector
+    image: otel/opentelemetry-collector:latest
     volumes:
+      - "./collector/otel-collector-config.yaml:/etc/otel/config.yaml"
       - "./collector:/var/lib"
 
   app-agent-manual:
