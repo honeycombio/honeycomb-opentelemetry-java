@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   gradle: circleci/gradle@2.2.0
+  bats: circleci/bats@1.0.0
 
 jobs:
   build:
@@ -51,9 +52,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./
+      - bats/install
       - run:
-          name: Is there BATS?
-          command: which bats
+          name: What's the BATS?
+          command: |
+            which bats
+            bats --version
       - run:
           name: Smoke Test
           command: make smoke
