@@ -22,12 +22,12 @@ teardown() {
 
 @test "Manual instrumentation produces span with name of span" {
 	result=$(span_names_for 'examples')
-	[ "$result" = '"greetings"' ]
+	assert_equal "$result" '"greetings"'
 }
 
 @test "Manual instrumentation adds custom attribute" {
 	result=$(span_attributes_for "examples" | jq "select(.key == \"custom_field\").value.stringValue")
-	[ "$result" = '"important value"' ]
+	assert_equal "$result" '"important value"'
 }
 
 

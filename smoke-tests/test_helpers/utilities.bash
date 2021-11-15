@@ -20,21 +20,43 @@ span_attributes_for() {
 }
 
 wait_for_data() {
+	echo -n "# Waiting for collector to receive data" >&3
 	NEXT_WAIT_TIME=0
 	until [ $NEXT_WAIT_TIME -eq 5 ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -ne 0 ]
 	do
-		echo "# Waiting $(( NEXT_WAIT_TIME++ ))s for collector to receive data." >&3
+		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
 		sleep $NEXT_WAIT_TIME
 	done
+	echo "" >&3
 	[ $NEXT_WAIT_TIME -lt 5 ]
 }
 
 wait_for_flush() {
+	echo -n "# Waiting for collector data flush" >&3
 	NEXT_WAIT_TIME=0
 	until [ $NEXT_WAIT_TIME -eq 5 ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -eq 0 ]
 	do
-		echo "Waiting $(( NEXT_WAIT_TIME++ ))s for collector data flush."
+		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
 		sleep $NEXT_WAIT_TIME
 	done
+	echo "" >&3
 	[ $NEXT_WAIT_TIME -lt 5 ]
+}
+
+# Fail and display details if the expected and actual values do not
+# equal. Details include both values.
+#
+# Lifted and then drastically simplified from bats-assert * bats-support
+assert_equal() {
+	if [[ $1 != "$2" ]]; then
+		{
+			echo
+			echo "-- values are not equal --"
+			echo "expected : $2"
+			echo "actual   : $1"
+			echo "--"
+			echo
+		} >&2 # output error to STDERR
+		return 1
+	fi
 }

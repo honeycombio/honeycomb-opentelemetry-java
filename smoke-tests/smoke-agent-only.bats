@@ -22,10 +22,10 @@ teardown() {
 
 @test "Auto instrumentation produces a Spring controller span" {
 	result=$(span_names_for "io.opentelemetry.spring-webmvc-3.1")
-	[ "$result" = '"HelloController.index"' ]
+	assert_equal "$result" '"HelloController.index"'
 }
 
 @test "Auto instrumentation produces an incoming web request span" {
 	result=$(span_names_for "io.opentelemetry.tomcat-7.0")
-	[ "$result" = '"/"' ]
+	assert_equal "$result" '"/"'
 }

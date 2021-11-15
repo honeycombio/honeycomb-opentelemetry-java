@@ -22,21 +22,21 @@ teardown() {
 
 @test "Auto instrumentation produces a Spring controller span" {
 	result=$(span_names_for "io.opentelemetry.spring-webmvc-3.1")
-	[ "$result" = '"HelloController.index"' ]
-	# [ "$result" = '"HelloControllr.index"' ] # intentional failure to see what it looks like in CI
+	# assert_equal "$result" '"HelloController.index"'
+	assert_equal "$result" '"NopeController.index"' # intentional failure to see what it looks like in CI
 }
 
 @test "Auto instrumentation produces an incoming web request span" {
 	result=$(span_names_for "io.opentelemetry.tomcat-7.0")
-	[ "$result" = '"/"' ]
+	assert_equal "$result" '"/"'
 }
 
 @test "Manual instrumentation produces span from @WithSpan annotation" {
 	result=$(span_names_for "io.opentelemetry.opentelemetry-annotations-1.0")
-	[ "$result" = '"importantSpan"' ]
+	assert_equal "$result" '"importantSpan"'
 }
 
 @test "Manual instrumentation adds custom attribute" {
 	result=$(span_attributes_for "io.opentelemetry.spring-webmvc-3.1" | jq "select(.key == \"custom_field\").value.stringValue")
-	[ "$result" = '"important value"' ]
+	assert_equal "$result" '"important value"'
 }
