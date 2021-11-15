@@ -53,7 +53,7 @@ smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar
 	cd smoke-tests && bats ./smoke-sdk.bats --formatter junit > test_results.xml
 
 smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar
-	cd smoke-tests && bats . --formatter junit > test_results.xml
+	cd smoke-tests && bats .
 
 unsmoke:
 	cd smoke-tests && docker-compose down --volumes
