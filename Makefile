@@ -21,8 +21,9 @@ build-artifacts:
 	mkdir -p ./build-artifacts
 
 smoke-tests/collector/data.json:
-	touch $@
-	chmod o+w $@
+	@echo ""
+	@echo "+++ Zhuzhing smoke test's Collector data.json"
+	@touch $@ && chmod o+w $@
 
 smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar
 	@echo ""
@@ -58,9 +59,15 @@ smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-test
 	cd smoke-tests && bats ./smoke-sdk.bats --formatter junit > test_results.xml
 
 smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
-	cd smoke-tests && bats . --formatter junit | tee test_results.xml
+	@echo ""
+	@echo "+++ Smoking all the tests."
+	@echo ""
+	cd smoke-tests && bats . --formatter junit > test_results.xml
 
 unsmoke:
+	@echo ""
+	@echo "+++ Spinning down the smokers."
+	@echo ""
 	cd smoke-tests && docker-compose down --volumes
 
 resmoke-agent-only: unsmoke smoke-agent-only
