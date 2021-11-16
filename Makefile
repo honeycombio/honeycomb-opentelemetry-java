@@ -10,6 +10,7 @@ clean:
 	rm -rf ./build-artifacts/*
 	rm -rf ./smoke-tests/apps/*.jar
 	rm -rf ./smoke-tests/collector/data.json
+	rm -rf ./smoke-tests/report.*
 	./gradlew clean
 
 project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ print $$2 }')
