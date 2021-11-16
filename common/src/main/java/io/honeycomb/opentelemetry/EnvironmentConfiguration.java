@@ -1,5 +1,9 @@
 package io.honeycomb.opentelemetry;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * This is a utility class that helps read Honeycomb environment variables and system properties.
  * <p>
@@ -22,6 +26,10 @@ public class EnvironmentConfiguration {
     public static final String SERVICE_NAME_FIELD = "service.name";
     public static final String HONEYCOMB_TEAM_HEADER = "X-Honeycomb-Team";
     public static final String HONEYCOMB_DATASET_HEADER = "X-Honeycomb-Dataset";
+    public static final String HONEYCOMB_CONFIGURATION_FILE = "HONEYCOMB_CONFIG_FILE";
+
+    private static final Properties properties = loadPropertiesFromConfigFile();
+    private static final String OTEL_AGENT_CONFIG_FILE = "otel.javaagent.configuration-file";
 
     /**
      * Reads the Honeycomb API key.
@@ -140,15 +148,23 @@ public class EnvironmentConfiguration {
     }
 
     private static String readVariable(String key, String fallback) {
-        final String envValue = System.getenv(key);
-        final String propValue = System.getProperty(getPropertyName(key));
-        if (propValue != null) {
-            return propValue;
-        } else if (envValue != null) {
-            return envValue;
-        } else {
-            return fallback;
+        String propertyName = getPropertyName(key);
+        String value;
+        if (propertyName != null) {
+            value = properties.getProperty(propertyName);
+            if (isPresent(value)) {
+                return value;
+            }
         }
+        value = System.getProperty(propertyName);
+        if (isPresent(value)) {
+            return value;
+        }
+        value = System.getenv(key);
+        if (isPresent(value)) {
+            return value;
+        }
+        return fallback;
     }
 
     private static String getPropertyName(String envKey) {
@@ -187,5 +203,31 @@ public class EnvironmentConfiguration {
                     HONEYCOMB_TEAM_HEADER, apiKey,
                     HONEYCOMB_DATASET_HEADER, dataset));
         }
+    }
+
+    public static Properties loadPropertiesFromConfigFile() {
+        // check system property then env var for properties file path
+        // we can't use readVariable here because it uses properties
+        String path = System.getProperty(getPropertyName(HONEYCOMB_CONFIGURATION_FILE));
+        if (!isPresent(path)) {
+            path = System.getenv(HONEYCOMB_CONFIGURATION_FILE);
+        }
+
+        Properties properties = new Properties();
+        if (isPresent(path)) {
+            try (InputStream stream = new FileInputStream(path)) {
+                properties.load(stream);
+
+                // if the otel config path has not been set, set it to the honeycomb config path
+                if (!isPresent(System.getProperty(OTEL_AGENT_CONFIG_FILE))) {
+                    System.setProperty(OTEL_AGENT_CONFIG_FILE, path);
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to load config file with path: " + path);
+                System.out.print(e);
+            }
+        }
+
+        return properties;
     }
 }
