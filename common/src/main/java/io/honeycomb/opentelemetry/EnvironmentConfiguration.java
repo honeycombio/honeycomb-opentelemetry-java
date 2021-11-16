@@ -150,11 +150,9 @@ public class EnvironmentConfiguration {
     private static String readVariable(String key, String fallback) {
         String propertyName = getPropertyName(key);
         String value;
-        if (propertyName != null) {
-            value = properties.getProperty(propertyName);
-            if (isPresent(value)) {
-                return value;
-            }
+        value = properties.getProperty(propertyName);
+        if (isPresent(value)) {
+            return value;
         }
         value = System.getProperty(propertyName);
         if (isPresent(value)) {
