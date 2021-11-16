@@ -10,14 +10,6 @@ x-app-base: &app_base
   depends_on:
     - collector
 
-
-x-bats-base: &bats_base
-    build:
-      context: ./tests
-    image: smoke-bats
-    volumes:
-      - "data-volume:/var/lib"
-
 services:
   collector:
     image: otel/opentelemetry-collector:latest
