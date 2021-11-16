@@ -39,9 +39,6 @@ jobs:
       - run:
           name: Smoke Test
           command: make smoke
-          environment:
-            DOCKER_BUILDKIT: 1
-            BUILDKIT_PROGRESS: plain
       - store_test_results:
           path: ./smoke-tests/
       - store_artifacts:
