@@ -57,7 +57,7 @@ wait_for_ready_app() {
 		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
 		sleep $NEXT_WAIT_TIME
 	done
-	echo " ready. ✨"  >&3
+	echo "" >&3
 	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
 }
 
