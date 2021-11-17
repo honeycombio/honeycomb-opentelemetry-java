@@ -4,10 +4,8 @@ load test_helpers/utilities
 
 setup_file() {
 	echo "# 🚧" >&3
-	echo -n "# 🍿 Setting up smoke-agent-only ..." >&3
 	docker-compose up --detach collector app-agent-only
-	until [[ $(docker-compose logs app-agent-only | grep "OK I'm ready now") ]]; do sleep 1; done
-	echo " ready. ✨"  >&3
+	wait_for_ready_app 'app-agent-only'
 }
 
 setup() {

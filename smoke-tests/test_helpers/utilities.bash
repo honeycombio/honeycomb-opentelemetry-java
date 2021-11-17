@@ -43,6 +43,24 @@ wait_for_flush() {
 	[ $NEXT_WAIT_TIME -lt 5 ]
 }
 
+# Wait loop for one of our example Java apps to be started and ready to receive traffic.
+#
+# Arguments:
+#   $1 - the name of the container/service in which the app is running
+wait_for_ready_app() {
+	CONTAINER=${1:?container name is a required parameter}
+	MAX_RETRIES=5
+	echo -n "# 🍿 Setting up ${CONTAINER}" >&3
+	NEXT_WAIT_TIME=0
+	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [[ $(docker-compose logs ${CONTAINER} | grep "OK I'm ready now") ]]
+	do
+		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
+		sleep $NEXT_WAIT_TIME
+	done
+	echo " ready. ✨"  >&3
+	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
+}
+
 # Fail and display details if the expected and actual values do not
 # equal. Details include both values.
 #
