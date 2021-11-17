@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   gradle: circleci/gradle@2.2.0
+  bats: circleci/bats@1.0.0
 
 jobs:
   build:
@@ -10,70 +11,70 @@ jobs:
       tag: "17.0"
     steps:
       - checkout
-      - run: mkdir -p ~/build-artifacts
+      - run: mkdir -p ./build-artifacts
       - gradle/with_cache:
           steps:
             - run: ./gradlew build -x test
       - run:
-          name: Copy JARs to build-artifacts
-          command: |
-            shopt -s globstar
-            cp **/build/libs/*.jar ~/build-artifacts
+          name: Show the JARs
+          command: ls -l build-artifacts
       - persist_to_workspace:
-          root: ~/
+          root: ./
           paths:
             - build-artifacts
 
   smoke_test:
-    docker:
-      - image: cimg/base:stable
-    environment:
-      AGENT_JAR_GLOB: $HOME/build-artifacts/honeycomb-opentelemetry-javaagent*-all.jar
-      AGENT_ONLY_APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-only-?.?.?.jar
-      AGENT_MANUAL_APP_JAR_GLOB: $HOME/build-artifacts/spring-agent-manual-?.?.?.jar
+    machine:
+      image: ubuntu-2004:202107-02
     steps:
-      - attach_workspace:
-          at: ~/
-      - setup_remote_docker:
-          version: 20.10.7
       - checkout
+      - attach_workspace:
+          at: ./
+      - bats/install
+      - run:
+          name: What's the BATS?
+          command: |
+            which bats
+            bats --version
       - run:
           name: Smoke Test
-          command: |
-            cp $(eval "echo $AGENT_JAR_GLOB") ./smoke-tests/smoke-tests-agent-only/agent.jar
-            cp $(eval "echo $AGENT_ONLY_APP_JAR_GLOB") ./smoke-tests/smoke-tests-agent-only/app.jar
-            cp $(eval "echo $AGENT_JAR_GLOB") ./smoke-tests/smoke-tests-agent-manual/agent.jar
-            cp $(eval "echo $AGENT_MANUAL_APP_JAR_GLOB") ./smoke-tests/smoke-tests-agent-manual/app.jar
-            make smoke
+          command: make smoke
+      - store_test_results:
+          path: ./smoke-tests/
+      - store_artifacts:
+          path: ./smoke-tests/report.xml
+      - run:
+          name: Extinguish the Flames
+          command: make unsmoke
 
   publish_github:
     docker:
       - image: cibuilds/github:0.13.0
     steps:
       - attach_workspace:
-          at: ~/
+          at: ./
       - run:
           name: "Publish Release on GitHub"
           command: |
             echo "about to publish to tag ${CIRCLE_TAG}"
-            ls -l ~/publish-artifacts/*
-            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/publish-artifacts
+            ls -l ./publish-artifacts/*
+            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ./publish-artifacts
   publish_maven:
     executor: gradle/default
     steps:
       - checkout
       - gradle/with_cache:
           steps:
-            - run: mkdir -p ~/publish-artifacts
+            - run: mkdir -p ./publish-artifacts
             - run:
                 name: "Publish Artifacts to Maven"
                 command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
             - run:
                 command: |
                   shopt -s globstar
-                  cp **/build/libs/*.jar ~/publish-artifacts
+                  cp **/build/libs/*.jar ./publish-artifacts
             - persist_to_workspace:
-                root: ~/
+                root: ./
                 paths:
                   - publish-artifacts
             - store_artifacts:
@@ -127,20 +128,20 @@ workflows:
           <<: *matrix_executors
           <<: *filters_always
       - build:
+          <<: *filters_always
           requires:
             - gradle/test
-          <<: *filters_always
       - smoke_test:
           <<: *filters_always
           requires:
             - build
+      - publish_maven:
+          <<: *filters_publish
+          context: java_beeline
+          requires:
+            - smoke_test
       - publish_github:
+          <<: *filters_publish
           context: Honeycomb Secrets for Public Repos
           requires:
             - publish_maven
-          <<: *filters_publish
-      - publish_maven:
-          context: java_beeline
-          requires:
-            - build
-          <<: *filters_publish

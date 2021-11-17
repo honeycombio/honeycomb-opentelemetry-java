@@ -47,6 +47,9 @@ subprojects {
         withJavadocJar()
         withSourcesJar()
     }
+    tasks.withType(Jar) {
+        destinationDirectory = file("$rootDir/build-artifacts")
+    }
 
     plugins.withId("maven-publish") {
 

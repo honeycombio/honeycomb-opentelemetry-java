@@ -1,0 +1,42 @@
+version: '3.0'
+
+x-app-base: &app_base
+  image: openjdk:17-jdk-alpine
+  environment:
+    HONEYCOMB_API_ENDPOINT: http://collector:4317
+    HONEYCOMB_API_KEY: bogus_key
+    HONEYCOMB_DATASET: bogus_dataset
+  command: "java -javaagent:/agent.jar -jar /app.jar"
+  depends_on:
+    - collector
+
+services:
+  collector:
+    image: otel/opentelemetry-collector:latest
+    volumes:
+      - "./collector/otel-collector-config.yaml:/etc/otel/config.yaml"
+      - "./collector:/var/lib"
+
+  app-agent-manual:
+    <<: *app_base
+    volumes:
+      - "./apps/agent.jar:/agent.jar"
+      - "./apps/spring-agent-manual.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5000:5000"
+
+  app-agent-only:
+    <<: *app_base
+    volumes:
+      - "./apps/agent.jar:/agent.jar"
+      - "./apps/spring-agent-only.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5002:5002"
+
+  app-sdk:
+    <<: *app_base
+    command: "java -jar /app.jar"
+    volumes:
+      - "./apps/spring-sdk.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5001:5001"

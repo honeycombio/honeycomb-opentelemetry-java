@@ -72,3 +72,8 @@ local.properties
 ### VSCode ###
 .vscode/
 .code-workspace
+
+### temporary smoke-test files
+smoke-tests/collector/data.json
+smoke-tests/report.xml
+smoke-tests/report.html
