@@ -148,16 +148,18 @@ public class EnvironmentConfiguration {
     }
 
     private static String readVariable(String key, String fallback) {
+        // preference order is system prop -> env var -> config file, following the agent config order:
+        // https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/2fbec9331349650890620266e9c22512c9433986/docs/agent-config.md#configuring-the-agent
         String propertyName = getPropertyName(key);
-        String value = properties.getProperty(propertyName);
-        if (isPresent(value)) {
-            return value;
-        }
-        value = System.getProperty(propertyName);
+        String value = System.getProperty(propertyName);
         if (isPresent(value)) {
             return value;
         }
         value = System.getenv(key);
+        if (isPresent(value)) {
+            return value;
+        }
+        value = properties.getProperty(propertyName);
         if (isPresent(value)) {
             return value;
         }
