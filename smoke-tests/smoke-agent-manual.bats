@@ -39,3 +39,8 @@ teardown() {
 	result=$(span_attributes_for "io.opentelemetry.spring-webmvc-3.1" | jq "select(.key == \"custom_field\").value.stringValue")
 	assert_equal "$result" '"important value"'
 }
+
+@test "BaggageSpanProcessor: key-values added to baggage appear on child spans" {
+	result=$(span_attributes_for "io.opentelemetry.opentelemetry-annotations-1.0" | jq "select(.key == \"for_the_children\").value.stringValue")
+	assert_equal "$result" '"another important value"'
+}
