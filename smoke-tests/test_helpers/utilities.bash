@@ -1,19 +1,19 @@
 # UTILITY FUNCS
 
 spans_from_library_named() {
-	spans_received | jq "select(.instrumentationLibrary.name == \"$1\").spans[]"
+	spans_received | jq ".instrumentationLibrarySpans[] | select(.instrumentationLibrary.name == \"$1\").spans[]"
 }
 
 metrics_from_library_named() {
-	metrics_received | jq "select(.instrumentationLibrary.name == \"$1\").metrics[]"
+	metrics_received | jq ".instrumentationLibraryMetrics[] | select(.instrumentationLibrary.name == \"$1\").metrics[]"
 }
 
 spans_received() {
-	jq ".resourceSpans[].instrumentationLibrarySpans[]" ./collector/data.json
+	jq ".resourceSpans[]" ./collector/data.json
 }
 
 metrics_received() {
-	jq ".resourceMetrics[].instrumentationLibraryMetrics[]" ./collector/data.json
+	jq ".resourceMetrics[]" ./collector/data.json
 }
 
 # test span name
