@@ -1,17 +1,19 @@
 # UTILITY FUNCS
 
 spans_from_library_named() {
-	jq ".resourceSpans[] |
-			.instrumentationLibrarySpans[] |
-			select(.instrumentationLibrary.name == \"$1\").spans[]" \
-		./collector/data.json
+	spans_received | jq "select(.instrumentationLibrary.name == \"$1\").spans[]"
 }
 
 metrics_from_library_named() {
-	jq ".resourceMetrics[] |
-			.instrumentationLibraryMetrics[] |
-			select(.instrumentationLibrary.name == \"$1\").metrics[]" \
-		./collector/data.json
+	metrics_received | jq "select(.instrumentationLibrary.name == \"$1\").metrics[]"
+}
+
+spans_received() {
+	jq ".resourceSpans[].instrumentationLibrarySpans[]" ./collector/data.json
+}
+
+metrics_received() {
+	jq ".resourceMetrics[].instrumentationLibraryMetrics[]" ./collector/data.json
 }
 
 # test span name
@@ -32,16 +34,34 @@ metric_names_for() {
 	metrics_from_library_named $1 | jq '.name'
 }
 
-wait_for_data() {
-	echo -n "# ⏳ Waiting for collector to receive data" >&3
+# Arguments
+# $1 - retry limit (default 5); Nth retry sleeps for N seconds
+wait_for_metrics() {
+	echo -n "# ⏳ Waiting for collector to receive metrics" >&3
 	NEXT_WAIT_TIME=0
-	until [ $NEXT_WAIT_TIME -eq 5 ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -ne 0 ]
+	MAX_RETRIES=${1:-5}
+	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [ "$(metrics_received)" != "" ]
 	do
 		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
 		sleep $NEXT_WAIT_TIME
 	done
 	echo "" >&3
-	[ $NEXT_WAIT_TIME -lt 5 ]
+	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
+}
+
+# Arguments
+# $1 - retry limit (default 5); Nth retry sleeps for N seconds
+wait_for_data() {
+	echo -n "# ⏳ Waiting for collector to receive data" >&3
+	NEXT_WAIT_TIME=0
+	MAX_RETRIES=${1:-5}
+	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [ "$(wc -l ./collector/data.json | awk '{ print $1 }')" -ne 0 ]
+	do
+		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
+		sleep $NEXT_WAIT_TIME
+	done
+	echo "" >&3
+	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
 }
 
 wait_for_flush() {
