@@ -6,6 +6,14 @@ spans_from_library_named() {
 			select(.instrumentationLibrary.name == \"$1\").spans[]" \
 		./collector/data.json
 }
+
+metrics_from_library_named() {
+	jq ".resourceMetrics[] |
+			.instrumentationLibraryMetrics[] |
+			select(.instrumentationLibrary.name == \"$1\").metrics[]" \
+		./collector/data.json
+}
+
 # test span name
 span_names_for() {
 	spans_from_library_named $1 | jq '.name'
@@ -17,6 +25,11 @@ span_attributes_for() {
 
 	spans_from_library_named $1 | \
 		jq ".attributes[]"
+}
+
+# test metric name
+metric_names_for() {
+	metrics_from_library_named $1 | jq '.name'
 }
 
 wait_for_data() {

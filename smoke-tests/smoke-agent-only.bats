@@ -8,10 +8,10 @@ setup_file() {
 	wait_for_ready_app 'app-agent-only'
 }
 
-setup() {
-	curl --silent "http://localhost:5002"
-	wait_for_data
-}
+# setup() {
+# 	curl --silent "http://localhost:5002"
+# 	wait_for_data
+# }
 
 teardown() {
 	docker-compose restart collector
@@ -20,12 +20,19 @@ teardown() {
 
 # TESTS
 
-@test "Auto instrumentation produces a Spring controller span" {
-	result=$(span_names_for "io.opentelemetry.spring-webmvc-3.1")
-	assert_equal "$result" '"HelloController.index"'
-}
+# @test "Auto instrumentation produces a Spring controller span" {
+# 	result=$(span_names_for "io.opentelemetry.spring-webmvc-3.1")
+# 	assert_equal "$result" '"HelloController.index"'
+# }
 
-@test "Auto instrumentation produces an incoming web request span" {
-	result=$(span_names_for "io.opentelemetry.tomcat-7.0")
-	assert_equal "$result" '"/"'
+# @test "Auto instrumentation produces an incoming web request span" {
+# 	result=$(span_names_for "io.opentelemetry.tomcat-7.0")
+# 	assert_equal "$result" '"/"'
+# }
+
+@test "SDK Trace metrics includes runtime.jvm.memory.area metric" {
+	sleep 30
+	result=$(metrics_from_library_named "io.opentelemetry.javaagent.shaded.instrumentation.runtimemetrics.MemoryPools" | jq "select(.name == \"runtime.jvm.memory.area\").name")
+	# echo " $result"  >&3
+	assert_equal "$result" '"runtime.jvm.memory.area"'
 }
