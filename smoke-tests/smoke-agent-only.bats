@@ -10,6 +10,11 @@ setup_file() {
 	wait_for_data
 }
 
+teardown_file() {
+	docker-compose restart collector
+	wait_for_flush
+}
+
 # TESTS
 
 @test "Auto instrumentation produces a Spring controller span" {
@@ -24,6 +29,6 @@ setup_file() {
 
 @test "Auto instrumentation emits metrics" {
 	wait_for_metrics 12
-	metric_names=$( metrics_received | jq ".metrics[].name" | wc -l | awk '{ print $1}' )
+	metric_names=$( metrics_received | jq ".instrumentationLibraryMetrics[].metrics[].name" | wc -l | awk '{ print $1}' )
 	[ "$metric_names" -ne 0 ]
 }
