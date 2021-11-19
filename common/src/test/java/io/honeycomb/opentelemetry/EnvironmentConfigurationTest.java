@@ -59,6 +59,7 @@ public class EnvironmentConfigurationTest {
     public void test_traces_apikey_fallsback() {
         try {
             System.setProperty("honeycomb.api.key", "my-apikey");
+            System.setProperty("honeycomb.traces.apikey", "");
             Assertions.assertEquals("my-apikey", EnvironmentConfiguration.getHoneycombTracesApiKey());
         } finally {
             System.setProperty("honeycomb.api.key", "");
@@ -79,6 +80,7 @@ public class EnvironmentConfigurationTest {
     public void test_traces_apiendpoint_fallsback() {
         try {
             System.setProperty("honeycomb.api.endpoint", "my-endpoint");
+            System.setProperty("honeycomb.traces.endpoint", "");
             Assertions.assertEquals("my-endpoint", EnvironmentConfiguration.getHoneycombTracesApiEndpoint());
         } finally {
             System.setProperty("honeycomb.api.endpoint", "");
@@ -99,6 +101,7 @@ public class EnvironmentConfigurationTest {
     public void test_traces_dataset_fallsback() {
         try {
             System.setProperty("honeycomb.dataset", "my-dataset");
+            System.setProperty("honeycomb.traces.dataset", "");
             Assertions.assertEquals("my-dataset", EnvironmentConfiguration.getHoneycombTracesDataset());
         } finally {
             System.setProperty("honeycomb.dataset", "");
@@ -119,6 +122,7 @@ public class EnvironmentConfigurationTest {
     public void test_metrics_apikey_fallsback() {
         try {
             System.setProperty("honeycomb.api.key", "my-apikey");
+            System.setProperty("honeycomb.metrics.apikey", "");
             Assertions.assertEquals("my-apikey", EnvironmentConfiguration.getHoneycombMetricsApiKey());
         } finally {
             System.setProperty("honeycomb.api.key", "");
@@ -139,6 +143,7 @@ public class EnvironmentConfigurationTest {
     public void test_metrics_apiendpoint_fallsback() {
         try {
             System.setProperty("honeycomb.api.endpoint", "my-apiendpoint");
+            System.setProperty("honeycomb.metrics.endpoint", "");
             Assertions.assertEquals("my-apiendpoint", EnvironmentConfiguration.getHoneycombMetricsApiEndpoint());
         } finally {
             System.setProperty("honeycomb.api.endpoint", "");
@@ -159,6 +164,7 @@ public class EnvironmentConfigurationTest {
     public void test_metrics_dataset_does_not_fallback() {
         try {
             System.setProperty("honeycomb.dataset", "my-dataset");
+            System.setProperty("honeycomb.metrics.dataset", "");
             Assertions.assertEquals(null, EnvironmentConfiguration.getHoneycombMetricsDataset());
         } finally {
             System.setProperty("honeycomb.dataset", "");
