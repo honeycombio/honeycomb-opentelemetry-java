@@ -1,5 +1,9 @@
 package io.honeycomb.opentelemetry;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Properties;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -161,7 +165,69 @@ public class EnvironmentConfigurationTest {
         }
     }
 
-    // enableOtlpTraces
-    // enableOtlpMetrics
-    // loadPropertiesFromConfigFile
+    @Test
+    public void test_enableOtlpTraces_sets_system_properties() {
+        try {
+            System.setProperty("honeycomb.api.key", "my-key");
+            System.setProperty("honeycomb.dataset", "my-dataset");
+
+            EnvironmentConfiguration.enableOTLPTraces();
+            Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.traces.endpoint"));
+            Assertions.assertEquals("X-Honeycomb-Team=my-key,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.traces.headers"));
+        } finally {
+            System.setProperty("honeycomb.api.key", "");
+            System.setProperty("honeycomb.dataset", "");
+        }
+    }
+
+    @Test
+    public void test_enableOtlpMetrics_sets_system_properties() {
+        try {
+            System.setProperty("honeycomb.api.key", "my-key");
+            System.setProperty("honeycomb.metrics.dataset", "my-dataset");
+
+            EnvironmentConfiguration.enableOTLPMetrics();
+            Assertions.assertEquals("otlp", System.getProperty("otel.metrics.exporter"));
+            Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
+            Assertions.assertEquals("X-Honeycomb-Team=my-key,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
+        } finally {
+            System.setProperty("honeycomb.api.key", "");
+            System.setProperty("honeycomb.dataset", "");
+        }
+    }
+
+    @Test
+    public void test_enableOtlpMetrics_without_dataset_does_not_enable_metrics() {
+        try {
+            System.setProperty("honeycomb.api.key", "my-key");
+            System.setProperty("honeycomb.metrics.dataset", "");
+
+            EnvironmentConfiguration.enableOTLPMetrics();
+            Assertions.assertEquals(null, System.getProperty("otel.metrics.exporter"));
+            Assertions.assertEquals(null, System.getProperty("otel.exporter.otlp.metrics.endpoint"));
+            Assertions.assertEquals(null, System.getProperty("otel.exporter.otlp.metrics.headers"));
+        } finally {
+            System.setProperty("honeycomb.api.key", "");
+            System.setProperty("honeycomb.metrics.dataset", "");
+        }
+    }
+
+    @Test
+    public void test_loadPropertiesFromConfigFile_sets_system_properties() {
+        try {
+            final File file = File.createTempFile("app", "properties");
+            file.deleteOnExit();
+            try (FileWriter fs = new FileWriter(file)) {
+                fs.write("honeycomb.api.key=my-key");
+            }
+            System.setProperty("honeycomb.config.file", file.getAbsolutePath());
+
+            Properties properties = EnvironmentConfiguration.loadPropertiesFromConfigFile();
+            Assertions.assertEquals("my-key", properties.getProperty("honeycomb.api.key"));
+        } catch (Exception e) {
+            Assertions.fail(e);
+        } finally {
+            System.setProperty("honeycomb.config.file", "");
+        }
+    }
 }
