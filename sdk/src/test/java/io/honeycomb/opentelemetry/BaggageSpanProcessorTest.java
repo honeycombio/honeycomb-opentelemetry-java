@@ -30,9 +30,7 @@ public class BaggageSpanProcessorTest {
                 .build()
                 .makeCurrent();
 
-            // TestSpan span = new TestSpan();
             processor.onStart(Context.current(), span);
-
             verify(span).setAttribute("key", "value");
         }
     }
