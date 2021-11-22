@@ -11,8 +11,6 @@ import org.mockito.Mock;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.api.common.AttributeKey;
-import io.opentelemetry.api.common.AttributeType;
-import io.opentelemetry.api.internal.InternalAttributeKeyImpl;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.sdk.trace.ReadWriteSpan;
 
@@ -23,7 +21,7 @@ public class BaggageSpanProcessorTest {
     public void test_baggageSpanProcessor_adds_attributes_to_spans(@Mock ReadWriteSpan span) {
 
         try (BaggageSpanProcessor processor = new BaggageSpanProcessor()) {
-            AttributeKey<String> attr = InternalAttributeKeyImpl.create("key", AttributeType.STRING);
+            AttributeKey<String> attr = AttributeKey.stringKey("key");
             Baggage.current()
                 .toBuilder()
                 .put(attr.getKey(), "value")

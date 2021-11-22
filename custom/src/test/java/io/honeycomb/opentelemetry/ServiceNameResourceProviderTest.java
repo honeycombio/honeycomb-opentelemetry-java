@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.sdk.resources.Resource;
 
@@ -23,7 +24,7 @@ public class ServiceNameResourceProviderTest {
 
         Assertions.assertEquals(
             Attributes.of(
-                AttributeUtils.createStringAttribute("service.name"), "my-service"
+                AttributeKey.stringKey("service.name"), "my-service"
             ),
             resource.getAttributes()
         );
