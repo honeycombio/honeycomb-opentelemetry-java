@@ -1,5 +1,6 @@
 package io.honeycomb.opentelemetry;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,22 +14,23 @@ public class ServiceNameResourceProviderTest {
     @Mock
     private ConfigProperties configProperties;
 
+    @Before
+    public void setup() {
+        System.setProperty("service.name", "");
+    }
+
     @Test
     public void test_ServiceNameResourceProvider_createResource_returns_configred_resource() {
-        try {
-            System.setProperty("service.name", "my-service");
+        System.setProperty("service.name", "my-service");
 
-            ServiceNameResourceProvider provider = new ServiceNameResourceProvider();
-            Resource resource = provider.createResource(configProperties);
+        ServiceNameResourceProvider provider = new ServiceNameResourceProvider();
+        Resource resource = provider.createResource(configProperties);
 
-            Assertions.assertEquals(
-                Attributes.of(
-                    AttributeUtils.createStringAttribute("service.name"), "my-service"
-                ),
-                resource.getAttributes()
-            );
-        } finally {
-            System.setProperty("service.name", "");
-        }
+        Assertions.assertEquals(
+            Attributes.of(
+                AttributeUtils.createStringAttribute("service.name"), "my-service"
+            ),
+            resource.getAttributes()
+        );
     }
 }
