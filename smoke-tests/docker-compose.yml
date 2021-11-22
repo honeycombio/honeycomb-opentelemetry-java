@@ -6,6 +6,8 @@ x-app-base: &app_base
     HONEYCOMB_API_ENDPOINT: http://collector:4317
     HONEYCOMB_API_KEY: bogus_key
     HONEYCOMB_DATASET: bogus_dataset
+    HONEYCOMB_METRICS_DATASET: bogus_dataset
+    OTEL_METRIC_EXPORT_INTERVAL: 1000
   command: "java -javaagent:/agent.jar -jar /app.jar"
   depends_on:
     - collector
