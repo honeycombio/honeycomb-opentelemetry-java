@@ -317,14 +317,13 @@ public final class OpenTelemetryConfiguration {
             SpanExporter exporter = builder.build();
 
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
-                .setSampler(sampler)
-                .addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
+                .setSampler(sampler);
+            this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
             if (this.enableDebug) {
                 tracerProviderBuilder.addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()));
             }
-
-            this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
+            tracerProviderBuilder.addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
 
             DistroMetadata.getMetadata().forEach(resourceAttributes::put);
             if (StringUtils.isNotEmpty(serviceName)) {
