@@ -22,5 +22,5 @@ bootRun.dependsOn ':agent:shadowJar'
 
 // use local agent
 bootRun.doFirst {
-	jvmArgs("-javaagent:${rootDir}/agent/build/libs/honeycomb-opentelemetry-javaagent-${project.version}-all.jar")
+	jvmArgs("-javaagent:${rootDir}/agent/build/libs/honeycomb-opentelemetry-javaagent-${project.version}.jar")
 }
