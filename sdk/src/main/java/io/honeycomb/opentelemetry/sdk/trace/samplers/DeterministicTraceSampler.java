@@ -51,7 +51,7 @@ public class DeterministicTraceSampler implements Sampler {
      */
     public DeterministicTraceSampler(final int sampleRate) {
         this.sampleRate = sampleRate;
-        Double ratio;
+        double ratio;
         if (sampleRate == ALWAYS_SAMPLE) {
             ratio = 1.0;
         } else if (sampleRate == NEVER_SAMPLE) {
