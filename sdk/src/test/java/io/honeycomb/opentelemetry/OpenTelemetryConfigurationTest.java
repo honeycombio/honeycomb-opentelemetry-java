@@ -30,6 +30,7 @@ public class OpenTelemetryConfigurationTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testConfiguration_tracerSettings() {
         Sampler sampler = new DeterministicTraceSampler(5);
         OpenTelemetry openTelemetry = OpenTelemetryConfiguration.builder()
@@ -59,8 +60,8 @@ public class OpenTelemetryConfigurationTest {
             Attributes attrs = r.getAttributes();
 
             // verify resource attributes
-            Assertions.assertEquals("0.6.1", attrs.get(AttributeKey.stringKey("honeycomb.distro.version")));
-            Assertions.assertEquals(System.getProperty("java.runtime.version"), attrs.get(AttributeKey.stringKey("honeycomb.distro.runtime_version")));
+            Assertions.assertEquals(DistroMetadata.VERSION_VALUE, attrs.get(AttributeKey.stringKey(DistroMetadata.VERSION_FIELD)));
+            Assertions.assertEquals(DistroMetadata.RUNTIME_VERSION_VALUE, attrs.get(AttributeKey.stringKey(DistroMetadata.RUNTIME_VERSION_FIELD)));
             Assertions.assertEquals("str", attrs.get(AttributeKey.stringKey("str")));
             Assertions.assertEquals(true, attrs.get(AttributeKey.booleanKey("bool")));
             Assertions.assertEquals(123, attrs.get(AttributeKey.longKey("int")));
