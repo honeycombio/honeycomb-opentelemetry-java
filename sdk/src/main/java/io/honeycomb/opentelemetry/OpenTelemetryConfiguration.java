@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry;
 
 import com.google.common.base.Preconditions;
 
+import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
@@ -40,7 +41,7 @@ public final class OpenTelemetryConfiguration {
 
     public static class Builder {
         private ContextPropagators propagators;
-        private Sampler sampler = Sampler.alwaysOn();
+        private Sampler sampler = new DeterministicTraceSampler(1);
         private final List<SpanProcessor> additionalSpanProcessors = new ArrayList<SpanProcessor>() {{
             add(new BaggageSpanProcessor());
         }};
@@ -160,8 +161,8 @@ public final class OpenTelemetryConfiguration {
         /**
          * Sets the {@link Sampler} to use.
          *
-         * <p>Note that if no sampler is specified, AlwaysOnSampler
-         * will be used by default.</p>
+         * <p>Note that if no sampler is specified, a {@link DeterministicTraceSampler} with a
+         * sample rate of 1 (always sample) will be used by default.</p>
          *
          * @param sampler Sampler instance
          * @return builder
