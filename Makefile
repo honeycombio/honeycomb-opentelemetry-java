@@ -26,7 +26,7 @@ smoke-tests/collector/data.json:
 	@echo "+++ Zhuzhing smoke test's Collector data.json"
 	@touch $@ && chmod o+w $@
 
-smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}-all.jar
+smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}.jar
 	@echo ""
 	@echo "+++ Getting the agent in place for smoking."
 	@echo ""

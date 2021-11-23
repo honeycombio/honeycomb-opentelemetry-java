@@ -25,6 +25,8 @@ dependencies {
 tasks {
     shadowJar {
         archivesBaseName = "honeycomb-opentelemetry-custom"
+        archiveClassifier.set("")
+        archiveVersion.set(project.version)
 
         mergeServiceFiles()
 
