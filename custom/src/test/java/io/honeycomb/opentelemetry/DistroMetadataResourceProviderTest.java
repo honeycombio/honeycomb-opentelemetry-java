@@ -16,8 +16,8 @@ public class DistroMetadataResourceProviderTest {
 
         Assertions.assertEquals(
             Attributes.of(
-                AttributeKey.stringKey("honeycomb.distro.version"), DistroMetadata.VERSION_VALUE,
-                AttributeKey.stringKey("honeycomb.distro.runtime_version"), DistroMetadata.RUNTIME_VERSION_VALUE
+                AttributeKey.stringKey(DistroMetadata.VERSION_FIELD), DistroMetadata.VERSION_VALUE,
+                AttributeKey.stringKey(DistroMetadata.RUNTIME_VERSION_FIELD), DistroMetadata.RUNTIME_VERSION_VALUE
             ),
             resource.getAttributes()
         );

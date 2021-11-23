@@ -10,9 +10,9 @@ public class DistroMetadataTest {
     @Test
     public void test_distroMetadata_returns_expected_values() {
         Map<String, String> metadata = DistroMetadata.getMetadata();
-        Assertions.assertNotNull(metadata.containsKey("honeycomb.distro.version"));
-        Assertions.assertEquals(metadata.get("honeycomb.distro.version"), DistroMetadata.VERSION_VALUE);
-        Assertions.assertNotNull(metadata.containsKey("honeycomb.distro.runtime_version"));
-        Assertions.assertEquals(metadata.get("honeycomb.distro.runtime_version"), DistroMetadata.RUNTIME_VERSION_VALUE);
+        Assertions.assertNotNull(metadata.containsKey(DistroMetadata.VERSION_FIELD));
+        Assertions.assertEquals(metadata.get(DistroMetadata.VERSION_FIELD), DistroMetadata.VERSION_VALUE);
+        Assertions.assertNotNull(metadata.containsKey(DistroMetadata.RUNTIME_VERSION_FIELD));
+        Assertions.assertEquals(metadata.get(DistroMetadata.RUNTIME_VERSION_FIELD), DistroMetadata.RUNTIME_VERSION_VALUE);
     }
 }

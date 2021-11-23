@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class DistroMetadata {
 
-    private static final String VERSION_FIELD = "honeycomb.distro.version";
+    public static final String VERSION_FIELD = "honeycomb.distro.version";
     /**
      * Note that we are intentionally duplicating this from the Gradle build
      * file. Normally we'd use processResources to produce a properties file
@@ -19,7 +19,7 @@ public class DistroMetadata {
      * Java agent.
      */
     public static final String VERSION_VALUE = "0.6.1";
-    private static final String RUNTIME_VERSION_FIELD = "honeycomb.distro.runtime_version";
+    public static final String RUNTIME_VERSION_FIELD = "honeycomb.distro.runtime_version";
     public static final String RUNTIME_VERSION_VALUE = System.getProperty("java.runtime.version");
 
     /**
