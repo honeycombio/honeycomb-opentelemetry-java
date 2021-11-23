@@ -52,11 +52,9 @@ public class OpenTelemetryConfigurationTest {
             Sampler s = sdkProvider.getSampler();
             Assertions.assertEquals(sampler, s);
 
-            Field providerField = sdkProvider.getClass().getDeclaredField("sharedState");
-            providerField.setAccessible(true);
+            Field providerField = pluckField(sdkProvider.getClass(), "sharedState");
             Object sharedState = providerField.get(sdkProvider);
-            Field resourceField = sharedState.getClass().getDeclaredField("resource");
-            resourceField.setAccessible(true);
+            Field resourceField = pluckField(sharedState.getClass(), "resource");
             Resource r = (Resource) resourceField.get(sharedState);
             Attributes attrs = r.getAttributes();
 
@@ -68,12 +66,10 @@ public class OpenTelemetryConfigurationTest {
             Assertions.assertEquals(123, attrs.get(AttributeKey.longKey("int")));
             Assertions.assertEquals(Arrays.asList("str1", "str2", "str3"), attrs.get(AttributeKey.stringArrayKey("str-array")));
 
-            Field procesorField = sharedState.getClass().getDeclaredField("activeSpanProcessor");
-            procesorField.setAccessible(true);
+            Field procesorField = pluckField(sharedState.getClass(), "activeSpanProcessor");
 
             Object sp = procesorField.get(sharedState);
-            Field allSpanProcessors = sp.getClass().getDeclaredField("spanProcessorsAll");
-            allSpanProcessors.setAccessible(true);
+            Field allSpanProcessors = pluckField(sp.getClass(), "spanProcessorsAll");
             List<SpanProcessor> processors = (List<SpanProcessor>) allSpanProcessors.get(sp);
 
             // verify configured span processors
@@ -82,5 +78,11 @@ public class OpenTelemetryConfigurationTest {
         } catch (Exception e) {
             Assertions.fail(e);
         }
+    }
+
+    private Field pluckField(Class aClass, String fieldName) throws NoSuchFieldException, SecurityException {
+        Field pluckedField = aClass.getDeclaredField(fieldName);
+        pluckedField.setAccessible(true);
+        return pluckedField;
     }
 }
