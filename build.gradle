@@ -117,6 +117,13 @@ subprojects {
         }
 
     }
+
+    test {
+        useJUnitPlatform()
+        reports {
+            junitXml.enabled = true
+        }
+    }
 }
 
 nexusPublishing {

@@ -6,6 +6,14 @@ plugins {
 def artifactName = "honeycomb-opentelemetry-common"
 description = 'Functionality shared across components of the Honeycomb OpenTelemetry distribution.'
 
+dependencies {
+    testImplementation(platform('org.junit:junit-bom:5.8.1'))
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'junit:junit:4.13.2'
+}
+
 jar {
     archivesBaseName = "${artifactName}"
 }
