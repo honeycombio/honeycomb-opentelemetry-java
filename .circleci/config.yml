@@ -72,7 +72,7 @@ jobs:
             - run:
                 command: |
                   shopt -s globstar
-                  cp **/build/libs/*.jar ./publish-artifacts
+                  cp **/build-artifacts/*.jar ./publish-artifacts
             - persist_to_workspace:
                 root: ./
                 paths:
