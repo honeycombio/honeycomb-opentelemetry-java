@@ -1,5 +1,39 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.7.0] - 2021-11-24
+
+### !!! Potential Breaking Change !!!
+
+- Remove -all suffix from artifacts (#214) | [@JamieDanielson](https://github.com/JamieDanielson)
+
+The java agent no longer has an `-all` suffix, ensure dependencies are updated accordingly.
+
+### Changes
+
+- Update DeterministicSampler to use OTel core Parent/TraceIDRatio samplers (#209) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Add support for properties files (#202) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- update otel sdk and agent (#200) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- when setting attributes return Builder (#192) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Maintenance
+
+- Update SDK tests to validate returned OpenTelemtry instance (#210)
+- Backfill unit tests (#205)
+- Add Smoke test for JVM metric being emitted (#206)
+- add smoke test for baggage span processor (#203)
+- Smoke tests for SDK-only traces (& duplication reduction) (#197)
+- teach gradle/make to display the project version (#199)
+- Add tests for agent+manual instrumentation (#194)
+- Simplify example output (#193)
+- a BATS-based smoke-test (#186)
+- CI: align Maven and GitHub releases (#179)
+- empower apply-labels action to apply labels (#187)
+- Bump com.github.johnrengelman.shadow from 7.0.0 to 7.1.0 (#163)
+- Bump org.springframework.boot from 2.5.5 to 2.6.0 (#207)
+- Bump mockito-core from 3.12.4 to 4.1.0 (#208)
+- Bump org.springframework.boot from 2.5.4 to 2.5.5 (#152)
+- Bump junit-jupiter-api from 5.7.2 to 5.8.1 (#153)
+
 ## [0.6.1] - 2021-10-14
 
 ### Fixes
