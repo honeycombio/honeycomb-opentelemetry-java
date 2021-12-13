@@ -82,3 +82,5 @@ dependencies {
     implementation('io.honeycomb:honeycomb-opentelemetry-sdk:0.7.0')
 }
 ```
+
+test
