@@ -22,7 +22,8 @@ teardown() {
 
 @test "Manual instrumentation produces span with name of span" {
 	result=$(span_names_for 'examples')
-	assert_equal "$result" '"greetings"'
+	# assert_equal "$result" '"greetings"'
+	assert_equal "$result" '"test fail smoke-sdk"'
 }
 
 @test "Manual instrumentation adds custom attribute" {
