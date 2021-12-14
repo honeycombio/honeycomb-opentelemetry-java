@@ -6,14 +6,12 @@ setup_file() {
 	echo "# 🚧" >&3
 	docker-compose up --detach collector app-sdk
 	wait_for_ready_app 'app-sdk'
-}
-
-setup() {
 	curl --silent "http://localhost:5001"
-	wait_for_data
+	wait_for_traces
 }
 
-teardown() {
+teardown_file() {
+	docker-compose stop app-sdk
 	docker-compose restart collector
 	wait_for_flush
 }
@@ -22,8 +20,7 @@ teardown() {
 
 @test "Manual instrumentation produces span with name of span" {
 	result=$(span_names_for 'examples')
-	# assert_equal "$result" '"greetings"'
-	assert_equal "$result" '"test fail smoke-sdk"'
+	assert_equal "$result" '"greetings"'
 }
 
 @test "Manual instrumentation adds custom attribute" {

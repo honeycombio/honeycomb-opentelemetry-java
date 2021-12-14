@@ -64,6 +64,21 @@ wait_for_data() {
 	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
 }
 
+# Arguments
+# $1 - retry limit (default 5); Nth retry sleeps for N seconds
+wait_for_traces() {
+	echo -n "# ⏳ Waiting for collector to receive traces" >&3
+	NEXT_WAIT_TIME=0
+	MAX_RETRIES=${1:-5}
+	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [ "$(spans_received)" != "" ]
+	do
+		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
+		sleep $NEXT_WAIT_TIME
+	done
+	echo "" >&3
+	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
+}
+
 wait_for_flush() {
 	echo -n "# ⏳ Waiting for collector data flush" >&3
 	NEXT_WAIT_TIME=0
