@@ -7,10 +7,11 @@ setup_file() {
 	docker-compose up --detach collector app-agent-only
 	wait_for_ready_app 'app-agent-only'
 	curl --silent "http://localhost:5002"
-	wait_for_data
+	wait_for_traces
 }
 
 teardown_file() {
+	docker-compose stop app-agent-only
 	docker-compose restart collector
 	wait_for_flush
 }

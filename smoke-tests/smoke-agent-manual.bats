@@ -6,14 +6,12 @@ setup_file() {
 	echo "# 🚧" >&3
 	docker-compose up --detach collector app-agent-manual
 	wait_for_ready_app 'app-agent-manual'
-}
-
-setup() {
 	curl --silent "http://localhost:5000"
-	wait_for_data
+	wait_for_traces
 }
 
-teardown() {
+teardown_file() {
+	docker-compose stop app-agent-manual
 	docker-compose restart collector
 	wait_for_flush
 }

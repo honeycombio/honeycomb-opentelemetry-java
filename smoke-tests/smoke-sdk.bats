@@ -6,14 +6,12 @@ setup_file() {
 	echo "# 🚧" >&3
 	docker-compose up --detach collector app-sdk
 	wait_for_ready_app 'app-sdk'
-}
-
-setup() {
 	curl --silent "http://localhost:5001"
-	wait_for_data
+	wait_for_traces
 }
 
-teardown() {
+teardown_file() {
+	docker-compose stop app-sdk
 	docker-compose restart collector
 	wait_for_flush
 }
