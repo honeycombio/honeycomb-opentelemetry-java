@@ -97,7 +97,7 @@ wait_for_flush() {
 #   $1 - the name of the container/service in which the app is running
 wait_for_ready_app() {
 	CONTAINER=${1:?container name is a required parameter}
-	MAX_RETRIES=5
+	MAX_RETRIES=10
 	echo -n "# 🍿 Setting up ${CONTAINER}" >&3
 	NEXT_WAIT_TIME=0
 	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [[ $(docker-compose logs ${CONTAINER} | grep "OK I'm ready now") ]]
