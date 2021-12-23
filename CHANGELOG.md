@@ -1,5 +1,26 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.8.0] - 2021-12-23
+
+### Fixes
+
+- remove parent-based sampler, sample with trace ID ratio only (#235) | [@vreynolds](https://github.com/vreynolds)
+
+### Maintenance
+
+- Bump com.github.johnrengelman.shadow from 7.1.0 to 7.1.1 (#231) | [dependabot](https://github.com/dependabot)
+- Bump opentelemetry from 1.7.1 to 1.9.1 (#218) | [dependabot](https://github.com/dependabot)
+- Bump junit-jupiter-engine from 5.8.1 to 5.8.2 (#232) | [dependabot](https://github.com/dependabot)
+- Bump guava from 30.1.1-jre to 31.0.1-jre (#164) | [dependabot](https://github.com/dependabot)
+- Bump mockito-inline from 4.1.0 to 4.2.0 (#230) | [dependabot](https://github.com/dependabot)
+- Bump mockito-core from 4.1.0 to 4.2.0 (#229) | [dependabot](https://github.com/dependabot)
+- Bump mockito-junit-jupiter from 4.1.0 to 4.2.0 (#228) | [dependabot](https://github.com/dependabot)
+- Bump junit-bom from 5.8.1 to 5.8.2 (#226) | [dependabot](https://github.com/dependabot)
+- Bump org.springframework.boot from 2.6.0 to 2.6.1 (#222) | [dependabot](https://github.com/dependabot)
+- maint: Make smarter smoke tests (#225) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Bump junit-jupiter-api from 5.8.1 to 5.8.2 (#219) | [dependabot](https://github.com/dependabot)
+- Update dependabot to monthly (#215) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.7.0] - 2021-11-24
 
 ### !!! Potential Breaking Change !!!

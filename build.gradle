@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     project.group = "io.honeycomb"
-    project.version = "0.7.0"
+    project.version = "0.8.0"
 }
 
 tasks.register('project_version') {

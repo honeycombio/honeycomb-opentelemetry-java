@@ -11,8 +11,8 @@ It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
 
-- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.7.1) version 1.7.1
-- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.7.2) version 1.7.2
+- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.9.1) version 1.9.1
+- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.9.1) version 1.9.1
 
 ## Getting Started
 
