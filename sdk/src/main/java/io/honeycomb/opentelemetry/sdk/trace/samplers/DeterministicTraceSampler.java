@@ -14,7 +14,7 @@ import java.util.List;
  * This TraceSampler allows for distributed sampling based on a common field
  * such as a request or trace ID. It accepts a sample rate N and will
  * deterministically sample 1/N events based on the target field. Hence, two or
- * more processes can decide whether or not to sample related events without
+ * more processes can decide whether to sample related events without
  * communication.
  * <p>
  * - A sample rate of 0 means the TraceSampler will never sample. <br>
@@ -59,7 +59,7 @@ public class DeterministicTraceSampler implements Sampler {
         } else {
             ratio = 1.0 / sampleRate;
         }
-        baseSampler = Sampler.parentBased(Sampler.traceIdRatioBased(ratio));
+        baseSampler = Sampler.traceIdRatioBased(ratio);
     }
 
     @Override
