@@ -44,7 +44,7 @@ jobs:
       - store_artifacts:
           path: ./smoke-tests/report.xml
       - store_artifacts:
-          path: ./smoke-tests/collector/data*.json
+          path: ./smoke-tests/collector/data-results
       - run:
           name: Extinguish the Flames
           command: make unsmoke

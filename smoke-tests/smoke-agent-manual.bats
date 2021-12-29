@@ -11,7 +11,7 @@ setup_file() {
 }
 
 teardown_file() {
-    cp collector/data.json collector/data-agent-manual.json
+    cp collector/data.json collector/data-results/data-agent-manual.json
 	docker-compose stop app-agent-manual
 	docker-compose restart collector
 	wait_for_flush
