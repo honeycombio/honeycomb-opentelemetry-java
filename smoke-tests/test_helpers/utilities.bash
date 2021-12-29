@@ -9,11 +9,11 @@ metrics_from_library_named() {
 }
 
 spans_received() {
-	jq ".resourceSpans[]" ./collector/data.json
+	jq ".resourceSpans[]?" ./collector/data.json
 }
 
 metrics_received() {
-	jq ".resourceMetrics[]" ./collector/data.json
+	jq ".resourceMetrics[]?" ./collector/data.json
 }
 
 # test span name

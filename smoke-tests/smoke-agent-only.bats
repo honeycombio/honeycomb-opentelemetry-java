@@ -11,6 +11,7 @@ setup_file() {
 }
 
 teardown_file() {
+    cp collector/data.json collector/data-results/data-agent-only.json
 	docker-compose stop app-agent-only
 	docker-compose restart collector
 	wait_for_flush

@@ -11,6 +11,7 @@ setup_file() {
 }
 
 teardown_file() {
+    cp collector/data.json collector/data-results/data-sdk.json
 	docker-compose stop app-sdk
 	docker-compose restart collector
 	wait_for_flush
