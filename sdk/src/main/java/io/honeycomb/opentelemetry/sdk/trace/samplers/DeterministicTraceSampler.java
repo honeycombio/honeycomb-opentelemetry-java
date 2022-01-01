@@ -37,7 +37,7 @@ public class DeterministicTraceSampler implements Sampler {
     private static final int ALWAYS_SAMPLE = 1;
     private static final int NEVER_SAMPLE = 0;
 
-    private static final AttributeKey SAMPLE_RATE_ATTRIBUTE_KEY = AttributeKey.longKey("SampleRate");
+    private static final AttributeKey<Long> SAMPLE_RATE_ATTRIBUTE_KEY = AttributeKey.longKey("SampleRate");
 
     private final Sampler baseSampler;
     private final int sampleRate;
