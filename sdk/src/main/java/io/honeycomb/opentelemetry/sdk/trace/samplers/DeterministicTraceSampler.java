@@ -37,9 +37,10 @@ public class DeterministicTraceSampler implements Sampler {
     private static final int ALWAYS_SAMPLE = 1;
     private static final int NEVER_SAMPLE = 0;
 
+    private static final AttributeKey SAMPLE_RATE_ATTRIBUTE_KEY = AttributeKey.longKey("SampleRate");
+
     private final Sampler baseSampler;
     private final int sampleRate;
-    private final Attributes sampleRateAttributes;
 
     public final static String DESCRIPTION = "HoneycombDeterministicSampler";
 
@@ -60,8 +61,6 @@ public class DeterministicTraceSampler implements Sampler {
         } else {
             ratio = 1.0 / sampleRate;
         }
-
-        sampleRateAttributes = Attributes.of(AttributeKey.longKey("SampleRate"), (long) sampleRate);
         baseSampler = Sampler.traceIdRatioBased(ratio);
     }
 
@@ -82,7 +81,7 @@ public class DeterministicTraceSampler implements Sampler {
         SamplingResult result = baseSampler.shouldSample(parentContext, traceId, name, spanKind, attributes, parentLinks);
         return SamplingResult.create(
             result.getDecision(),
-            sampleRateAttributes
+            Attributes.of(SAMPLE_RATE_ATTRIBUTE_KEY, (long) sampleRate)
         );
     }
 }
