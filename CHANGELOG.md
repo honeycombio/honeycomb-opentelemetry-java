@@ -1,5 +1,17 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.9.0] - 2022-01-07
+
+### Improvements
+
+- Create the AttributeKey for SampleRate once (#240) | [@mveitas](https://github.com/mveitas)
+
+### Maintenance
+
+- Update smoke tests (#238) | [@vreynolds](https://github.com/vreynolds)
+- Add re-triage workflow (#237) | [@vreynolds](https://github.com/vreynolds)
+- Bump grpc-netty-shaded from 1.41.0 to 1.43.1 (#239)
+
 ## [0.8.0] - 2021-12-23
 
 ### Fixes
