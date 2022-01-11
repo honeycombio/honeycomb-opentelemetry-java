@@ -1,5 +1,20 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.8.1] - 2022-01-11
+
+### Changed
+
+- Create the AttributeKey for SampleRate once (#240) | [@mveitas](https://github.com/mveitas)
+
+### Maintenance
+
+- Bump opentelemetryJavaagent to 1.9.2 to address memory leak in reactor-netty (#245) | [@mveitas](https://github.com/mveitas)
+- Bump org.springframework.boot from 2.6.1 to 2.6.2 (#242) | [dependabot](https://github.com/dependabot)
+- Bump com.github.johnrengelman.shadow from 7.1.1 to 7.1.2 (#241) | [dependabot](https://github.com/dependabot)
+- Bump grpc-netty-shaded from 1.41.0 to 1.43.1 (#239) | [dependabot](https://github.com/dependabot)
+- gh: add re-triage workflow (#237) | [@vreynolds](https://github.com/vreynolds)
+- update smoke tests (#238) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.8.0] - 2021-12-23
 
 ### Fixes
