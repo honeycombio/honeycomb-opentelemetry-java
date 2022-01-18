@@ -5,6 +5,9 @@ plugins {
 allprojects {
     project.group = "io.honeycomb"
     project.version = "0.8.1"
+    def tag = System.getenv("CIRCLE_TAG")
+    println "circle tag!"
+    println tag
 }
 
 tasks.register('project_version') {
