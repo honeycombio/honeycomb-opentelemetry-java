@@ -88,7 +88,14 @@ filters_always: &filters_always
     tags:
       only: /.*/
 
-filters_publish: &filters_publish
+filters_main_only: &filters_main_only
+  filters:
+    tags:
+      only: /.*/
+    branches:
+      only: main
+
+filters_tags_only: &filters_tags_only
   filters:
     tags:
       only: /^v.*/
@@ -139,12 +146,12 @@ workflows:
 #          requires:
 #            - build
       - publish_maven:
-          <<: *filters_publish
+          <<: *filters_main_only
           context: java_beeline
 #          requires:
 #            - smoke_test
       - publish_github:
-          <<: *filters_publish
+          <<: *filters_tags_only
           context: Honeycomb Secrets for Public Repos
           requires:
             - publish_maven
