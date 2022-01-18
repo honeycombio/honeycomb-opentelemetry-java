@@ -126,17 +126,17 @@ workflows:
             - build
   build:
     jobs:
-      - gradle/test:
-          <<: *matrix_executors
-          <<: *filters_always
+#      - gradle/test:
+#          <<: *matrix_executors
+#          <<: *filters_always
       - build:
           <<: *filters_always
-          requires:
-            - gradle/test
-      - smoke_test:
-          <<: *filters_always
-          requires:
-            - build
+#          requires:
+#            - gradle/test
+#      - smoke_test:
+#          <<: *filters_always
+#          requires:
+#            - build
       - publish_maven:
           <<: *filters_publish
           context: java_beeline
