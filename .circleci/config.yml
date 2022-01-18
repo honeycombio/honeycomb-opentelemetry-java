@@ -93,7 +93,7 @@ filters_main_only: &filters_main_only
     tags:
       only: /.*/
     branches:
-      only: main
+      only: vera.snapshots
 
 filters_tags_only: &filters_tags_only
   filters:
