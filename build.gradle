@@ -4,10 +4,11 @@ plugins {
 
 allprojects {
     project.group = "io.honeycomb"
-    project.version = "0.8.1"
     def tag = System.getenv("CIRCLE_TAG")
     if (tag != null && tag.startsWith("test")) {
-        println "huZZah!"
+        project.version = "0.8.1"
+    } else {
+        project.version = "0.8.2-SNAPSHOT"
     }
 }
 
