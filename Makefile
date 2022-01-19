@@ -13,7 +13,7 @@ clean:
 	rm -rf ./smoke-tests/report.*
 	./gradlew clean
 
-project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ print $$2 }')
+project_version:=$(shell ./gradlew properties -q | grep "version:" | awk '{print $$2}')
 #: display the project's version
 project_version:
 	@echo ${project_version}
