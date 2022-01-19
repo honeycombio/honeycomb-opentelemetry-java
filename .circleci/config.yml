@@ -70,7 +70,8 @@ jobs:
             - run: mkdir -p ./publish-artifacts
             - run:
                 name: "Publish Artifacts to Maven"
-                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+#                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+                command: ./gradlew publishToSonatype
             - run:
                 command: |
                   shopt -s globstar
@@ -92,12 +93,12 @@ filters_main_only: &filters_main_only
     tags:
       only: /.*/
     branches:
-      only: main
+      only: vera.snapshots
 
 filters_tags_only: &filters_tags_only
   filters:
     tags:
-      only: /^v.*/
+      only: /^test.*/
     branches:
       ignore: /.*/
 
