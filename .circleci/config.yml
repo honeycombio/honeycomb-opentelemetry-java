@@ -54,20 +54,20 @@ jobs:
       - image: cibuilds/github:0.13.0
     steps:
       - attach_workspace:
-          at: ~/
+          at: ./
       - run:
           name: "Publish Release on GitHub"
           command: |
             echo "about to publish to tag ${CIRCLE_TAG}"
-            ls -l ~/publish-artifacts/*
-            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/publish-artifacts
+            ls -l ./publish-artifacts/*
+            ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ./publish-artifacts
   publish_maven:
     executor: gradle/default
     steps:
       - checkout
       - gradle/with_cache:
           steps:
-            - run: mkdir -p ~/publish-artifacts
+            - run: mkdir -p ./publish-artifacts
             - run:
                 name: "Publish Artifacts to Maven"
 #                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
@@ -75,13 +75,13 @@ jobs:
             - run:
                 command: |
                   shopt -s globstar
-                  cp build-artifacts/*.jar ~/publish-artifacts
+                  cp build-artifacts/*.jar ./publish-artifacts
             - persist_to_workspace:
-                root: ~/
+                root: ./
                 paths:
                   - publish-artifacts
             - store_artifacts:
-                path: ~/publish-artifacts
+                path: ./publish-artifacts
 
 filters_always: &filters_always
   filters:
