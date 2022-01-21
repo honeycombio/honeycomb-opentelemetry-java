@@ -38,7 +38,7 @@ jobs:
             bats --version
       - run:
           name: Project version?
-          command: make project_version
+          command: make project_version -d
       - run:
           name: Smoke Test
           command: make smoke
