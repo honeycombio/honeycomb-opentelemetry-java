@@ -37,6 +37,9 @@ jobs:
             which bats
             bats --version
       - run:
+          name: Project version?
+          command: make project_version
+      - run:
           name: Smoke Test
           command: make smoke
       - store_test_results:
