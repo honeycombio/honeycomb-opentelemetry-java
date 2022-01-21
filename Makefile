@@ -13,10 +13,10 @@ clean:
 	rm -rf ./smoke-tests/report.*
 	./gradlew clean
 
-print_project_version:=$(shell ./gradlew project_version -q)
+project_version:=$(shell ./gradlew project_version -q)
 #: display the project's version
 project_version:
-	@echo ${print_project_version}
+	@echo ${project_version}
 
 build-artifacts:
 	mkdir -p ./build-artifacts
