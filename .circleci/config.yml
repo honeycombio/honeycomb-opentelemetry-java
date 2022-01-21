@@ -37,11 +37,8 @@ jobs:
             which bats
             bats --version
       - run:
-          name: Project version?
-          command: make project_version -d
-      - run:
           name: Smoke Test
-          command: make smoke
+          command: make smoke -d
       - store_test_results:
           path: ./smoke-tests/
       - store_artifacts:
