@@ -38,7 +38,7 @@ jobs:
             bats --version
       - run:
           name: Smoke Test
-          command: make smoke -d
+          command: make smoke
       - store_test_results:
           path: ./smoke-tests/
       - store_artifacts:
