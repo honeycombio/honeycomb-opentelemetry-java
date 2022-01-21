@@ -32,19 +32,19 @@ smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-$(
 	@echo ""
 	cp $< $@
 
-smoke-tests/apps/spring-agent-manual.jar: build-artifacts/spring-agent-manual-123.jar
+smoke-tests/apps/spring-agent-manual.jar: build-artifacts/spring-agent-manual-$(project_version).jar
 	@echo ""
 	@echo "+++ Getting the auto & manually instrumented app in place for smoking."
 	@echo ""
 	cp $< $@
 
-smoke-tests/apps/spring-agent-only.jar: build-artifacts/spring-agent-only-123.jar
+smoke-tests/apps/spring-agent-only.jar: build-artifacts/spring-agent-only-$(project_version).jar
 	@echo ""
 	@echo "+++ Getting the auto-instrumented app in place for smoking."
 	@echo ""
 	cp $< $@
 
-smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-123.jar
+smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).jar
 	@echo ""
 	@echo "+++ Getting the SDK manually-instrumented app in place for smoking."
 	@echo ""
