@@ -26,25 +26,25 @@ smoke-tests/collector/data.json:
 	@echo "+++ Zhuzhing smoke test's Collector data.json"
 	@touch $@ && chmod o+w $@
 
-smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-$(project_version).jar
+smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}.jar
 	@echo ""
 	@echo "+++ Getting the agent in place for smoking."
 	@echo ""
 	cp $< $@
 
-smoke-tests/apps/spring-agent-manual.jar: build-artifacts/spring-agent-manual-$(project_version).jar
+smoke-tests/apps/spring-agent-manual.jar: build-artifacts/spring-agent-manual-${project_version}.jar
 	@echo ""
 	@echo "+++ Getting the auto & manually instrumented app in place for smoking."
 	@echo ""
 	cp $< $@
 
-smoke-tests/apps/spring-agent-only.jar: build-artifacts/spring-agent-only-$(project_version).jar
+smoke-tests/apps/spring-agent-only.jar: build-artifacts/spring-agent-only-${project_version}.jar
 	@echo ""
 	@echo "+++ Getting the auto-instrumented app in place for smoking."
 	@echo ""
 	cp $< $@
 
-smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).jar
+smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-${project_version}.jar
 	@echo ""
 	@echo "+++ Getting the SDK manually-instrumented app in place for smoking."
 	@echo ""
