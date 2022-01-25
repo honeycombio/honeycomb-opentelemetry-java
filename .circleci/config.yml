@@ -74,20 +74,27 @@ jobs:
             - run:
                 command: |
                   shopt -s globstar
-                  cp **/build-artifacts/*.jar ./publish-artifacts
+                  cp build-artifacts/*.jar ./publish-artifacts
             - persist_to_workspace:
                 root: ./
                 paths:
                   - publish-artifacts
             - store_artifacts:
-                path: ~/publish-artifacts
+                path: ./publish-artifacts
 
 filters_always: &filters_always
   filters:
     tags:
       only: /.*/
 
-filters_publish: &filters_publish
+filters_main_only: &filters_main_only
+  filters:
+    tags:
+      only: /.*/
+    branches:
+      only: main
+
+filters_tags_only: &filters_tags_only
   filters:
     tags:
       only: /^v.*/
@@ -138,12 +145,12 @@ workflows:
           requires:
             - build
       - publish_maven:
-          <<: *filters_publish
+          <<: *filters_main_only
           context: java_beeline
           requires:
             - smoke_test
       - publish_github:
-          <<: *filters_publish
+          <<: *filters_tags_only
           context: Honeycomb Secrets for Public Repos
           requires:
             - publish_maven

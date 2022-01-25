@@ -13,7 +13,7 @@ clean:
 	rm -rf ./smoke-tests/report.*
 	./gradlew clean
 
-project_version:=$(shell grep 'project.version =' build.gradle | awk -F\" '{ print $$2 }')
+project_version:=$(shell ./gradlew properties -q | grep "version:" | awk '{print $$2}')
 #: display the project's version
 project_version:
 	@echo ${project_version}
@@ -26,7 +26,7 @@ smoke-tests/collector/data.json:
 	@echo "+++ Zhuzhing smoke test's Collector data.json"
 	@touch $@ && chmod o+w $@
 
-smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-${project_version}.jar
+smoke-tests/apps/agent.jar: build-artifacts/honeycomb-opentelemetry-javaagent-$(project_version).jar
 	@echo ""
 	@echo "+++ Getting the agent in place for smoking."
 	@echo ""
