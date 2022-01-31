@@ -293,6 +293,11 @@ public final class OpenTelemetryConfiguration {
 
             Logger logger = Logger.getLogger(OpenTelemetryConfiguration.class.getName());
 
+            // helpful to know if service name is missing
+            if (!isPresent(serviceName)) {
+                logger.warning(EnvironmentConfiguration.getErrorMessage("service name",
+                    EnvironmentConfiguration.SERVICE_NAME) + " If left unset, this will show up in Honeycomb as unknown_service:java");
+            }
             if (!isPresent(tracesApiKey)) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
                     EnvironmentConfiguration.HONEYCOMB_API_KEY));
