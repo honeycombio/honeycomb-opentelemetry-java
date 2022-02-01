@@ -202,6 +202,16 @@ public class EnvironmentConfiguration {
             System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
         }
 
+        // heads up: even if dataset is set, it will be ignored
+        if (isPresent(apiKey) && !isLegacyKey(apiKey) && isPresent(dataset)) {
+            if (isPresent(serviceName)) {
+                System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
+            } else {
+                // should only get here if missing service name; above check shows "null" as service name
+                System.out.printf("WARN: Dataset is ignored in favor of service name.%n");
+            }
+        }
+
         System.setProperty("otel.exporter.otlp.traces.endpoint", endpoint);
 
         // send dataset if legacy, otherwise no dataset

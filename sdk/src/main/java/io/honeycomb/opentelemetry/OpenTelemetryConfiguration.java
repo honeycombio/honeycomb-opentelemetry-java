@@ -305,6 +305,16 @@ public final class OpenTelemetryConfiguration {
                     EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
 
+            // heads up: even if dataset is set, it will be ignored
+            if (isPresent(tracesApiKey) && !isLegacyKey(tracesApiKey) && isPresent(tracesDataset)) {
+                if (isPresent(serviceName)) {
+                    System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
+                } else {
+                    // should only get here if missing service name; above check shows "null" as service name
+                    System.out.printf("WARN: Dataset is ignored in favor of service name.%n");
+                }
+            }
+
             // only warn on missing dataset if provided key is legacy or if no key is provided
             if (!isPresent(tracesDataset)) {
                 if ((isPresent(tracesApiKey) && isLegacyKey(tracesApiKey)) || (!isPresent(tracesApiKey))) {
