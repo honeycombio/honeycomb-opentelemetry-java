@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
+import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isLegacyKey;
 
 /**
  * This class exists to make it easier and more intuitive to use Honeycomb with OpenTelemetry.
@@ -298,13 +299,18 @@ public final class OpenTelemetryConfiguration {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("service name",
                     EnvironmentConfiguration.SERVICE_NAME) + " If left unset, this will show up in Honeycomb as unknown_service:java");
             }
+
             if (!isPresent(tracesApiKey)) {
                 logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
                     EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
+
+            // only warn on missing dataset if provided key is legacy or if no key is provided
             if (!isPresent(tracesDataset)) {
-                logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
-                    EnvironmentConfiguration.HONEYCOMB_DATASET));
+                if ((isPresent(tracesApiKey) && isLegacyKey(tracesApiKey)) || (!isPresent(tracesApiKey))) {
+                    logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
+                            EnvironmentConfiguration.HONEYCOMB_DATASET));
+                }
             }
 
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
@@ -315,11 +321,19 @@ public final class OpenTelemetryConfiguration {
                 builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
             }
 
-            if (isPresent(tracesApiKey) && isPresent(tracesDataset)) {
+            // only add dataset if legacy key
+            if (isPresent(tracesApiKey) && isLegacyKey(tracesApiKey) && isPresent(tracesDataset)) {
+                    builder
+                        .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey)
+                        .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
+                }
+
+            // otherwise add api key, ignore dataset if not legacy
+            if (isPresent(tracesApiKey) && !isLegacyKey(tracesApiKey)) {
                 builder
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey)
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
+                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey);
             }
+
             SpanExporter exporter = builder.build();
 
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()

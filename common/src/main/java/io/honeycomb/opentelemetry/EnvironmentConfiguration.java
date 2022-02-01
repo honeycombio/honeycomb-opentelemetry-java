@@ -202,10 +202,18 @@ public class EnvironmentConfiguration {
         }
 
         System.setProperty("otel.exporter.otlp.traces.endpoint", endpoint);
-        System.setProperty("otel.exporter.otlp.traces.headers",
+
+        // send dataset if legacy, otherwise no dataset
+        if (isPresent(apiKey) && isLegacyKey(apiKey)) {
+            System.setProperty("otel.exporter.otlp.traces.headers",
             String.format("%s=%s,%s=%s",
                 HONEYCOMB_TEAM_HEADER, apiKey,
                 HONEYCOMB_DATASET_HEADER, dataset));
+        } else if (isPresent(apiKey)) {
+            System.setProperty("otel.exporter.otlp.traces.headers",
+            String.format("%s=%s", HONEYCOMB_TEAM_HEADER, apiKey));
+        }
+
     }
 
     public static void enableOTLPMetrics() {
