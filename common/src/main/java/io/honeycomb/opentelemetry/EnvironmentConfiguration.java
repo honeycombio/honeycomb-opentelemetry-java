@@ -190,7 +190,9 @@ public class EnvironmentConfiguration {
 
         // helpful to know if service name is missing
         if (!isPresent(serviceName)) {
-            System.out.printf("WARN: %s%n", getErrorMessage("service name", SERVICE_NAME));
+            System.out.printf("WARN: %s%n",
+            getErrorMessage("service name", SERVICE_NAME) +
+            " If left unset, this will show up in Honeycomb as unknown_service:java");
         }
 
         if (!isPresent(apiKey)) {
