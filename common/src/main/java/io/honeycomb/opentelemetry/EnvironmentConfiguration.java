@@ -156,8 +156,7 @@ public class EnvironmentConfiguration {
 
     public static boolean isLegacyKey(String key) {
         // legacy key has 32 characters
-        // todo: check multi-line input
-        return key.matches("^[0-9a-fA-F]{32}$");
+        return key.length() == 32;
     }
 
     private static String readVariable(String key, String fallback) {
