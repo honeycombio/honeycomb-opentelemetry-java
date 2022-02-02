@@ -300,26 +300,13 @@ public final class OpenTelemetryConfiguration {
                     EnvironmentConfiguration.SERVICE_NAME) + " If left unset, this will show up in Honeycomb as unknown_service:java");
             }
 
-            if (!isPresent(tracesApiKey)) {
-                logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
-                    EnvironmentConfiguration.HONEYCOMB_API_KEY));
-            }
-
             // heads up: even if dataset is set, it will be ignored
             if (isPresent(tracesApiKey) && !isLegacyKey(tracesApiKey) && isPresent(tracesDataset)) {
                 if (isPresent(serviceName)) {
                     System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
                 } else {
-                    // should only get here if missing service name; above check shows "null" as service name
+                    // should only get here if missing service name and dataset
                     System.out.printf("WARN: Dataset is ignored in favor of service name.%n");
-                }
-            }
-
-            // only warn on missing dataset if provided key is legacy or if no key is provided
-            if (!isPresent(tracesDataset)) {
-                if ((isPresent(tracesApiKey) && isLegacyKey(tracesApiKey)) || (!isPresent(tracesApiKey))) {
-                    logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
-                            EnvironmentConfiguration.HONEYCOMB_DATASET));
                 }
             }
 
@@ -331,17 +318,25 @@ public final class OpenTelemetryConfiguration {
                 builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
             }
 
-            // only add dataset if legacy key
-            if (isPresent(tracesApiKey) && isLegacyKey(tracesApiKey) && isPresent(tracesDataset)) {
-                    builder
-                        .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey)
-                        .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
-                }
-
-            // otherwise add api key, ignore dataset if not legacy
-            if (isPresent(tracesApiKey) && !isLegacyKey(tracesApiKey)) {
+            // if we have an API Key, add it to the header
+            if (isPresent(tracesApiKey)) {
                 builder
                     .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey);
+                if (isLegacyKey(tracesApiKey)) {
+                    // if the key is legacy, add dataset to the header
+                    if (isPresent(tracesDataset)) {
+                        builder
+                            .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
+                    } else {
+                        // if legacy key and missing dataset, warn on missing dataset
+                        logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
+                            EnvironmentConfiguration.HONEYCOMB_DATASET));
+                    }
+                }
+            } else {
+                // warn on missing API Key
+                logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
+                    EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
 
             SpanExporter exporter = builder.build();

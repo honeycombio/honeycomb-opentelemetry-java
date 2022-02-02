@@ -195,34 +195,34 @@ public class EnvironmentConfiguration {
             " If left unset, this will show up in Honeycomb as unknown_service:java");
         }
 
-        if (!isPresent(apiKey)) {
-            System.out.printf("WARN: %s%n", getErrorMessage("API key", HONEYCOMB_API_KEY));
-        }
-        if (!isPresent(dataset)) {
-            System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
-        }
-
         // heads up: even if dataset is set, it will be ignored
         if (isPresent(apiKey) && !isLegacyKey(apiKey) && isPresent(dataset)) {
             if (isPresent(serviceName)) {
                 System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
             } else {
-                // should only get here if missing service name; above check shows "null" as service name
+                // should only get here if missing service name and dataset
                 System.out.printf("WARN: Dataset is ignored in favor of service name.%n");
             }
         }
 
         System.setProperty("otel.exporter.otlp.traces.endpoint", endpoint);
 
-        // send dataset if legacy, otherwise no dataset
-        if (isPresent(apiKey) && isLegacyKey(apiKey)) {
-            System.setProperty("otel.exporter.otlp.traces.headers",
-            String.format("%s=%s,%s=%s",
-                HONEYCOMB_TEAM_HEADER, apiKey,
-                HONEYCOMB_DATASET_HEADER, dataset));
-        } else if (isPresent(apiKey)) {
-            System.setProperty("otel.exporter.otlp.traces.headers",
-            String.format("%s=%s", HONEYCOMB_TEAM_HEADER, apiKey));
+        // if we have an API Key, add it to the header
+        if (isPresent(apiKey)) {
+            String header = String.format("%s=%s", HONEYCOMB_TEAM_HEADER, apiKey);
+            if (isLegacyKey(apiKey)) {
+                // if the key is legacy, add dataset to the header
+                if (isPresent(dataset)) {
+                    header += String.format("%s=%s", HONEYCOMB_DATASET_HEADER, dataset);
+                } else {
+                    // if legacy key and missing dataset, warn on missing dataset
+                    System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
+                }
+            }
+            System.setProperty("otel.exporter.otlp.traces.headers", header);
+        } else {
+            // warn on missing API Key
+            System.out.printf("WARN: %s%n", getErrorMessage("API key", HONEYCOMB_API_KEY));
         }
 
     }
