@@ -213,7 +213,7 @@ public class EnvironmentConfiguration {
             if (isLegacyKey(apiKey)) {
                 // if the key is legacy, add dataset to the header
                 if (isPresent(dataset)) {
-                    header += String.format("%s=%s", HONEYCOMB_DATASET_HEADER, dataset);
+                    header += String.format(",%s=%s", HONEYCOMB_DATASET_HEADER, dataset);
                 } else {
                     // if legacy key and missing dataset, warn on missing dataset
                     System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
