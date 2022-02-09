@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
+import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isLegacyKey;
 
 /**
  * This class exists to make it easier and more intuitive to use Honeycomb with OpenTelemetry.
@@ -293,13 +294,20 @@ public final class OpenTelemetryConfiguration {
 
             Logger logger = Logger.getLogger(OpenTelemetryConfiguration.class.getName());
 
-            if (!isPresent(tracesApiKey)) {
-                logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
-                    EnvironmentConfiguration.HONEYCOMB_API_KEY));
+            // helpful to know if service name is missing
+            if (!isPresent(serviceName)) {
+                logger.warning(EnvironmentConfiguration.getErrorMessage("service name",
+                    EnvironmentConfiguration.SERVICE_NAME) + " If left unset, this will show up in Honeycomb as unknown_service:java");
             }
-            if (!isPresent(tracesDataset)) {
-                logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
-                    EnvironmentConfiguration.HONEYCOMB_DATASET));
+
+            // heads up: even if dataset is set, it will be ignored
+            if (isPresent(tracesApiKey) && !isLegacyKey(tracesApiKey) && isPresent(tracesDataset)) {
+                if (isPresent(serviceName)) {
+                    System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
+                } else {
+                    // should only get here if missing service name and dataset
+                    System.out.printf("WARN: Dataset is ignored in favor of service name.%n");
+                }
             }
 
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
@@ -310,11 +318,27 @@ public final class OpenTelemetryConfiguration {
                 builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
             }
 
-            if (isPresent(tracesApiKey) && isPresent(tracesDataset)) {
+            // if we have an API Key, add it to the header
+            if (isPresent(tracesApiKey)) {
                 builder
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey)
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
+                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey);
+                if (isLegacyKey(tracesApiKey)) {
+                    // if the key is legacy, add dataset to the header
+                    if (isPresent(tracesDataset)) {
+                        builder
+                            .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
+                    } else {
+                        // if legacy key and missing dataset, warn on missing dataset
+                        logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
+                            EnvironmentConfiguration.HONEYCOMB_DATASET));
+                    }
+                }
+            } else {
+                // warn on missing API Key
+                logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
+                    EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
+
             SpanExporter exporter = builder.build();
 
             SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()

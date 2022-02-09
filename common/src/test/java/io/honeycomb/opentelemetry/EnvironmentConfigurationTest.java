@@ -121,13 +121,23 @@ public class EnvironmentConfigurationTest {
     }
 
     @Test
-    public void test_enableOtlpTraces_sets_system_properties() {
-        System.setProperty("honeycomb.api.key", "my-key");
+    public void test_enableOtlpTraces_sets_system_properties_for_legacy_key() {
+        System.setProperty("honeycomb.api.key", "11111111111111111111111111111111");
         System.setProperty("honeycomb.dataset", "my-dataset");
 
         EnvironmentConfiguration.enableOTLPTraces();
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.traces.endpoint"));
-        Assertions.assertEquals("X-Honeycomb-Team=my-key,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.traces.headers"));
+        Assertions.assertEquals("X-Honeycomb-Team=11111111111111111111111111111111,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.traces.headers"));
+    }
+
+    @Test
+    public void test_enableOtlpTraces_sets_system_properties_for_non_legacy_key() {
+        System.setProperty("honeycomb.api.key", "specialenvkey");
+        System.setProperty("honeycomb.dataset", "my-dataset");
+
+        EnvironmentConfiguration.enableOTLPTraces();
+        Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.traces.endpoint"));
+        Assertions.assertEquals("X-Honeycomb-Team=specialenvkey", System.getProperty("otel.exporter.otlp.traces.headers"));
     }
 
     @Test
@@ -139,6 +149,18 @@ public class EnvironmentConfigurationTest {
         Assertions.assertEquals("otlp", System.getProperty("otel.metrics.exporter"));
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
         Assertions.assertEquals("X-Honeycomb-Team=my-key,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
+    }
+
+    // make sure OtlpTraces logic doesn't bleed into metrics; dataset still needed
+    @Test
+    public void test_enableOtlpMetrics_sets_system_properties_for_legacy_key() {
+        System.setProperty("honeycomb.api.key", "11111111111111111111111111111111");
+        System.setProperty("honeycomb.metrics.dataset", "my-dataset");
+
+        EnvironmentConfiguration.enableOTLPMetrics();
+        Assertions.assertEquals("otlp", System.getProperty("otel.metrics.exporter"));
+        Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
+        Assertions.assertEquals("X-Honeycomb-Team=11111111111111111111111111111111,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
     }
 
     @Test
