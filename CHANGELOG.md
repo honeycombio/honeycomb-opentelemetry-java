@@ -1,5 +1,15 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.9.0] - 2022-02-09
+
+### Enhancements
+
+- Provide more feedback to users to help configure for use in E&S (#255) | [@JamieDanielson](https://github.com/JamieDanielson)
+
+### Maintenance
+
+- Publish snapshots (#248) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.8.1] - 2022-01-11
 
 ### Changed
