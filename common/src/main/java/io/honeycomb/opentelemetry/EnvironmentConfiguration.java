@@ -245,7 +245,7 @@ public class EnvironmentConfiguration {
     static Properties loadPropertiesFromConfigFile() {
         // check system property then env var for properties file path
         // we can't use readVariable here because it uses properties
-        String path = System.getProperty(getPropertyName(HONEYCOMB_CONFIGURATION_FILE));
+        String path = System.getProperty(HONEYCOMB_CONFIGURATION_FILE);
         if (!isPresent(path)) {
             path = System.getenv(HONEYCOMB_CONFIGURATION_FILE);
         }
