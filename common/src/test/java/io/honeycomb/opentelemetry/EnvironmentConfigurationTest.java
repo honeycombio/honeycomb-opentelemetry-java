@@ -121,6 +121,12 @@ public class EnvironmentConfigurationTest {
     }
 
     @Test
+    public void test_config_file_path() {
+        System.setProperty("honeycomb.config.file", "./src/app.properties");
+        Assertions.assertEquals("./src/app.properties", EnvironmentConfiguration.getHoneycombConfigFile());
+    }
+
+    @Test
     public void test_enableOtlpTraces_sets_system_properties_for_legacy_key() {
         System.setProperty("honeycomb.api.key", "11111111111111111111111111111111");
         System.setProperty("honeycomb.dataset", "my-dataset");

@@ -23,7 +23,7 @@ public class EnvironmentConfiguration {
     public static final String HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET";
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String SAMPLE_RATE = "SAMPLE_RATE";
-    public static final String HONEYCOMB_CONFIGURATION_FILE = "HONEYCOMB_CONFIG_FILE";
+    public static final String HONEYCOMB_CONFIG_FILE = "HONEYCOMB_CONFIG_FILE";
 
     // default value
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
@@ -139,6 +139,15 @@ public class EnvironmentConfiguration {
     }
 
     /**
+     * Read the path to the configuration file.
+     *
+     * @return honeycomb.config.file system property or HONEYCOMB_CONFIG_FILE environment variable
+     */
+    public static String getHoneycombConfigFile() {
+        return readVariable(HONEYCOMB_CONFIG_FILE, null);
+    }
+
+    /**
      * Get a friendly error message for missing variable.
      *
      * @param humanKey human-friendly variable description
@@ -245,9 +254,9 @@ public class EnvironmentConfiguration {
     static Properties loadPropertiesFromConfigFile() {
         // check system property then env var for properties file path
         // we can't use readVariable here because it uses properties
-        String path = System.getProperty(HONEYCOMB_CONFIGURATION_FILE);
+        String path = System.getProperty(getPropertyName(HONEYCOMB_CONFIG_FILE));
         if (!isPresent(path)) {
-            path = System.getenv(HONEYCOMB_CONFIGURATION_FILE);
+            path = System.getenv(HONEYCOMB_CONFIG_FILE);
         }
 
         Properties properties = new Properties();
