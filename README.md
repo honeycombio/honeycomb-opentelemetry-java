@@ -2,7 +2,7 @@
 
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/honeycomb-opentelemetry-java)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java.svg?style=shield&circle-token=e2f4c30919ecbdbfb095415a6f4114a03dc491a0)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java)
-[![Maven](https://maven-badges.herokuapp.com/maven-central/io.honeycomb/honeycomb-opentelemetry-javaagent/badge.svg)](https://mvnrepository.com/artifact/io.honeycomb/honeycomb-opentelemetry-javaagent)
+[![Maven](https://img.shields.io/maven-central/v/io.honeycomb/honeycomb-opentelemetry-javaagent)](https://mvnrepository.com/artifact/io.honeycomb/honeycomb-opentelemetry-javaagent)
 
 **STATUS: this library is BETA.**
 You're welcome to try it, and let us know your feedback in the issues!
