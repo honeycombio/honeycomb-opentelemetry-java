@@ -1,5 +1,12 @@
 # honeycomb-opentelemetry-java changelog
 
+## [0.10.0] - 2022-02-09
+
+### Maintenance
+
+- Update OpenTelemetry SDK & Agent dependencies (#264) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Add maven badge to README (#261) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.9.0] - 2022-02-09
 
 ### Enhancements
