@@ -4,16 +4,13 @@
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java.svg?style=shield&circle-token=e2f4c30919ecbdbfb095415a6f4114a03dc491a0)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java)
 [![Maven](https://img.shields.io/maven-central/v/io.honeycomb/honeycomb-opentelemetry-javaagent)](https://mvnrepository.com/artifact/io.honeycomb/honeycomb-opentelemetry-javaagent)
 
-**STATUS: this library is BETA.**
-You're welcome to try it, and let us know your feedback in the issues!
-
 This is Honeycomb's distribution of OpenTelemetry for Java.
 It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
 
-- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.11.0) version 1.11.0
-- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.11.1) version 1.11.1
+- [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.12.0) version 1.12.0
+- [OpenTelemetry Java Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.12.0) version 1.12.0
 
 ## Getting Started
 

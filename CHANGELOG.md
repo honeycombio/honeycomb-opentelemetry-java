@@ -1,5 +1,13 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.0.0] - 2022-03-23
+
+### This project is now out of BETA \o/
+
+### Maintenance
+
+- bump otel version from 1.11 to 1.12.0 (#273) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.10.0] - 2022-02-09
 
 ### Maintenance
