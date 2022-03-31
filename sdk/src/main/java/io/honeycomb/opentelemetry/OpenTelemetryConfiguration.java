@@ -346,7 +346,7 @@ public final class OpenTelemetryConfiguration {
             this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
             if (this.enableDebug) {
-                tracerProviderBuilder.addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()));
+                tracerProviderBuilder.addSpanProcessor(SimpleSpanProcessor.create(LoggingSpanExporter.create()));
             }
             tracerProviderBuilder.addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
 
