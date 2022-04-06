@@ -3,17 +3,23 @@ package io.honeycomb.opentelemetry;
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
-import io.opentelemetry.sdk.autoconfigure.spi.traces.SdkTracerProviderConfigurer;
+import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizer;
+import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizerProvider;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 
 /**
- * Honeycomb implementation of {@link SdkTracerProviderConfigurer} SPI.
+ * Honeycomb implementation of {@link AutoConfigurationCustomizerProvider} SPI.
  *
  * This configurer adds a trace sampler and a span processor to the OpenTelemetry auto-instrumentation.
  */
-public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderConfigurer {
+public class HoneycombAutoConfigurationCustomizerProvider implements AutoConfigurationCustomizerProvider {
     @Override
-    public void configure(SdkTracerProviderBuilder tracerProvider, ConfigProperties config) {
+    public void customize(AutoConfigurationCustomizer autoConfiguration) {
+        autoConfiguration.addTracerProviderCustomizer(this::configureSdkTracerProvider);
+    }
+
+
+    private SdkTracerProviderBuilder configureSdkTracerProvider(SdkTracerProviderBuilder tracerProvider, ConfigProperties config) {
         int sampleRate;
         try {
             sampleRate = EnvironmentConfiguration.getSampleRate();
@@ -22,7 +28,7 @@ public class HoneycombSdkTracerProviderConfigurer implements SdkTracerProviderCo
             sampleRate = 1;
         }
 
-        tracerProvider
+        return tracerProvider
             .setSampler(new DeterministicTraceSampler(sampleRate))
             .addSpanProcessor(new BaggageSpanProcessor());
     }
