@@ -40,7 +40,7 @@ public class EnvironmentConfigurationTest {
 
     @Test
     public void test_dafault_otel_exporter_otlp_proto() {
-        Assertions.assertEquals("grpc/protobuf", EnvironmentConfiguration.getOtelExporterOTLPProtocol());
+        Assertions.assertEquals("grpc", EnvironmentConfiguration.getOtelExporterOTLPProtocol());
     }
 
     @Test
