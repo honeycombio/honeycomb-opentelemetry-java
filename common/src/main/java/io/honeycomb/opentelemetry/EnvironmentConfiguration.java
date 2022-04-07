@@ -40,7 +40,7 @@ public class EnvironmentConfiguration {
     private static final String OTEL_AGENT_CONFIG_FILE = "otel.javaagent.configuration-file";
 
     // OTLP protocols
-    public static final String OTLP_GRPC_PROTOBUF = "grpc/protobuf";
+    public static final String OTLP_GRPC_PROTOBUF = "grpc";
     public static final String OTLP_HTTP_PROTOBUF = "http/protobuf";
 
     /**
