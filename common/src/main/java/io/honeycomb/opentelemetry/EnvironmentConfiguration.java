@@ -24,6 +24,7 @@ public class EnvironmentConfiguration {
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String SAMPLE_RATE = "SAMPLE_RATE";
     public static final String HONEYCOMB_CONFIGURATION_FILE = "HONEYCOMB_CONFIG_FILE";
+    public static final String OTEL_EXPORTER_OTLP_PROTOCOL = "OTEL_EXPORTER_OTLP_PROTOCOL";
 
     // default value
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
@@ -136,6 +137,15 @@ public class EnvironmentConfiguration {
     public static int getSampleRate() throws NumberFormatException {
         final String sampleRate = readVariable(SAMPLE_RATE, "1");
         return Integer.parseInt(sampleRate);
+    }
+
+    /**
+    * Read the OpenTelemetry exporter OTLP protocol. Default is grpc/protobuf.
+    *
+    * @return otel.exporter.otlp.protocol or OTEL_EXPORTER_OTLP_PROTOCOL environment variable.
+    */
+    public static String getOtelExporterOTLPProtocol() {
+        return readVariable(OTEL_EXPORTER_OTLP_PROTOCOL, "grpc/protobuf");
     }
 
     /**
