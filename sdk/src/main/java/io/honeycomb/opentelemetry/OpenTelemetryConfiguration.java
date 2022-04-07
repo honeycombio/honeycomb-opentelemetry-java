@@ -13,6 +13,8 @@ import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.extension.resources.OsResource;
@@ -53,6 +55,7 @@ public final class OpenTelemetryConfiguration {
         private String tracesDataset;
         private String tracesEndpoint;
         private String serviceName;
+        private String otlpProtocol = EnvironmentConfiguration.getOtelExporterOTLPProtocol();
 
         private Builder() {}
 
@@ -259,6 +262,19 @@ public final class OpenTelemetryConfiguration {
         }
 
         /**
+         * Sets the OTLP procotol used to export trace spans.
+         * Can be to either 'grpc/protobuf' or 'http/protobuf'.
+         * Default is grpc/protobuf.
+         *
+         * @param protocol The protocol to use to export spans with
+         * @return Builder
+         */
+        public Builder setOtlpProtocol(String protocol) {
+            this.otlpProtocol = protocol;
+            return this;
+        }
+
+        /**
          * Returns a new {@link OpenTelemetry} built with the configuration of this {@link
          * Builder} and registers it as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. An exception will be thrown if this method is attempted to
@@ -310,8 +326,47 @@ public final class OpenTelemetryConfiguration {
                 }
             }
 
-            OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
+            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
+                .setSampler(sampler);
+            this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
+            if (this.enableDebug) {
+                tracerProviderBuilder.addSpanProcessor(SimpleSpanProcessor.create(LoggingSpanExporter.create()));
+            }
+            SpanExporter spanExporter = getSpanExporter(logger);
+            tracerProviderBuilder.addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build());
+
+            DistroMetadata.getMetadata().forEach(resourceAttributes::put);
+            if (StringUtils.isNotEmpty(serviceName)) {
+                resourceAttributes.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
+            }
+            tracerProviderBuilder.setResource(
+                Resource.getDefault()
+                    .merge(OsResource.get())
+                    .merge(ProcessRuntimeResource.get())
+                    .merge(Resource.create(resourceAttributes.build())));
+
+            if (propagators == null) {
+                propagators = ContextPropagators.create(
+                    TextMapPropagator.composite(
+                        W3CTraceContextPropagator.getInstance(),
+                        W3CBaggagePropagator.getInstance()));
+            }
+
+            return OpenTelemetrySdk.builder()
+                .setTracerProvider(tracerProviderBuilder.build())
+                .setPropagators(propagators)
+                .build();
+        }
+
+        private SpanExporter getSpanExporter(Logger logger) {
+            return otlpProtocol == EnvironmentConfiguration.OTLP_GRPC_PROTOBUF ?
+                createHttpSpanExporter(logger) :
+                createGrpcSpanExporter(logger);
+        }
+
+        private SpanExporter createGrpcSpanExporter(Logger logger) {
+            OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder();
             if (tracesEndpoint != null) {
                 builder.setEndpoint(tracesEndpoint);
             } else {
@@ -339,38 +394,39 @@ public final class OpenTelemetryConfiguration {
                     EnvironmentConfiguration.HONEYCOMB_API_KEY));
             }
 
-            SpanExporter exporter = builder.build();
+            return builder.build();
+        }
 
-            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
-                .setSampler(sampler);
-            this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
-
-            if (this.enableDebug) {
-                tracerProviderBuilder.addSpanProcessor(SimpleSpanProcessor.create(LoggingSpanExporter.create()));
-            }
-            tracerProviderBuilder.addSpanProcessor(BatchSpanProcessor.builder(exporter).build());
-
-            DistroMetadata.getMetadata().forEach(resourceAttributes::put);
-            if (StringUtils.isNotEmpty(serviceName)) {
-                resourceAttributes.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
-            }
-            tracerProviderBuilder.setResource(
-                Resource.getDefault()
-                    .merge(OsResource.get())
-                    .merge(ProcessRuntimeResource.get())
-                    .merge(Resource.create(resourceAttributes.build())));
-
-            if (propagators == null) {
-                propagators = ContextPropagators.create(
-                    TextMapPropagator.composite(
-                        W3CTraceContextPropagator.getInstance(),
-                        W3CBaggagePropagator.getInstance()));
+        private SpanExporter createHttpSpanExporter(Logger logger) {
+            OtlpHttpSpanExporterBuilder builder = OtlpHttpSpanExporter.builder();
+            if (tracesEndpoint != null) {
+                builder.setEndpoint(tracesEndpoint);
+            } else {
+                builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
             }
 
-            return OpenTelemetrySdk.builder()
-                .setTracerProvider(tracerProviderBuilder.build())
-                .setPropagators(propagators)
-                .build();
+            // if we have an API Key, add it to the header
+            if (isPresent(tracesApiKey)) {
+                builder
+                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey);
+                if (isLegacyKey(tracesApiKey)) {
+                    // if the key is legacy, add dataset to the header
+                    if (isPresent(tracesDataset)) {
+                        builder
+                            .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
+                    } else {
+                        // if legacy key and missing dataset, warn on missing dataset
+                        logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
+                            EnvironmentConfiguration.HONEYCOMB_DATASET));
+                    }
+                }
+            } else {
+                // warn on missing API Key
+                logger.warning(EnvironmentConfiguration.getErrorMessage("API key",
+                    EnvironmentConfiguration.HONEYCOMB_API_KEY));
+            }
+
+            return builder.build();
         }
     }
 

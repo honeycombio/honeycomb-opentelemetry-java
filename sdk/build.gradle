@@ -12,6 +12,7 @@ dependencies {
 
     implementation "io.opentelemetry:opentelemetry-exporter-logging:${versions.opentelemetry}"
     implementation "io.opentelemetry:opentelemetry-exporter-otlp:${versions.opentelemetry}"
+    implementation "io.opentelemetry:opentelemetry-exporter-otlp-http-trace:${versions.opentelemetry}"
     implementation "io.opentelemetry:opentelemetry-sdk-extension-resources:${versions.opentelemetry}"
 
     implementation 'io.grpc:grpc-netty-shaded:1.43.1'
