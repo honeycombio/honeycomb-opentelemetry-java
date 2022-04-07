@@ -39,6 +39,10 @@ public class EnvironmentConfiguration {
     private static final Properties properties = loadPropertiesFromConfigFile();
     private static final String OTEL_AGENT_CONFIG_FILE = "otel.javaagent.configuration-file";
 
+    // OTLP protocols
+    public static final String OTLP_GRPC_PROTOBUF = "grpc/protobuf";
+    public static final String OTLP_HTTP_PROTOBUF = "http/protobuf";
+
     /**
      * Reads the Honeycomb API key.
      *
@@ -145,7 +149,7 @@ public class EnvironmentConfiguration {
     * @return otel.exporter.otlp.protocol or OTEL_EXPORTER_OTLP_PROTOCOL environment variable.
     */
     public static String getOtelExporterOTLPProtocol() {
-        return readVariable(OTEL_EXPORTER_OTLP_PROTOCOL, "grpc/protobuf");
+        return readVariable(OTEL_EXPORTER_OTLP_PROTOCOL, OTLP_GRPC_PROTOBUF);
     }
 
     /**
