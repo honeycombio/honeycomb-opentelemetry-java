@@ -148,7 +148,7 @@ public class EnvironmentConfiguration {
     *
     * @return otel.exporter.otlp.protocol or OTEL_EXPORTER_OTLP_PROTOCOL environment variable.
     */
-    public static String getOtelExporterOTLPProtocol() {
+    public static String getOtelExporterOtlpProtocol() {
         return readVariable(OTEL_EXPORTER_OTLP_PROTOCOL, OTLP_GRPC_PROTOBUF);
     }
 

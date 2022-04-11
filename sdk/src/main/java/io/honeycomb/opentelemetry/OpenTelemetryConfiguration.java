@@ -55,7 +55,7 @@ public final class OpenTelemetryConfiguration {
         private String tracesDataset;
         private String tracesEndpoint;
         private String serviceName;
-        private String otlpProtocol = EnvironmentConfiguration.getOtelExporterOTLPProtocol();
+        private String otelExporterOtlpProtocol = EnvironmentConfiguration.getOtelExporterOtlpProtocol();
 
         private Builder() {}
 
@@ -263,14 +263,14 @@ public final class OpenTelemetryConfiguration {
 
         /**
          * Sets the OTLP procotol used to export trace spans.
-         * Can be to either 'grpc/protobuf' or 'http/protobuf'.
-         * Default is grpc/protobuf.
+         * Can be to either 'grpc' or 'http/protobuf'.
+         * Default is grpc.
          *
          * @param protocol The protocol to use to export spans with
          * @return Builder
          */
         public Builder setOtlpProtocol(String protocol) {
-            this.otlpProtocol = protocol;
+            this.otelExporterOtlpProtocol = protocol;
             return this;
         }
 
@@ -360,7 +360,7 @@ public final class OpenTelemetryConfiguration {
         }
 
         private SpanExporter getSpanExporter(Logger logger) {
-            return otlpProtocol == EnvironmentConfiguration.OTLP_GRPC_PROTOBUF ?
+            return otelExporterOtlpProtocol == EnvironmentConfiguration.OTLP_GRPC_PROTOBUF ?
                 createHttpSpanExporter(logger) :
                 createGrpcSpanExporter(logger);
         }
