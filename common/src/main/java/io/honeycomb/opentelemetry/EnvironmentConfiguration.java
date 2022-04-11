@@ -144,7 +144,7 @@ public class EnvironmentConfiguration {
     }
 
     /**
-    * Read the OpenTelemetry exporter OTLP protocol. Default is grpc/protobuf.
+    * Read the OpenTelemetry exporter OTLP protocol.
     *
     * @return otel.exporter.otlp.protocol or OTEL_EXPORTER_OTLP_PROTOCOL environment variable.
     */
