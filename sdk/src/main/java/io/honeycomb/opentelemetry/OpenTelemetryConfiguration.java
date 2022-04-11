@@ -326,8 +326,8 @@ public final class OpenTelemetryConfiguration {
                 }
             }
 
-            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder()
-                .setSampler(sampler);
+            SdkTracerProviderBuilder tracerProviderBuilder = SdkTracerProvider.builder();
+            tracerProviderBuilder.setSampler(sampler);
             this.additionalSpanProcessors.forEach(tracerProviderBuilder::addSpanProcessor);
 
             if (this.enableDebug) {
@@ -360,7 +360,7 @@ public final class OpenTelemetryConfiguration {
         }
 
         private SpanExporter getSpanExporter(Logger logger) {
-            return otelExporterOtlpProtocol == EnvironmentConfiguration.OTLP_GRPC_PROTOBUF ?
+            return otelExporterOtlpProtocol == EnvironmentConfiguration.OTLP_HTTP_PROTOBUF ?
                 createHttpSpanExporter(logger) :
                 createGrpcSpanExporter(logger);
         }
