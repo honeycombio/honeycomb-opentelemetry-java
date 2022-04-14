@@ -398,12 +398,18 @@ public final class OpenTelemetryConfiguration {
         }
 
         private SpanExporter createHttpSpanExporter(Logger logger) {
-            OtlpHttpSpanExporterBuilder builder = OtlpHttpSpanExporter.builder();
+            String endpoint;
             if (tracesEndpoint != null) {
-                builder.setEndpoint(tracesEndpoint);
+                endpoint = tracesEndpoint;
             } else {
-                builder.setEndpoint(EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT);
+                endpoint = EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT;
             }
+            // add the "/v1/traces" path if missing
+            if (!endpoint.endsWith(EnvironmentConfiguration.OTLP_HTTP_TRACES_PATH)) {
+                endpoint += EnvironmentConfiguration.OTLP_HTTP_TRACES_PATH;
+            }
+            OtlpHttpSpanExporterBuilder builder = OtlpHttpSpanExporter.builder();
+            builder.setEndpoint(endpoint);
 
             // if we have an API Key, add it to the header
             if (isPresent(tracesApiKey)) {

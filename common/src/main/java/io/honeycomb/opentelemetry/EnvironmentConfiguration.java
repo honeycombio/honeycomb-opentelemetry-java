@@ -28,6 +28,7 @@ public class EnvironmentConfiguration {
 
     // default value
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
+    public static final String OTLP_HTTP_TRACES_PATH = "/v1/traces";
 
     // attribute key names
     public static final String SERVICE_NAME_FIELD = "service.name";
