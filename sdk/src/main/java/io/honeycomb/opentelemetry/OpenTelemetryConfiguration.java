@@ -360,7 +360,7 @@ public final class OpenTelemetryConfiguration {
         }
 
         private SpanExporter getSpanExporter(Logger logger) {
-            return otelExporterOtlpProtocol == EnvironmentConfiguration.OTLP_HTTP_PROTOBUF ?
+            return otelExporterOtlpProtocol.equals(EnvironmentConfiguration.OTLP_HTTP_PROTOBUF) ?
                 createHttpSpanExporter(logger) :
                 createGrpcSpanExporter(logger);
         }
