@@ -398,12 +398,10 @@ public final class OpenTelemetryConfiguration {
         }
 
         private SpanExporter createHttpSpanExporter(Logger logger) {
-            String endpoint;
-            if (tracesEndpoint != null) {
-                endpoint = tracesEndpoint;
-            } else {
-                endpoint = EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT;
-            }
+            // use tracesEndpoint if set, use default if null or empty
+            String endpoint = StringUtils.isNotEmpty(tracesEndpoint) ?
+                tracesEndpoint :
+                EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT;
             // add the "/v1/traces" path if missing
             if (!endpoint.endsWith(EnvironmentConfiguration.OTLP_HTTP_TRACES_PATH)) {
                 endpoint += EnvironmentConfiguration.OTLP_HTTP_TRACES_PATH;
