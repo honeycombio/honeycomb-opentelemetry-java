@@ -56,8 +56,16 @@ smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.
 smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/collector/data.json
 	cd smoke-tests && bats ./smoke-agent-manual.bats --report-formatter junit --output ./
 
-smoke-sdk: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-tests/collector/data.json
-	cd smoke-tests && bats ./smoke-sdk.bats --report-formatter junit --output ./
+.PHONY: smoke-sdk
+smoke-sdk: smoke-sdk-grpc smoke-sdk-http
+
+.PHONY: smoke-sdk-grpc
+smoke-sdk-grpc: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-tests/collector/data.json
+	cd smoke-tests && PROTO=grpc bats ./smoke-sdk.bats --report-formatter junit --output ./
+
+.PHONY: smoke-sdk-http
+smoke-sdk-http: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-tests/collector/data.json
+	cd smoke-tests && PROTO=http bats ./smoke-sdk.bats --report-formatter junit --output ./
 
 smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
 	@echo ""
@@ -75,7 +83,14 @@ resmoke-agent-only: unsmoke smoke-agent-only
 
 resmoke-agent-manual: unsmoke smoke-agent-manual
 
+.PHONY: resmoke-sdk
 resmoke-sdk: unsmoke smoke-sdk
+
+.PHONY: resmoke-sdk-grpc
+resmoke-sdk-grpc: unsmoke smoke-sdk-grpc
+
+.PHONY: resmoke-sdk-http
+resmoke-sdk-http: unsmoke smoke-sdk-http
 
 resmoke: unsmoke smoke
 
