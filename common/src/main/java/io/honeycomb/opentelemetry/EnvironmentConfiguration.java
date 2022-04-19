@@ -27,7 +27,6 @@ public class EnvironmentConfiguration {
 
     // default value
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
-    public static final String OTLP_HTTP_TRACES_PATH = "/v1/traces";
 
     // attribute key names
     public static final String SERVICE_NAME_FIELD = "service.name";
@@ -43,6 +42,7 @@ public class EnvironmentConfiguration {
     public static final String OTEL_EXPORTER_OTLP_PROTOCOL = "OTEL_EXPORTER_OTLP_PROTOCOL";
     public static final String OTEL_EXPORTER_OTLP_PROTOCOL_GRPC = "grpc";
     public static final String OTEL_EXPORTER_OTLP_PROTOCOL_HTTP_PROTOBUF = "http/protobuf";
+    public static final String OTEL_EXPORTER_OTLP_HTTP_TRACES_PATH = "/v1/traces";
 
     /**
      * Reads the Honeycomb API key.

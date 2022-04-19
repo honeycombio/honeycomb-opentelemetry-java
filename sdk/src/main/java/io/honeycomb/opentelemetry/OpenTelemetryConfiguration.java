@@ -403,8 +403,8 @@ public final class OpenTelemetryConfiguration {
                 tracesEndpoint :
                 EnvironmentConfiguration.DEFAULT_HONEYCOMB_ENDPOINT;
             // add the "/v1/traces" path if missing
-            if (!endpoint.endsWith(EnvironmentConfiguration.OTLP_HTTP_TRACES_PATH)) {
-                endpoint += EnvironmentConfiguration.OTLP_HTTP_TRACES_PATH;
+            if (!endpoint.endsWith(EnvironmentConfiguration.OTEL_EXPORTER_OTLP_HTTP_TRACES_PATH)) {
+                endpoint += EnvironmentConfiguration.OTEL_EXPORTER_OTLP_HTTP_TRACES_PATH;
             }
             OtlpHttpSpanExporterBuilder builder = OtlpHttpSpanExporter.builder();
             builder.setEndpoint(endpoint);
