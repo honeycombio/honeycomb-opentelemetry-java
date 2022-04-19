@@ -61,11 +61,11 @@ smoke-sdk: smoke-sdk-grpc smoke-sdk-http
 
 .PHONY: smoke-sdk-grpc
 smoke-sdk-grpc: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-tests/collector/data.json
-	cd smoke-tests && PROTO=grpc bats ./smoke-sdk.bats --report-formatter junit --output ./
+	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
 
 .PHONY: smoke-sdk-http
 smoke-sdk-http: smoke-tests/apps/agent.jar smoke-tests/apps/spring-sdk.jar smoke-tests/collector/data.json
-	cd smoke-tests && PROTO=http bats ./smoke-sdk.bats --report-formatter junit --output ./
+	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
 
 smoke: smoke-tests/apps/spring-sdk.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
 	@echo ""

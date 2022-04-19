@@ -2,7 +2,7 @@
 
 load test_helpers/utilities
 
-CONTAINER_NAME="app-sdk-${PROTO}"
+CONTAINER_NAME="app-sdk-http"
 
 setup_file() {
 	echo "# 🚧" >&3
