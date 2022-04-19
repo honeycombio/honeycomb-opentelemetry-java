@@ -24,7 +24,6 @@ public class EnvironmentConfiguration {
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String SAMPLE_RATE = "SAMPLE_RATE";
     public static final String HONEYCOMB_CONFIGURATION_FILE = "HONEYCOMB_CONFIG_FILE";
-    public static final String OTEL_EXPORTER_OTLP_PROTOCOL = "OTEL_EXPORTER_OTLP_PROTOCOL";
 
     // default value
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
@@ -41,8 +40,9 @@ public class EnvironmentConfiguration {
     private static final String OTEL_AGENT_CONFIG_FILE = "otel.javaagent.configuration-file";
 
     // OTLP exporter protocols
-    public static final String OTLP_PROTOCOL_GRPC = "grpc";
-    public static final String OTLP_PROTOCOL_HTTP_PROTOBUF = "http/protobuf";
+    public static final String OTEL_EXPORTER_OTLP_PROTOCOL = "OTEL_EXPORTER_OTLP_PROTOCOL";
+    public static final String OTEL_EXPORTER_OTLP_PROTOCOL_GRPC = "grpc";
+    public static final String OTEL_EXPORTER_OTLP_PROTOCOL_HTTP_PROTOBUF = "http/protobuf";
 
     /**
      * Reads the Honeycomb API key.
@@ -150,7 +150,7 @@ public class EnvironmentConfiguration {
     * @return otel.exporter.otlp.protocol or OTEL_EXPORTER_OTLP_PROTOCOL environment variable.
     */
     public static String getOtelExporterOtlpProtocol() {
-        return readVariable(OTEL_EXPORTER_OTLP_PROTOCOL, OTLP_PROTOCOL_GRPC);
+        return readVariable(OTEL_EXPORTER_OTLP_PROTOCOL, OTEL_EXPORTER_OTLP_PROTOCOL_GRPC);
     }
 
     /**
