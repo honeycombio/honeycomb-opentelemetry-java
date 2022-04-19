@@ -38,6 +38,12 @@ public class EnvironmentConfiguration {
     private static final Properties properties = loadPropertiesFromConfigFile();
     private static final String OTEL_AGENT_CONFIG_FILE = "otel.javaagent.configuration-file";
 
+    // OTLP exporter protocols
+    public static final String OTEL_EXPORTER_OTLP_PROTOCOL = "OTEL_EXPORTER_OTLP_PROTOCOL";
+    public static final String OTEL_EXPORTER_OTLP_PROTOCOL_GRPC = "grpc";
+    public static final String OTEL_EXPORTER_OTLP_PROTOCOL_HTTP_PROTOBUF = "http/protobuf";
+    public static final String OTEL_EXPORTER_OTLP_HTTP_TRACES_PATH = "/v1/traces";
+
     /**
      * Reads the Honeycomb API key.
      *
@@ -136,6 +142,15 @@ public class EnvironmentConfiguration {
     public static int getSampleRate() throws NumberFormatException {
         final String sampleRate = readVariable(SAMPLE_RATE, "1");
         return Integer.parseInt(sampleRate);
+    }
+
+    /**
+    * Read the OpenTelemetry exporter OTLP protocol.
+    *
+    * @return otel.exporter.otlp.protocol or OTEL_EXPORTER_OTLP_PROTOCOL environment variable.
+    */
+    public static String getOtelExporterOtlpProtocol() {
+        return readVariable(OTEL_EXPORTER_OTLP_PROTOCOL, OTEL_EXPORTER_OTLP_PROTOCOL_GRPC);
     }
 
     /**

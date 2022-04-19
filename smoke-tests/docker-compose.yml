@@ -1,13 +1,14 @@
 version: '3.0'
 
+x-env-base: &env_base
+  HONEYCOMB_API_ENDPOINT: http://collector:4317
+  HONEYCOMB_API_KEY: bogus_key
+  HONEYCOMB_DATASET: bogus_dataset
+  HONEYCOMB_METRICS_DATASET: bogus_dataset
+  OTEL_METRIC_EXPORT_INTERVAL: 1000
+
 x-app-base: &app_base
   image: openjdk:17-jdk-alpine
-  environment:
-    HONEYCOMB_API_ENDPOINT: http://collector:4317
-    HONEYCOMB_API_KEY: bogus_key
-    HONEYCOMB_DATASET: bogus_dataset
-    HONEYCOMB_METRICS_DATASET: bogus_dataset
-    OTEL_METRIC_EXPORT_INTERVAL: 1000
   command: "java -javaagent:/agent.jar -jar /app.jar"
   depends_on:
     - collector
@@ -21,6 +22,8 @@ services:
 
   app-agent-manual:
     <<: *app_base
+    environment:
+      <<: *env_base
     volumes:
       - "./apps/agent.jar:/agent.jar"
       - "./apps/spring-agent-manual.jar:/app.jar"
@@ -29,14 +32,32 @@ services:
 
   app-agent-only:
     <<: *app_base
+    environment:
+      <<: *env_base
     volumes:
       - "./apps/agent.jar:/agent.jar"
       - "./apps/spring-agent-only.jar:/app.jar"
     ports:
       - "127.0.0.1:5002:5002"
 
-  app-sdk:
+  app-sdk-grpc:
     <<: *app_base
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4317
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    command: "java -jar /app.jar"
+    volumes:
+      - "./apps/spring-sdk.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5001:5001"
+
+  app-sdk-http:
+    <<: *app_base
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     command: "java -jar /app.jar"
     volumes:
       - "./apps/spring-sdk.jar:/app.jar"

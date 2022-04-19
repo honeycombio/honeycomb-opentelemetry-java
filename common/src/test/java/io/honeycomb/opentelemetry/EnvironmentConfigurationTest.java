@@ -13,6 +13,7 @@ public class EnvironmentConfigurationTest {
     @BeforeEach
     public void setup() {
         System.setProperty("sample.rate", "");
+        System.setProperty("otel.exporter.otlp.protocol", "");
         System.setProperty("service.name", "");
         System.setProperty("honeycomb.api.endpoint", "");
         System.setProperty("honeycomb.traces.endpoint", "");
@@ -35,6 +36,17 @@ public class EnvironmentConfigurationTest {
     public void test_can_set_sample_rate() {
         System.setProperty("sample.rate", "10");
         Assertions.assertEquals(10, EnvironmentConfiguration.getSampleRate());
+    }
+
+    @Test
+    public void test_dafault_otel_exporter_otlp_proto() {
+        Assertions.assertEquals("grpc", EnvironmentConfiguration.getOtelExporterOtlpProtocol());
+    }
+
+    @Test
+    public void test_can_set_otel_exporter_otlp_proto() {
+        System.setProperty("otel.exporter.otlp.protocol", "http/protobuf");
+        Assertions.assertEquals("http/protobuf", EnvironmentConfiguration.getOtelExporterOtlpProtocol());
     }
 
     @Test

@@ -76,6 +76,40 @@ public class OpenTelemetryConfigurationTest {
             // verify configured span processors
             Assertions.assertInstanceOf(BaggageSpanProcessor.class, processors.get(0));
             Assertions.assertInstanceOf(BatchSpanProcessor.class, processors.get(1));
+            SpanProcessor processor = processors.get(1);
+            Assertions.assertTrue(processor.toString().contains("spanExporter=io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter"));
+        } catch (Exception e) {
+            Assertions.fail(e);
+        }
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testConfiguration_tracerSettings_httpExporter() {
+        Sampler sampler = new DeterministicTraceSampler(5);
+        OpenTelemetry openTelemetry = OpenTelemetryConfiguration.builder()
+            .setOtlpProtocol("http/protobuf")
+            .build();
+
+        TracerProvider provider = openTelemetry.getTracerProvider();
+        try {
+            Method m = provider.getClass().getDeclaredMethod("unobfuscate");
+            m.setAccessible(true);
+            SdkTracerProvider sdkProvider = (SdkTracerProvider) m.invoke(provider, (Object[]) null);
+
+            Field providerField = pluckField(sdkProvider.getClass(), "sharedState");
+            Object sharedState = providerField.get(sdkProvider);
+
+            Field procesorField = pluckField(sharedState.getClass(), "activeSpanProcessor");
+
+            Object sp = procesorField.get(sharedState);
+            Field allSpanProcessors = pluckField(sp.getClass(), "spanProcessorsAll");
+            List<SpanProcessor> processors = (List<SpanProcessor>) allSpanProcessors.get(sp);
+
+            // verify configured span processors
+            Assertions.assertInstanceOf(BatchSpanProcessor.class, processors.get(1));
+            SpanProcessor processor = processors.get(1);
+            Assertions.assertTrue(processor.toString().contains("spanExporter=io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter"));
         } catch (Exception e) {
             Assertions.fail(e);
         }
