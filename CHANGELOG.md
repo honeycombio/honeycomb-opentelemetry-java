@@ -1,5 +1,19 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.1.0] - 2022-04-25
+
+### Enhancements
+
+- Adds support for SDK to set OTLP protocol (#283) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Maintenance
+
+- Bump mockito-inline from 4.2.0 to 4.4.0 (#286) | [dependabot](https://github.com/dependabot)
+- Bump mockito-junit-jupiter from 4.2.0 to 4.4.0 (#276) | [dependabot](https://github.com/dependabot)
+- Bump mockito-core from 4.2.0 to 4.4.0 (#275) | [dependabot](https://github.com/dependabot)
+- Bump org.springframework.boot from 2.6.2 to 2.6.6 (#281) | [dependabot](https://github.com/dependabot)
+- resolve deprecations from upstream (#278) | [@robbkidd](https://github.com/robbkidd)
+
 ## [1.0.0] - 2022-03-23
 
 ### This project is now out of BETA \o/
