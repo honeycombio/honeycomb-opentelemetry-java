@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.1.1] - 2022-05-11
+
+### Fixes
+
+- Append traces path (v1/traces) to endpoint if using http/protobuf with agent (#296) | [@JamieDanielson](https://github.com/JamieDanielson)
+
 ## [1.1.0] - 2022-04-25
 
 ### Enhancements
