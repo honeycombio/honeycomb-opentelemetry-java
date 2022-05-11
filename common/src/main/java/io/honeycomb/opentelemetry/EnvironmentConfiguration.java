@@ -198,7 +198,9 @@ public class EnvironmentConfiguration {
     }
 
     public static void enableOTLPTraces() {
+        final String otelExporterOtlpProtocol = getOtelExporterOtlpProtocol();
         final String endpoint = getHoneycombTracesApiEndpoint();
+        final String httpEndpoint = endpoint + OTEL_EXPORTER_OTLP_HTTP_TRACES_PATH;
         final String apiKey = getHoneycombTracesApiKey();
         final String dataset = getHoneycombTracesDataset();
         final String serviceName = getServiceName();
@@ -220,7 +222,11 @@ public class EnvironmentConfiguration {
             }
         }
 
-        System.setProperty("otel.exporter.otlp.traces.endpoint", endpoint);
+        if (otelExporterOtlpProtocol.equals("http/protobuf")) {
+            System.setProperty("otel.exporter.otlp.traces.endpoint", httpEndpoint);
+        } else {
+            System.setProperty("otel.exporter.otlp.traces.endpoint", endpoint);
+        }
 
         // if we have an API Key, add it to the header
         if (isPresent(apiKey)) {
