@@ -160,7 +160,7 @@ public class EnvironmentConfigurationTest {
         EnvironmentConfiguration.enableOTLPMetrics();
         Assertions.assertEquals("otlp", System.getProperty("otel.metrics.exporter"));
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
-        Assertions.assertEquals("x-otlp-version=0.16.0,X-Honeycomb-Team=my-key,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
+        Assertions.assertEquals("x-otlp-version=0.16.0,X-Honeycomb-Team=my-key", System.getProperty("otel.exporter.otlp.metrics.headers"));
     }
 
     // make sure OtlpTraces logic doesn't bleed into metrics; dataset still needed
