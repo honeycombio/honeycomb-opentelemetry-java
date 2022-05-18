@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
@@ -375,18 +376,13 @@ public final class OpenTelemetryConfiguration {
 
             // if we have an API Key, add it to the header
             if (isPresent(tracesApiKey)) {
-                builder
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey);
-                if (isLegacyKey(tracesApiKey)) {
-                    // if the key is legacy, add dataset to the header
-                    if (isPresent(tracesDataset)) {
-                        builder
-                            .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
-                    } else {
-                        // if legacy key and missing dataset, warn on missing dataset
-                        logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
-                            EnvironmentConfiguration.HONEYCOMB_DATASET));
-                    }
+                final Map<String, String> headers = EnvironmentConfiguration.getHeaders(tracesApiKey, tracesDataset);
+                headers.entrySet().forEach(entry -> builder.addHeader(entry.getKey(), entry.getValue()));
+
+                // if legacy key and missing dataset, warn on missing dataset
+                if (isLegacyKey(tracesApiKey) && !isPresent(tracesDataset)) {
+                    logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
+                        EnvironmentConfiguration.HONEYCOMB_DATASET));
                 }
             } else {
                 // warn on missing API Key
@@ -411,18 +407,13 @@ public final class OpenTelemetryConfiguration {
 
             // if we have an API Key, add it to the header
             if (isPresent(tracesApiKey)) {
-                builder
-                    .addHeader(EnvironmentConfiguration.HONEYCOMB_TEAM_HEADER, tracesApiKey);
-                if (isLegacyKey(tracesApiKey)) {
-                    // if the key is legacy, add dataset to the header
-                    if (isPresent(tracesDataset)) {
-                        builder
-                            .addHeader(EnvironmentConfiguration.HONEYCOMB_DATASET_HEADER, tracesDataset);
-                    } else {
-                        // if legacy key and missing dataset, warn on missing dataset
-                        logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
-                            EnvironmentConfiguration.HONEYCOMB_DATASET));
-                    }
+                final Map<String, String> headers = EnvironmentConfiguration.getHeaders(tracesApiKey, tracesDataset);
+                headers.entrySet().forEach(entry -> builder.addHeader(entry.getKey(), entry.getValue()));
+
+                // if legacy key and missing dataset, warn on missing dataset
+                if (isLegacyKey(tracesApiKey) && !isPresent(tracesDataset)) {
+                    logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
+                        EnvironmentConfiguration.HONEYCOMB_DATASET));
                 }
             } else {
                 // warn on missing API Key

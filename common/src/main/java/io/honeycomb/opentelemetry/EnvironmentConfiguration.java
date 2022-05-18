@@ -2,7 +2,10 @@ package io.honeycomb.opentelemetry;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This is a utility class that helps read Honeycomb environment variables and system properties.
@@ -204,6 +207,7 @@ public class EnvironmentConfiguration {
         final String apiKey = getHoneycombTracesApiKey();
         final String dataset = getHoneycombTracesDataset();
         final String serviceName = getServiceName();
+        final Map<String, String> headers = getHeaders(apiKey, dataset);
 
         // helpful to know if service name is missing
         if (!isPresent(serviceName)) {
@@ -230,36 +234,23 @@ public class EnvironmentConfiguration {
 
         // if we have an API Key, add it to the header
         if (isPresent(apiKey)) {
-            String header = String.format("%s=%s", HONEYCOMB_TEAM_HEADER, apiKey);
-            if (isLegacyKey(apiKey)) {
-                // if the key is legacy, add dataset to the header
-                if (isPresent(dataset)) {
-                    header += String.format(",%s=%s", HONEYCOMB_DATASET_HEADER, dataset);
-                } else {
-                    // if legacy key and missing dataset, warn on missing dataset
-                    System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
-                }
-            }
-            System.setProperty("otel.exporter.otlp.traces.headers", header);
+            System.setProperty("otel.exporter.otlp.traces.headers", StringUtils.join(headers));
         } else {
             // warn on missing API Key
             System.out.printf("WARN: %s%n", getErrorMessage("API key", HONEYCOMB_API_KEY));
         }
-
     }
 
     public static void enableOTLPMetrics() {
         final String endpoint = getHoneycombMetricsApiEndpoint();
         final String apiKey = getHoneycombMetricsApiKey();
         final String dataset = getHoneycombMetricsDataset();
+        final Map<String, String> headers = getHeaders(apiKey, dataset);
 
         if (isPresent(dataset)) {
             System.setProperty("otel.metrics.exporter", "otlp");
             System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
-            System.setProperty("otel.exporter.otlp.metrics.headers",
-                    String.format("%s=%s,%s=%s",
-                    HONEYCOMB_TEAM_HEADER, apiKey,
-                    HONEYCOMB_DATASET_HEADER, dataset));
+            System.setProperty("otel.exporter.otlp.metrics.headers", StringUtils.join(headers));
         }
     }
 
@@ -287,5 +278,22 @@ public class EnvironmentConfiguration {
         }
 
         return properties;
+    }
+
+    public static Map<String, String> getHeaders(String apiKey, String dataset) {
+        final Map<String, String> headers = new HashMap<String, String>() {{
+            put(DistroMetadata.OTLP_PROTO_VERSION_HEADER, DistroMetadata.OTLP_PROTO_VERSION_VALUE);
+            put(HONEYCOMB_TEAM_HEADER, apiKey);
+        }};
+        if (isLegacyKey(apiKey)) {
+            // if the key is legacy, add dataset to the header
+            if (isPresent(dataset)) {
+                headers.put(HONEYCOMB_DATASET_HEADER, dataset);
+            } else {
+                // if legacy key and missing dataset, warn on missing dataset
+                System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
+            }
+        }
+        return headers;
     }
 }
