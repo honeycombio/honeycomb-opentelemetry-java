@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.commons.lang3.StringUtils;
+import java.util.stream.Collectors;
 
 /**
  * This is a utility class that helps read Honeycomb environment variables and system properties.
@@ -234,7 +234,7 @@ public class EnvironmentConfiguration {
 
         // if we have an API Key, add it to the header
         if (isPresent(apiKey)) {
-            System.setProperty("otel.exporter.otlp.traces.headers", StringUtils.join(headers));
+            System.setProperty("otel.exporter.otlp.traces.headers", headersToString(headers));
         } else {
             // warn on missing API Key
             System.out.printf("WARN: %s%n", getErrorMessage("API key", HONEYCOMB_API_KEY));
@@ -250,7 +250,7 @@ public class EnvironmentConfiguration {
         if (isPresent(dataset)) {
             System.setProperty("otel.metrics.exporter", "otlp");
             System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
-            System.setProperty("otel.exporter.otlp.metrics.headers", StringUtils.join(headers));
+            System.setProperty("otel.exporter.otlp.metrics.headers", headersToString(headers));
         }
     }
 
@@ -281,10 +281,9 @@ public class EnvironmentConfiguration {
     }
 
     public static Map<String, String> getHeaders(String apiKey, String dataset) {
-        final Map<String, String> headers = new HashMap<String, String>() {{
-            put(DistroMetadata.OTLP_PROTO_VERSION_HEADER, DistroMetadata.OTLP_PROTO_VERSION_VALUE);
-            put(HONEYCOMB_TEAM_HEADER, apiKey);
-        }};
+        final Map<String, String> headers = new HashMap<String, String>();
+        headers.put(DistroMetadata.OTLP_PROTO_VERSION_HEADER, DistroMetadata.OTLP_PROTO_VERSION_VALUE);
+        headers.put(HONEYCOMB_TEAM_HEADER, apiKey);
         if (isLegacyKey(apiKey)) {
             // if the key is legacy, add dataset to the header
             if (isPresent(dataset)) {
@@ -295,5 +294,13 @@ public class EnvironmentConfiguration {
             }
         }
         return headers;
+    }
+
+    public static String headersToString(Map<String, String> headers) {
+        return headers
+            .entrySet()
+            .stream()
+            .map((entry) -> String.join("=", entry.getKey(), entry.getValue()))
+            .collect(Collectors.joining(","));
     }
 }
