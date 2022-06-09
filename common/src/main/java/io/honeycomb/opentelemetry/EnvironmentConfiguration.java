@@ -253,6 +253,9 @@ public class EnvironmentConfiguration {
         final String apiKey = getHoneycombMetricsApiKey();
         final String dataset = getHoneycombMetricsDataset();
 
+        // metrics should be opt-in, so keep disabled by default
+        System.setProperty("otel.metrics.exporter", "none");
+
         if (isPresent(dataset)) {
             System.setProperty("otel.metrics.exporter", "otlp");
             System.setProperty("otel.exporter.otlp.metrics.endpoint", endpoint);
