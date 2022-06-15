@@ -207,7 +207,7 @@ public class EnvironmentConfiguration {
         final String apiKey = getHoneycombTracesApiKey();
         final String dataset = getHoneycombTracesDataset();
         final String serviceName = getServiceName();
-        final Map<String, String> headers = getHeaders(apiKey, dataset);
+        final Map<String, String> headers = getTracesHeaders(apiKey, dataset);
 
         // helpful to know if service name is missing
         if (!isPresent(serviceName)) {
@@ -245,7 +245,7 @@ public class EnvironmentConfiguration {
         final String endpoint = getHoneycombMetricsApiEndpoint();
         final String apiKey = getHoneycombMetricsApiKey();
         final String dataset = getHoneycombMetricsDataset();
-        final Map<String, String> headers = getHeaders(apiKey, dataset);
+        final Map<String, String> headers = getMetricsHeaders(apiKey, dataset);
 
         if (isPresent(dataset)) {
             System.setProperty("otel.metrics.exporter", "otlp");
@@ -280,7 +280,7 @@ public class EnvironmentConfiguration {
         return properties;
     }
 
-    public static Map<String, String> getHeaders(String apiKey, String dataset) {
+    public static Map<String, String> getTracesHeaders(String apiKey, String dataset) {
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(DistroMetadata.OTLP_PROTO_VERSION_HEADER, DistroMetadata.OTLP_PROTO_VERSION_VALUE);
         headers.put(HONEYCOMB_TEAM_HEADER, apiKey);
@@ -293,6 +293,14 @@ public class EnvironmentConfiguration {
                 System.out.printf("WARN: %s%n", getErrorMessage("dataset", HONEYCOMB_DATASET));
             }
         }
+        return headers;
+    }
+
+    public static Map<String, String> getMetricsHeaders(String apiKey, String dataset) {
+        final Map<String, String> headers = new HashMap<String, String>();
+        headers.put(DistroMetadata.OTLP_PROTO_VERSION_HEADER, DistroMetadata.OTLP_PROTO_VERSION_VALUE);
+        headers.put(HONEYCOMB_TEAM_HEADER, apiKey);
+        headers.put(HONEYCOMB_DATASET_HEADER, dataset);
         return headers;
     }
 

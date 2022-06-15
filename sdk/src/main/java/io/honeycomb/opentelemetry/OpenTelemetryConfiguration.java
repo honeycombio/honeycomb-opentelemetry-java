@@ -376,7 +376,7 @@ public final class OpenTelemetryConfiguration {
 
             // if we have an API Key, add it to the header
             if (isPresent(tracesApiKey)) {
-                final Map<String, String> headers = EnvironmentConfiguration.getHeaders(tracesApiKey, tracesDataset);
+                final Map<String, String> headers = EnvironmentConfiguration.getTracesHeaders(tracesApiKey, tracesDataset);
                 headers.entrySet().forEach(entry -> builder.addHeader(entry.getKey(), entry.getValue()));
 
                 // if legacy key and missing dataset, warn on missing dataset
@@ -407,7 +407,7 @@ public final class OpenTelemetryConfiguration {
 
             // if we have an API Key, add it to the header
             if (isPresent(tracesApiKey)) {
-                final Map<String, String> headers = EnvironmentConfiguration.getHeaders(tracesApiKey, tracesDataset);
+                final Map<String, String> headers = EnvironmentConfiguration.getMetricsHeaders(tracesApiKey, tracesDataset);
                 headers.entrySet().forEach(entry -> builder.addHeader(entry.getKey(), entry.getValue()));
 
                 // if legacy key and missing dataset, warn on missing dataset
