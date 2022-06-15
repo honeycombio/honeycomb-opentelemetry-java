@@ -3,6 +3,7 @@
 1. Update the `project.version` in the root build.gradle file with the new release version. Snapshot version is one patch bump ahead of the new release (e.g. if we're releasing `1.0.0` then the corresponding snapshot would be `1.0.1`)
 
 2. Update the version in `DistroMetadata.java` with the new release version
+    -  When updating the OTel Agent/SDK version, update the OTLP version header in `DistroMetadata.java`
 
 3. Update the Changelog
 
