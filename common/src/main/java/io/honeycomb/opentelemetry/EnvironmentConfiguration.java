@@ -27,6 +27,7 @@ public class EnvironmentConfiguration {
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String SAMPLE_RATE = "SAMPLE_RATE";
     public static final String HONEYCOMB_CONFIGURATION_FILE = "HONEYCOMB_CONFIG_FILE";
+    public static final String OTEL_SERVICE_NAME = "OTEL_SERVICE_NAME";
 
     // default value
     public static final String DEFAULT_HONEYCOMB_ENDPOINT = "https://api.honeycomb.io:443";
@@ -137,6 +138,10 @@ public class EnvironmentConfiguration {
         return readVariable(SERVICE_NAME, null);
     }
 
+    private static String getOTelServiceName() {
+        return readVariable(OTEL_SERVICE_NAME, null);
+    }
+
     /**
      * Read the sample rate.
      *
@@ -208,9 +213,10 @@ public class EnvironmentConfiguration {
         final String dataset = getHoneycombTracesDataset();
         final String serviceName = getServiceName();
         final Map<String, String> headers = getTracesHeaders(apiKey, dataset);
+        final String otelServiceName = getOTelServiceName();
 
         // helpful to know if service name is missing
-        if (!isPresent(serviceName)) {
+        if (!isPresent(serviceName) && !isPresent(otelServiceName)) {
             System.out.printf("WARN: %s%n",
             getErrorMessage("service name", SERVICE_NAME) +
             " If left unset, this will show up in Honeycomb as unknown_service:java");
