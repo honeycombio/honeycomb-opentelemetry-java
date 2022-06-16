@@ -14,8 +14,10 @@ public class ServiceNameResourceProvider implements ResourceProvider {
     @Override
     public Resource createResource(ConfigProperties config) {
         String serviceName = EnvironmentConfiguration.getServiceName();
-        return StringUtils.isNotEmpty(serviceName)
-            ? Resource.create(Attributes.of(SERVICE_NAME_FIELD, serviceName))
-            : Resource.empty();
+            return Resource.create(Attributes.of(SERVICE_NAME_FIELD, serviceName));
+
+        // return StringUtils.isNotEmpty(serviceName)
+        //     ? Resource.create(Attributes.of(SERVICE_NAME_FIELD, serviceName))
+        //     : Resource.empty();
     }
 }

@@ -1,7 +1,7 @@
 package io.honeycomb.opentelemetry;
 
-import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
-import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
+// import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
+// import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
 import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizer;
 import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizerProvider;
@@ -28,8 +28,8 @@ public class HoneycombAutoConfigurationCustomizerProvider implements AutoConfigu
             sampleRate = 1;
         }
 
-        return tracerProvider
-            .setSampler(new DeterministicTraceSampler(sampleRate))
-            .addSpanProcessor(new BaggageSpanProcessor());
+        return tracerProvider;
+            // .setSampler(new DeterministicTraceSampler(sampleRate))
+            // .addSpanProcessor(new BaggageSpanProcessor());
     }
 }
