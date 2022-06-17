@@ -1,14 +1,13 @@
-package io.honeycomb.opentelemetry;
+package io.honeycomb.opentelemetry.sdk.trace.spanprocessors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.verify;
+import org.mockito.Mockito;
 
 import org.mockito.Mock;
 
-import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.context.Context;
@@ -29,7 +28,7 @@ public class BaggageSpanProcessorTest {
                 .makeCurrent();
 
             processor.onStart(Context.current(), span);
-            verify(span).setAttribute("key", "value");
+            Mockito.verify(span).setAttribute("key", "value");
         }
     }
 }
