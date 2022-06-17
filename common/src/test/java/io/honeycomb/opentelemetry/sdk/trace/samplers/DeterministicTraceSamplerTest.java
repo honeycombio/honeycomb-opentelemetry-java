@@ -1,10 +1,9 @@
-package io.honeycomb.opentelemetry;
+package io.honeycomb.opentelemetry.sdk.trace.samplers;
 
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.opentelemetry.sdk.trace.IdGenerator;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import io.opentelemetry.sdk.trace.samplers.SamplingDecision;

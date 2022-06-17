@@ -31,6 +31,6 @@ teardown_file() {
 
 @test "Auto instrumentation emits metrics" {
 	wait_for_metrics 12
-	metric_names=$( metrics_received | jq ".instrumentationLibraryMetrics[].metrics[].name" | wc -l | awk '{ print $1}' )
+	metric_names=$( metrics_received | jq ".scopeMetrics[].metrics[].name" | wc -l | awk '{ print $1}' )
 	[ "$metric_names" -ne 0 ]
 }

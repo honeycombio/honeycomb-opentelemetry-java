@@ -1,11 +1,11 @@
 # UTILITY FUNCS
 
 spans_from_library_named() {
-	spans_received | jq ".instrumentationLibrarySpans[] | select(.instrumentationLibrary.name == \"$1\").spans[]"
+	spans_received | jq ".scopeSpans[] | select(.scope.name == \"$1\").spans[]"
 }
 
 metrics_from_library_named() {
-	metrics_received | jq ".instrumentationLibraryMetrics[] | select(.instrumentationLibrary.name == \"$1\").metrics[]"
+	metrics_received | jq ".scopeMetrics[] | select(.scope.name == \"$1\").metrics[]"
 }
 
 spans_received() {

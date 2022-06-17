@@ -176,12 +176,21 @@ public class EnvironmentConfigurationTest {
     }
 
     @Test
+    public void test_enableOtlpMetrics_does_not_enable_metrics_by_default() {
+        System.setProperty("honeycomb.api.key", "");
+        System.setProperty("honeycomb.metrics.dataset", "");
+
+        EnvironmentConfiguration.enableOTLPMetrics();
+        Assertions.assertEquals("none", System.getProperty("otel.metrics.exporter"));
+    }
+
+    @Test
     public void test_enableOtlpMetrics_without_dataset_does_not_enable_metrics() {
         System.setProperty("honeycomb.api.key", "my-key");
         System.setProperty("honeycomb.metrics.dataset", "");
 
         EnvironmentConfiguration.enableOTLPMetrics();
-        Assertions.assertEquals(null, System.getProperty("otel.metrics.exporter"));
+        Assertions.assertEquals("none", System.getProperty("otel.metrics.exporter"));
         Assertions.assertEquals(null, System.getProperty("otel.exporter.otlp.metrics.endpoint"));
         Assertions.assertEquals(null, System.getProperty("otel.exporter.otlp.metrics.headers"));
     }
