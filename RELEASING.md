@@ -1,6 +1,6 @@
 # Creating a new release
 
-1. Prep public docs PR with the new version (java-distro, otel-java-configuration, otel-java-install, otel-java-run)
+1. Prep public docs PR with the new version (java-distro, otel-java-install, otel-java-run)
 
 1. Prep Onboarding docs PR with the new version (hound/DocsJava)
 
