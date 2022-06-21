@@ -18,7 +18,7 @@ public class DistroMetadata {
      * with the version number and read it, but that isn't possible from the
      * Java agent.
      */
-    public static final String VERSION_VALUE = "1.1.1";
+    public static final String VERSION_VALUE = "1.2.0";
     public static final String RUNTIME_VERSION_FIELD = "honeycomb.distro.runtime_version";
     public static final String RUNTIME_VERSION_VALUE = System.getProperty("java.runtime.version");
 
