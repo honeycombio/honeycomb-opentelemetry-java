@@ -1,5 +1,28 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.2.0] - 2022-06-21
+
+### Added
+
+- Add OTLP version to headers (HTTP & gRPC) (#300) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Fixes
+
+- Fixed False Warning about no SERVICE_NAME defined when OTEL_SERVICE_NAME was present. (#310) | | [@ArtificialBlue](https://github.com/ArtificialBlue)
+
+### Maintenance
+
+- Upgrade otel versions to 1.14.0 (#307) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Bump grpc-netty-shaded from 1.43.1 to 1.47.0 (#305)
+- Bump org.springframework.boot from 2.6.6 to 2.7.0 (#301)
+- Bump mockito-junit-jupiter from 4.4.0 to 4.6.1 (#309)
+- Bump mockito-core from 4.6.0 to 4.6.1 (#308)
+- Bump mockito-inline from 4.5.1 to 4.6.1 (#304)
+- Bump mockito-core from 4.5.1 to 4.6.0 (#302)
+- Bump mockito-inline from 4.4.0 to 4.5.1 (#299)
+- Bump guava from 31.0.1-jre to 31.1-jre (#268)
+- Bump mockito-core from 4.4.0 to 4.5.1 (#290)
+
 ## [1.1.1] - 2022-05-11
 
 ### Fixes
