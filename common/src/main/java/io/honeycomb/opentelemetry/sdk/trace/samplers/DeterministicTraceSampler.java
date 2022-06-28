@@ -57,7 +57,7 @@ public class DeterministicTraceSampler implements Sampler {
      * @param decoratedSampler another Sampler whose decision to sample a span is combined with the
      *                         sample rate.
      *
-     * @param sampleRate to use - class level javadoc.
+     * @param sampleRate to use - see class level javadoc.
      * @throws IllegalArgumentException if sampleRate is negative.
      * @throws IllegalStateException    if SHA-1 is not supported.
      */
@@ -80,7 +80,7 @@ public class DeterministicTraceSampler implements Sampler {
      * Creates a DeterministicTraceSampler that makes the final decision about whether to sample
      * a Span based on its sampleRate.
      *
-     * @param sampleRate to use - class level javadoc.
+     * @param sampleRate to use - see class level javadoc.
      * @throws IllegalArgumentException if sampleRate is negative.
      * @throws IllegalStateException    if SHA-1 is not supported.
      */
