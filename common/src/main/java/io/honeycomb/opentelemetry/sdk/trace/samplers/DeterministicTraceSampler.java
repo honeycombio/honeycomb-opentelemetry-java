@@ -48,11 +48,15 @@ public class DeterministicTraceSampler implements Sampler {
     public final static String DESCRIPTION = "HoneycombDeterministicSampler";
 
     /**
-     * Creates a DeterministicTraceSampler that, upon determining that a Span should be sampled,
-     * delegates to a decorated Sampler to make the final decision.
+     * Creates a DeterministicTraceSampler which samples a span if the provided decoratedSampler
+     * AND this sampler's deterministic sampleRate both decide that a span should be sampled.
      *
-     * @param decoratedSampler another Sampler which is delegated to when this Sampler thinks that
-     *                         a Span should be sampled.
+     * The decoratedSampler is always called first.
+     * When it doesn't decide to DROP the span, the sampleRate determines the final outcome.
+     *
+     * @param decoratedSampler another Sampler whose decision to sample a span is combined with the
+     *                         sample rate.
+     *
      * @param sampleRate to use - class level javadoc.
      * @throws IllegalArgumentException if sampleRate is negative.
      * @throws IllegalStateException    if SHA-1 is not supported.
