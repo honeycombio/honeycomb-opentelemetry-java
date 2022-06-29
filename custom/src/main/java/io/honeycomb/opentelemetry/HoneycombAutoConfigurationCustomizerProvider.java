@@ -2,10 +2,11 @@ package io.honeycomb.opentelemetry;
 
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
-import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
 import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizer;
 import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizerProvider;
+import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
 
 /**
  * Honeycomb implementation of {@link AutoConfigurationCustomizerProvider} SPI.
@@ -15,11 +16,11 @@ import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 public class HoneycombAutoConfigurationCustomizerProvider implements AutoConfigurationCustomizerProvider {
     @Override
     public void customize(AutoConfigurationCustomizer autoConfiguration) {
-        autoConfiguration.addTracerProviderCustomizer(this::configureSdkTracerProvider);
+        autoConfiguration.addSamplerCustomizer(this::customizeSampler);
+        autoConfiguration.addTracerProviderCustomizer(this::addBaggageSpanProcessor);
     }
 
-
-    private SdkTracerProviderBuilder configureSdkTracerProvider(SdkTracerProviderBuilder tracerProvider, ConfigProperties config) {
+    private Sampler customizeSampler(Sampler sampler, ConfigProperties configProperties) {
         int sampleRate;
         try {
             sampleRate = EnvironmentConfiguration.getSampleRate();
@@ -28,8 +29,10 @@ public class HoneycombAutoConfigurationCustomizerProvider implements AutoConfigu
             sampleRate = 1;
         }
 
-        return tracerProvider
-            .setSampler(new DeterministicTraceSampler(sampleRate))
-            .addSpanProcessor(new BaggageSpanProcessor());
+        return new DeterministicTraceSampler(sampler, sampleRate);
+    }
+
+    private SdkTracerProviderBuilder addBaggageSpanProcessor(SdkTracerProviderBuilder tracerProvider, ConfigProperties config) {
+        return tracerProvider.addSpanProcessor(new BaggageSpanProcessor());
     }
 }

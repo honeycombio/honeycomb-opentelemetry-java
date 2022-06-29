@@ -6,9 +6,11 @@ import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.sdk.trace.data.LinkData;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
+import io.opentelemetry.sdk.trace.samplers.SamplingDecision;
 import io.opentelemetry.sdk.trace.samplers.SamplingResult;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This TraceSampler allows for distributed sampling based on a common field
@@ -39,19 +41,29 @@ public class DeterministicTraceSampler implements Sampler {
 
     private static final AttributeKey<Long> SAMPLE_RATE_ATTRIBUTE_KEY = AttributeKey.longKey("SampleRate");
 
+    private final Sampler decoratedSampler;
     private final Sampler baseSampler;
     private final int sampleRate;
 
     public final static String DESCRIPTION = "HoneycombDeterministicSampler";
 
     /**
-     * See the class level javadoc for an explanation of the sampleRate.
+     * Creates a DeterministicTraceSampler which samples a span if the provided decoratedSampler
+     * AND this sampler's deterministic sampleRate both decide that a span should be sampled.
      *
-     * @param sampleRate to use - must not be negative.
+     * The decoratedSampler is always called first.
+     * When it doesn't decide to DROP the span, the sampleRate determines the final outcome.
+     *
+     * @param decoratedSampler another Sampler whose decision to sample a span is combined with the
+     *                         sample rate.
+     *
+     * @param sampleRate to use - see class level javadoc.
      * @throws IllegalArgumentException if sampleRate is negative.
      * @throws IllegalStateException    if SHA-1 is not supported.
      */
-    public DeterministicTraceSampler(final int sampleRate) {
+    public DeterministicTraceSampler(final Sampler decoratedSampler, final int sampleRate) {
+        Objects.requireNonNull(decoratedSampler, "decoratedSampler cannot be null");
+        this.decoratedSampler = decoratedSampler;
         this.sampleRate = sampleRate;
         double ratio;
         if (sampleRate == ALWAYS_SAMPLE) {
@@ -62,6 +74,18 @@ public class DeterministicTraceSampler implements Sampler {
             ratio = 1.0 / sampleRate;
         }
         baseSampler = Sampler.traceIdRatioBased(ratio);
+    }
+
+    /**
+     * Creates a DeterministicTraceSampler that makes the final decision about whether to sample
+     * a Span based on its sampleRate.
+     *
+     * @param sampleRate to use - see class level javadoc.
+     * @throws IllegalArgumentException if sampleRate is negative.
+     * @throws IllegalStateException    if SHA-1 is not supported.
+     */
+    public DeterministicTraceSampler(final int sampleRate) {
+        this(Sampler.alwaysOn(), sampleRate);
     }
 
     @Override
@@ -78,10 +102,18 @@ public class DeterministicTraceSampler implements Sampler {
         Attributes attributes,
         List<LinkData> parentLinks) {
 
-        SamplingResult result = baseSampler.shouldSample(parentContext, traceId, name, spanKind, attributes, parentLinks);
-        return SamplingResult.create(
-            result.getDecision(),
-            Attributes.of(SAMPLE_RATE_ATTRIBUTE_KEY, (long) sampleRate)
-        );
+        SamplingResult result =
+            decoratedSampler.shouldSample(parentContext, traceId, name, spanKind, attributes, parentLinks);
+        SamplingDecision decision = result.getDecision();
+        if (decision != SamplingDecision.DROP) {
+            decision = baseSampler.shouldSample(parentContext, traceId, name, spanKind, attributes, parentLinks)
+                .getDecision();
+        }
+        Attributes newAttributes = Attributes.builder()
+            .putAll(result.getAttributes())
+            .put(SAMPLE_RATE_ATTRIBUTE_KEY, (long) sampleRate)
+            .build();
+
+        return SamplingResult.create(decision, newAttributes);
     }
 }
