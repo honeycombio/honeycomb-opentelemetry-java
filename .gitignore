@@ -14,6 +14,7 @@
 .mtj.tmp/
 
 # Package Files #
+build-artifacts/
 *.jar
 *.war
 *.nar
