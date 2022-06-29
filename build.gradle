@@ -19,6 +19,19 @@ tasks.register('project_version') {
     }
 }
 
+def releaseInfoTask = tasks.register('releaseInfo') {
+    doLast {
+        def releaseInfo = new TreeMap<String,Object>()
+        releaseInfo["repo_name"] = "honeycombio/honeycomb-opentelemetry-java"
+        releaseInfo["version"] = project.version
+
+        def releaseJsonFile = file("$rootDir/build-artifacts/release.json")
+        def releaseJson = groovy.json.JsonOutput.toJson(releaseInfo)
+        releaseJsonFile.write groovy.json.JsonOutput.prettyPrint(releaseJson)
+    }
+}
+
+
 subprojects {
     version = rootProject.version
 
@@ -55,6 +68,7 @@ subprojects {
     }
     tasks.withType(Jar) {
         destinationDirectory = file("$rootDir/build-artifacts")
+        finalizedBy releaseInfoTask
     }
 
     plugins.withId("maven-publish") {
