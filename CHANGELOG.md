@@ -1,5 +1,16 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.3.0] - 2022-07-01
+
+### Enhancements
+
+- Produce a JSON of release info on build (#319) | [@robbkidd](https://github.com/robbkidd)
+- Decorate existing Sampler with DeterministicTraceSampler instead of replacing it (#316) | [@GrahamLea](https://github.com/GrahamLea)
+
+- Move workflows into workflows directory (#318) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Add github workflow to auto-create issue for public docs (#314) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Include onboard docs in releasing, move to top (#313) | [@JamieDanielson](https://github.com/JamieDanielson)
+
 ## [1.2.0] - 2022-06-21
 
 ### Added
