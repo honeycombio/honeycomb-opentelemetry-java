@@ -18,6 +18,15 @@ jobs:
       - run:
           name: Show the JARs
           command: ls -l build-artifacts
+      - run:
+          name: "Add Un-versioned Copy of Agent - TESTING FOR PR"
+          command: |
+            echo "about to add copy of un-versioned agent"
+            ls -ld ./build-artifacts/honeycomb-opentelemetry-javaagent*[!A-Z,a-z].jar
+            cp ./build-artifacts/honeycomb-opentelemetry-javaagent*[!A-Z,a-z].jar ./build-artifacts/honeycomb-opentelemetry-javaagent.jar
+      - run:
+          name: Show the JARs
+          command: ls -l build-artifacts
       - persist_to_workspace:
           root: ./
           paths:
