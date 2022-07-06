@@ -7,6 +7,8 @@
 - Produce a JSON of release info on build (#319) | [@robbkidd](https://github.com/robbkidd)
 - Decorate existing Sampler with DeterministicTraceSampler instead of replacing it (#316) | [@GrahamLea](https://github.com/GrahamLea)
 
+### Maintenance
+
 - Move workflows into workflows directory (#318) | [@JamieDanielson](https://github.com/JamieDanielson)
 - Add github workflow to auto-create issue for public docs (#314) | [@JamieDanielson](https://github.com/JamieDanielson)
 - Include onboard docs in releasing, move to top (#313) | [@JamieDanielson](https://github.com/JamieDanielson)
