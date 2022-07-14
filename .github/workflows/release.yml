@@ -18,18 +18,3 @@ jobs:
             Update Java Distro docs to latest version
 
         assignees: @honeycombio/telemetry-team
-  create_issue_onboard_docs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create an issue
-        uses: actions-ecosystem/action-create-issue@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repo: github.com/honeycombio/hound
-          title: ${{ steps.date.outputs.today }}
-          body: |
-            ## Bump otel-java version
-
-            Update Java Distro in Onboarding docs to latest version
-
-        assignees: @honeycombio/telemetry-team
