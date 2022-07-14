@@ -13,9 +13,9 @@ jobs:
           github_token: ${{ secrets.GHPROJECTS_TOKEN }}
           repo: honeycombio/docs
           title: ${{ steps.date.outputs.today }}
+          assignees: @honeycombio/telemetry-team
           body: |
             ## Bump otel-java version
 
             Update Java Distro docs to latest version
 
-          assignees: @honeycombio/telemetry-team
