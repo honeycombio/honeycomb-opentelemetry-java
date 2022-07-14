@@ -22,7 +22,7 @@ jobs:
           name: "Add Un-versioned Copy of Agent - TESTING FOR PR"
           command: |
             echo "about to add copy of un-versioned agent"
-            cp build-artifacts/honeycomb-opentelemetry-javaagent*[!A-Z,a-z].jar build-artifacts/honeycomb-opentelemetry-javaagent.jar
+            cp build-artifacts/honeycomb-opentelemetry-javaagent*[!a-z].jar build-artifacts/honeycomb-opentelemetry-javaagent.jar
       - run:
           name: Show the JARs
           command: ls -l build-artifacts
@@ -67,8 +67,8 @@ jobs:
           name: "Add Un-versioned Copy of Agent to GitHub"
           command: |
             echo "about to add copy of un-versioned agent"
-            ls -ld ./publish-artifacts/honeycomb-opentelemetry-javaagent*[!A-Z,a-z].jar
-            cp ./publish-artifacts/honeycomb-opentelemetry-javaagent*[!A-Z,a-z].jar ./publish-artifacts/honeycomb-opentelemetry-javaagent.jar
+            ls -ld ./publish-artifacts/honeycomb-opentelemetry-javaagent*[!a-z].jar
+            cp ./publish-artifacts/honeycomb-opentelemetry-javaagent*[!a-z].jar ./publish-artifacts/honeycomb-opentelemetry-javaagent.jar
       - run:
           name: "Publish Release on GitHub"
           command: |
