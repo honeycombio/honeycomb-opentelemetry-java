@@ -13,7 +13,6 @@ jobs:
           github_token: ${{ secrets.GHPROJECTS_TOKEN }}
           repo: honeycombio/docs
           title: Bump otel-java version
-          assignees: @honeycombio/telemetry-team
           body: |
             ## Bump otel-java version
 
