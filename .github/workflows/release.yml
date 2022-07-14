@@ -18,4 +18,4 @@ jobs:
 
             Update Java Distro docs to latest version
 
-        assignees: @honeycombio/telemetry-team
+          assignees: @honeycombio/telemetry-team
