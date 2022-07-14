@@ -9,8 +9,8 @@ jobs:
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repo: github.com/honeycombio/docs
+          github_token: ${{ secrets.GHPROJECTS_TOKEN }}
+          repo: honeycombio/docs
           title: ${{ steps.date.outputs.today }}
           body: |
             ## Bump otel-java version
