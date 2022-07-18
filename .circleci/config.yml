@@ -78,8 +78,10 @@ jobs:
                 name: "Publish Artifacts to Maven"
                 command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
             - run:
+                name: "Collect Artifacts Published"
                 command: |
                   shopt -s globstar
+                  cp build-artifacts/release.yml ./publish-artifacts
                   cp build-artifacts/*.jar ./publish-artifacts
             - persist_to_workspace:
                 root: ./
