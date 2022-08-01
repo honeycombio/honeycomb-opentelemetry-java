@@ -15,7 +15,7 @@ dependencies {
     implementation "io.opentelemetry:opentelemetry-exporter-otlp-http-trace:${versions.opentelemetry}"
     implementation "io.opentelemetry:opentelemetry-sdk-extension-resources:${versions.opentelemetry}"
 
-    implementation 'io.grpc:grpc-netty-shaded:1.47.0'
+    implementation 'io.grpc:grpc-netty-shaded:1.48.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
