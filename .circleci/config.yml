@@ -119,6 +119,8 @@ matrix_executors: &matrix_executors
           tag: "11.0"
         - name: gradle/default
           tag: "17.0"
+        - name: gradle/default
+          tag: "18.0"
 
 workflows:
   version: 2
