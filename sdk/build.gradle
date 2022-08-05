@@ -15,13 +15,13 @@ dependencies {
     implementation "io.opentelemetry:opentelemetry-exporter-otlp-http-trace:${versions.opentelemetry}"
     implementation "io.opentelemetry:opentelemetry-sdk-extension-resources:${versions.opentelemetry}"
 
-    implementation 'io.grpc:grpc-netty-shaded:1.47.0'
+    implementation 'io.grpc:grpc-netty-shaded:1.48.1'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     api project(":common")
 
-    testImplementation(platform('org.junit:junit-bom:5.8.2'))
+    testImplementation(platform('org.junit:junit-bom:5.9.0'))
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
