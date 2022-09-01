@@ -144,15 +144,12 @@ workflows:
     jobs:
       - gradle/test:
           <<: *matrix_executors
-          <<: *slack_notify_failed_main
       - build:
           requires:
             - gradle/test
-          <<: *slack_notify_failed_main
       - smoke_test:
           requires:
             - build
-          <<: *slack_notify_failed_main
   build:
     jobs:
       - gradle/test:
