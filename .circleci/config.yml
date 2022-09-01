@@ -168,19 +168,18 @@ workflows:
       - gradle/test:
           <<: *filters_not_forked
           matrix:
+            alias: test
             <<: *matrix_executors
           <<: *slack_notify_failed_main
           context: Slack
       - build:
           <<: *filters_not_forked
-          name: build
           requires:
-            - gradle/test
+            - test
           <<: *slack_notify_failed_main
           context: Slack
       - smoke_test:
           <<: *filters_not_forked
-          name: smoke_test
           requires:
             - build
           <<: *slack_notify_failed_main
