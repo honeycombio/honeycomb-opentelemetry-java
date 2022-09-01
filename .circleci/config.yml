@@ -173,12 +173,14 @@ workflows:
           context: Slack
       - build:
           <<: *filters_not_forked
+          name: build
           requires:
             - gradle/test
           <<: *slack_notify_failed_main
           context: Slack
       - smoke_test:
           <<: *filters_not_forked
+          name: smoke_test
           requires:
             - build
           <<: *slack_notify_failed_main
@@ -199,7 +201,7 @@ workflows:
           requires:
             - publish_maven
           <<: *slack_notify_failed_main
-# forked PR & dependabot jobs
+# forked & dependabot
       - gradle/test:
           matrix:
             alias: test_forked
