@@ -9,7 +9,7 @@ slack_notify_failed_main: &slack_notify_failed_main
   post-steps:
     - slack/notify:
         event: fail
-#        branch_pattern: main
+        branch_pattern: main
         channel: team-telemetry-oncall-stream
         template: basic_fail_1
 
