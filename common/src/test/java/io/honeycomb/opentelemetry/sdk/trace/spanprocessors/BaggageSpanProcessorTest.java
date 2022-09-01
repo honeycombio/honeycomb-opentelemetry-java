@@ -28,7 +28,7 @@ public class BaggageSpanProcessorTest {
                 .makeCurrent();
 
             processor.onStart(Context.current(), span);
-            Mockito.verify(span).setAttribute("key", "value");
+            Mockito.verify(span).setAttribute("key", "foo");
         }
     }
 }
