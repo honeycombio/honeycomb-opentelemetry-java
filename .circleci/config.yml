@@ -3,6 +3,15 @@ version: 2.1
 orbs:
   gradle: circleci/gradle@3.0.0
   bats: circleci/bats@1.0.0
+  slack: circleci/slack@4.10.1
+
+slack_notify_failed_main: &slack_notify_failed_main
+  post-steps:
+    - slack/notify:
+        event: fail
+        branch_pattern: main
+        channel: team-telemetry-oncall-stream
+        template: basic_fail_1
 
 jobs:
   build:
@@ -135,32 +144,40 @@ workflows:
     jobs:
       - gradle/test:
           <<: *matrix_executors
+          <<: *slack_notify_failed_main
       - build:
           requires:
             - gradle/test
+          <<: *slack_notify_failed_main
       - smoke_test:
           requires:
             - build
+          <<: *slack_notify_failed_main
   build:
     jobs:
       - gradle/test:
           <<: *matrix_executors
           <<: *filters_always
+          <<: *slack_notify_failed_main
       - build:
           <<: *filters_always
           requires:
             - gradle/test
+          <<: *slack_notify_failed_main
       - smoke_test:
           <<: *filters_always
           requires:
             - build
+          <<: *slack_notify_failed_main
       - publish_maven:
           <<: *filters_main_only
           context: java_beeline
           requires:
             - smoke_test
+          <<: *slack_notify_failed_main
       - publish_github:
           <<: *filters_tags_only
           context: Honeycomb Secrets for Public Repos
           requires:
             - publish_maven
+          <<: *slack_notify_failed_main
