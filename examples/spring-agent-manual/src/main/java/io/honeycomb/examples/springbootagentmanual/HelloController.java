@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @RestController
 public class HelloController {
