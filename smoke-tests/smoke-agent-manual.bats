@@ -30,7 +30,7 @@ teardown_file() {
 }
 
 @test "Manual instrumentation produces span from @WithSpan annotation" {
-	result=$(span_names_for "io.opentelemetry.opentelemetry-annotations-1.0")
+	result=$(span_names_for "io.opentelemetry.opentelemetry-instrumentation-annotations-1.16")
 	assert_equal "$result" '"importantSpan"'
 }
 
@@ -40,6 +40,6 @@ teardown_file() {
 }
 
 @test "BaggageSpanProcessor: key-values added to baggage appear on child spans" {
-	result=$(span_attributes_for "io.opentelemetry.opentelemetry-annotations-1.0" | jq "select(.key == \"for_the_children\").value.stringValue")
+	result=$(span_attributes_for "io.opentelemetry.opentelemetry-instrumentation-annotations-1.16" | jq "select(.key == \"for_the_children\").value.stringValue")
 	assert_equal "$result" '"another important value"'
 }
