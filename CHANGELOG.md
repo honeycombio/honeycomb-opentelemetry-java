@@ -1,5 +1,19 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.4.0] - 2022-10-28
+
+### Maintenance
+
+- Update Otel SDK and JavaAgent to v1.19.0/v1.19.1 (#348) | @MikeGoldsmith
+- maint: upgrade gradle to 7.5 (#351) | @vreynolds
+- maint: include generated release.yml in published artifacts (#326) | @robbkidd
+- maint: add un-versioned copy of agent to Github assets (#323) | @JamieDanielson
+- Bump examples/org.springframework.boot from 2.7.0 to 2.7.5 (#322, #352)
+- Bump examples/io.spring.dependency-management from 1.0.11.RELEASE to 1.1.0 (#353)
+- Bump junit-jupiter-engine from 5.8.2 to 5.9.1 (#345)
+- Bump grpc-netty-shaded from 1.47.0 to 1.50.2 (#350)
+- Bump junit-bom from 5.8.2 to 5.9.0 (#329)
+
 ## [1.3.0] - 2022-07-01
 
 ### Enhancements
