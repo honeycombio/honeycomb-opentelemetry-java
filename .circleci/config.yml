@@ -123,8 +123,6 @@ filters_tags_only: &filters_tags_only
 
 filters_forked_only: &filters_forked_only
   filters:
-    tags:
-      only: /.*/
     branches:
       only:
         - /pull\/.*/
