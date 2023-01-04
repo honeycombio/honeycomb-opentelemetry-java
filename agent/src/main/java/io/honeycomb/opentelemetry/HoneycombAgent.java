@@ -22,7 +22,7 @@ public class HoneycombAgent {
     }
 
     private static void configureEnvironment() {
-        // set sytem properties to configre OTLP exporter to send traces & metrics data
+        // set system properties to configure OTLP exporter to send traces & metrics data
         EnvironmentConfiguration.enableOTLPTraces();
         EnvironmentConfiguration.enableOTLPMetrics();
     }

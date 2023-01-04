@@ -179,7 +179,7 @@ public class EnvironmentConfiguration {
 
     public static boolean isLegacyKey(String key) {
         // legacy key has 32 characters
-        return key.length() == 32;
+        return isPresent(key) && key.length() == 32;
     }
 
     private static String readVariable(String key, String fallback) {
