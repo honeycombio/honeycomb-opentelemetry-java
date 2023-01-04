@@ -17,7 +17,8 @@ public class DistroMetadataResourceProviderTest {
         Assertions.assertEquals(
             Attributes.of(
                 AttributeKey.stringKey(DistroMetadata.VERSION_FIELD), DistroMetadata.VERSION_VALUE,
-                AttributeKey.stringKey(DistroMetadata.RUNTIME_VERSION_FIELD), DistroMetadata.RUNTIME_VERSION_VALUE
+                AttributeKey.stringKey(DistroMetadata.RUNTIME_VERSION_FIELD), DistroMetadata.RUNTIME_VERSION_VALUE,
+                AttributeKey.stringKey(DistroMetadata.VARIANT_FIELD), DistroMetadata.VARIANT_AGENT
             ),
             resource.getAttributes()
         );
