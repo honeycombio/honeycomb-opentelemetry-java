@@ -337,7 +337,7 @@ public final class OpenTelemetryConfiguration {
             SpanExporter spanExporter = getSpanExporter(logger);
             tracerProviderBuilder.addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build());
 
-            DistroMetadata.getMetadata().forEach(resourceAttributes::put);
+            DistroMetadata.getSDKMetadata().forEach(resourceAttributes::put);
             if (StringUtils.isNotEmpty(serviceName)) {
                 resourceAttributes.put(EnvironmentConfiguration.SERVICE_NAME_FIELD, serviceName);
             }
