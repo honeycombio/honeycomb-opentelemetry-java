@@ -28,7 +28,7 @@ public class EnvironmentConfigurationTest {
     }
 
     @Test
-    public void test_dafault_sample_rate() {
+    public void test_default_sample_rate() {
         Assertions.assertEquals(1, EnvironmentConfiguration.getSampleRate());
     }
 
@@ -39,7 +39,7 @@ public class EnvironmentConfigurationTest {
     }
 
     @Test
-    public void test_dafault_otel_exporter_otlp_proto() {
+    public void test_default_otel_exporter_otlp_proto() {
         Assertions.assertEquals("grpc", EnvironmentConfiguration.getOtelExporterOtlpProtocol());
     }
 
@@ -140,6 +140,11 @@ public class EnvironmentConfigurationTest {
         EnvironmentConfiguration.enableOTLPTraces();
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.traces.endpoint"));
         Assertions.assertEquals("x-otlp-version=0.19.0,X-Honeycomb-Team=11111111111111111111111111111111,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.traces.headers"));
+    }
+
+    @Test
+    public void test_enableOtlpTraces_no_exception_null_api_key() {
+        Assertions.assertDoesNotThrow(EnvironmentConfiguration::enableOTLPTraces);
     }
 
     @Test
