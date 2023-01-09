@@ -19,6 +19,9 @@ public class DistroMetadata {
      * Java agent.
      */
     public static final String VERSION_VALUE = "1.4.0";
+    public static final String VARIANT_FIELD = "honeycomb.distro.variant";
+    public static final String VARIANT_AGENT = "agent";
+    public static final String VARIANT_SDK = "sdk";
     public static final String RUNTIME_VERSION_FIELD = "honeycomb.distro.runtime_version";
     public static final String RUNTIME_VERSION_VALUE = System.getProperty("java.runtime.version");
 
@@ -29,11 +32,28 @@ public class DistroMetadata {
      * Get Metadata as a map of strings to strings.
      *
      * @return map of metadata to include as resource attributes.
+     * @deprecated use getAgentMetadata() or getSDKMetadata() instead
      */
     public static Map<String, String> getMetadata() {
         Map<String, String> metadata = new HashMap<String, String>();
         metadata.put(VERSION_FIELD, VERSION_VALUE);
         metadata.put(RUNTIME_VERSION_FIELD, RUNTIME_VERSION_VALUE);
+        return metadata;
+    }
+
+    public static Map<String, String> getAgentMetadata() {
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put(VERSION_FIELD, VERSION_VALUE);
+        metadata.put(RUNTIME_VERSION_FIELD, RUNTIME_VERSION_VALUE);
+        metadata.put(VARIANT_FIELD, VARIANT_AGENT);
+        return metadata;
+    }
+
+    public static Map<String, String> getSDKMetadata() {
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put(VERSION_FIELD, VERSION_VALUE);
+        metadata.put(RUNTIME_VERSION_FIELD, RUNTIME_VERSION_VALUE);
+        metadata.put(VARIANT_FIELD, VARIANT_SDK);
         return metadata;
     }
 }

@@ -10,7 +10,7 @@ public class DistroMetadataResourceProvider implements ResourceProvider {
     @Override
     public Resource createResource(ConfigProperties config) {
         AttributesBuilder attributesBuilder = Attributes.builder();
-        DistroMetadata.getMetadata().forEach(attributesBuilder::put);
+        DistroMetadata.getAgentMetadata().forEach(attributesBuilder::put);
         return Resource.create(attributesBuilder.build());
     }
 }
