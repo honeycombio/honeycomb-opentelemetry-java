@@ -16,3 +16,7 @@ updates:
     commit-message:
       prefix: "maint"
       include: "scope"
+    ignore:
+      # Mockito 5.x.x requires Java 11 min version
+      - dependency-name: "org.mockito:mockito-*"
+        update-types: ["version-update:semver-major"]
