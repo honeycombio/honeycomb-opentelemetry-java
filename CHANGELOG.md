@@ -1,5 +1,23 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.4.1] - 2023-01-17
+
+### Fixes
+
+- fix: exception when initialized without API key (#378) | @vreynolds
+
+### Maintenance
+
+- maint(deps): bump mockito-core from 4.6.1 to 4.11.0 (#377)
+- maint(deps): bump junit-jupiter-api from 5.8.2 to 5.9.2 (#380)
+- Bump junit-bom from 5.9.0 to 5.9.1 (#359)
+- maint: additional metadata to diff sdk from agent (#379) | @vreynolds
+- chore: Dependabot fixes (#371) | @kentquirk
+- ci: update validate PR title workflow (#364) | @pkanal
+- ci: fix slack notify channel (#363) | @vreynolds
+- ci: validate PR title (#362) | @pkanal
+- maint: don't run extra jobs when releasing (#355) | @vreynolds
+
 ## [1.4.0] - 2022-10-28
 
 ### Maintenance
