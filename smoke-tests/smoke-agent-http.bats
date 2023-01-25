@@ -2,7 +2,7 @@
 
 load test_helpers/utilities
 
-CONTAINER_NAME="smoke-agent-http"
+CONTAINER_NAME="app-agent-http"
 
 setup_file() {
 	echo "# 🚧" >&3

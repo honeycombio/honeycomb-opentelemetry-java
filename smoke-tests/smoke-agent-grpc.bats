@@ -2,7 +2,7 @@
 
 load test_helpers/utilities
 
-CONTAINER_NAME="smoke-agent-grpc"
+CONTAINER_NAME="app-agent-grpc"
 
 setup_file() {
 	echo "# 🚧" >&3
