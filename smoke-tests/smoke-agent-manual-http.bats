@@ -2,7 +2,7 @@
 
 load test_helpers/utilities
 
-CONTAINER_NAME="app-agent-manual"
+CONTAINER_NAME="app-agent-manual-http"
 
 setup_file() {
 	echo "# 🚧" >&3
