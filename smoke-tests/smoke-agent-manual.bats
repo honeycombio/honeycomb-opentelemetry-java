@@ -2,17 +2,19 @@
 
 load test_helpers/utilities
 
+CONTAINER_NAME="app-agent-manual"
+
 setup_file() {
 	echo "# 🚧" >&3
-	docker-compose up --detach collector app-agent-manual
-	wait_for_ready_app 'app-agent-manual'
+	docker-compose up --detach collector ${CONTAINER_NAME}
+	wait_for_ready_app ${CONTAINER_NAME}
 	curl --silent "http://localhost:5000"
 	wait_for_traces
 }
 
 teardown_file() {
-    cp collector/data.json collector/data-results/data-agent-manual.json
-	docker-compose stop app-agent-manual
+  cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
+	docker-compose stop ${CONTAINER_NAME}
 	docker-compose restart collector
 	wait_for_flush
 }
