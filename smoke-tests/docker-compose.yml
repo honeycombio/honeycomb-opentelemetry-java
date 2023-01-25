@@ -31,10 +31,24 @@ services:
     ports:
       - "127.0.0.1:5000:5000"
 
-  app-agent-only:
+  app-agent-grpc:
     <<: *app_base
     environment:
       <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4317
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    volumes:
+      - "./apps/agent.jar:/agent.jar"
+      - "./apps/spring-agent-only.jar:/app.jar"
+    ports:
+      - "127.0.0.1:5002:5002"
+
+  app-agent-http:
+    <<: *app_base
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     volumes:
       - "./apps/agent.jar:/agent.jar"
       - "./apps/spring-agent-only.jar:/app.jar"
