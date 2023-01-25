@@ -53,8 +53,16 @@ smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).j
 smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
 	cd smoke-tests && bats ./smoke-agent-only.bats --report-formatter junit --output ./
 
-smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/collector/data.json
-	cd smoke-tests && bats ./smoke-agent-manual.bats --report-formatter junit --output ./
+.PHONY: smoke-agent-manual
+smoke-agent-manual: smoke-agent-manual-grpc smoke-agent-manual-http
+
+.PHONY: smoke-agent-manual-grpc
+smoke-agent-manual-grpc: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/collector/data.json
+	cd smoke-tests && bats ./smoke-agent-manual-grpc.bats --report-formatter junit --output ./
+
+.PHONY: smoke-agent-manual-http
+smoke-agent-manual-http: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/collector/data.json
+	cd smoke-tests && bats ./smoke-agent-manual-http.bats --report-formatter junit --output ./
 
 .PHONY: smoke-sdk
 smoke-sdk: smoke-sdk-grpc smoke-sdk-http
