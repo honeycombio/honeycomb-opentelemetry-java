@@ -45,3 +45,9 @@ teardown_file() {
 	result=$(span_attributes_for "io.opentelemetry.opentelemetry-instrumentation-annotations-1.16" | jq "select(.key == \"for_the_children\").value.stringValue")
 	assert_equal "$result" '"another important value"'
 }
+
+@test "Auto instrumentation emits metrics" {
+	wait_for_metrics 12
+	metric_names=$( metrics_received | jq ".scopeMetrics[].metrics[].name" | wc -l | awk '{ print $1}' )
+	[ "$metric_names" -ne 0 ]
+}
