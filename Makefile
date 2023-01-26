@@ -50,8 +50,16 @@ smoke-tests/apps/spring-sdk.jar: build-artifacts/spring-sdk-$(project_version).j
 	@echo ""
 	cp $< $@
 
-smoke-agent-only: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
-	cd smoke-tests && bats ./smoke-agent-only.bats --report-formatter junit --output ./
+.PHONY: smoke-agent-only
+smoke-agent-only: smoke-agent-grpc smoke-agent-http
+
+.PHONY: smoke-agent-grpc
+smoke-agent-grpc: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
+	cd smoke-tests && bats ./smoke-agent-grpc.bats --report-formatter junit --output ./
+
+.PHONY: smoke-agent-http
+smoke-agent-http: smoke-tests/apps/spring-agent-only.jar smoke-tests/apps/agent.jar smoke-tests/collector/data.json
+	cd smoke-tests && bats ./smoke-agent-http.bats --report-formatter junit --output ./
 
 smoke-agent-manual: smoke-tests/apps/agent.jar smoke-tests/apps/spring-agent-manual.jar smoke-tests/collector/data.json
 	cd smoke-tests && bats ./smoke-agent-manual.bats --report-formatter junit --output ./

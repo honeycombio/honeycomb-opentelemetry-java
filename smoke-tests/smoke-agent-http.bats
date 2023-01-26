@@ -2,17 +2,19 @@
 
 load test_helpers/utilities
 
+CONTAINER_NAME="app-agent-http"
+
 setup_file() {
 	echo "# 🚧" >&3
-	docker-compose up --detach collector app-agent-only
-	wait_for_ready_app 'app-agent-only'
+	docker-compose up --detach collector ${CONTAINER_NAME}
+	wait_for_ready_app ${CONTAINER_NAME}
 	curl --silent "http://localhost:5002"
 	wait_for_traces
 }
 
 teardown_file() {
-    cp collector/data.json collector/data-results/data-agent-only.json
-	docker-compose stop app-agent-only
+  cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
+	docker-compose stop ${CONTAINER_NAME}
 	docker-compose restart collector
 	wait_for_flush
 }
@@ -29,8 +31,9 @@ teardown_file() {
 	assert_equal "$result" '"/"'
 }
 
-@test "Auto instrumentation emits metrics" {
-	wait_for_metrics 12
-	metric_names=$( metrics_received | jq ".scopeMetrics[].metrics[].name" | wc -l | awk '{ print $1}' )
-	[ "$metric_names" -ne 0 ]
-}
+# TODO add when http metrics is enabled
+# @test "Auto instrumentation emits metrics" {
+# 	wait_for_metrics 12
+# 	metric_names=$( metrics_received | jq ".scopeMetrics[].metrics[].name" | wc -l | awk '{ print $1}' )
+# 	[ "$metric_names" -ne 0 ]
+# }
