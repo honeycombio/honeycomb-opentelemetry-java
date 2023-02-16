@@ -20,7 +20,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     api project(":common")
 
-    testImplementation(platform('org.junit:junit-bom:5.9.1'))
+    testImplementation(platform('org.junit:junit-bom:5.9.2'))
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
