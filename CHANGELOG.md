@@ -1,5 +1,15 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.4.2] - 2023-02-16
+
+### Maintenance
+
+- maint: add smoke tests for grpc/http exporter protocols for agent only (#391) | @JamieDanielson
+- maint(deps): bump otel to 1.22.1 (#393) | @vreynolds
+- maint(deps): bump junit-jupiter-engine from 5.9.1 to 5.9.2 (#390)
+- maint(deps): bump io.grpc:grpc-netty-shaded from 1.50.2 to 1.53.0 (#395)
+- maint(deps): bump junit-bom from 5.9.1 to 5.9.2 (#386)
+
 ## [1.4.1] - 2023-01-17
 
 ### Fixes
