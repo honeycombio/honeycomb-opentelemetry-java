@@ -8,11 +8,11 @@ description = 'Honeycomb SDK for manually configuring OpenTelemetry instrumentat
 
 dependencies {
     api "io.opentelemetry:opentelemetry-sdk:${versions.opentelemetry}"
-    api "io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${versions.opentelemetryJavaagentAlpha}"
+    api "io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${versions.opentelemetryJavaagent}"
 
     implementation "io.opentelemetry:opentelemetry-exporter-logging:${versions.opentelemetry}"
     implementation "io.opentelemetry:opentelemetry-exporter-otlp:${versions.opentelemetry}"
-    implementation "io.opentelemetry:opentelemetry-sdk-extension-resources:${versions.opentelemetry}"
+    implementation "io.opentelemetry.instrumentation:opentelemetry-resources:${versions.opentelemetryJavaagentAlpha}"
 
     implementation 'io.grpc:grpc-netty-shaded:1.50.2'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'

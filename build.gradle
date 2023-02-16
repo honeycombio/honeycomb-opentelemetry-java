@@ -39,8 +39,8 @@ subprojects {
 
     ext {
         versions = [
-                opentelemetry         : "1.19.0",
-                opentelemetryJavaagent: "1.19.1",
+                opentelemetry         : "1.22.0",
+                opentelemetryJavaagent: "1.22.1",
                 bytebuddy             : "1.10.18",
         ]
         versions.opentelemetryAlpha = "${versions.opentelemetry}-alpha"

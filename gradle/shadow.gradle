@@ -5,7 +5,11 @@ ext.relocatePackages = { shadowJar ->
   shadowJar.relocate 'java.util.logging.Logger', 'io.opentelemetry.javaagent.bootstrap.PatchLogger'
 
   // rewrite library instrumentation dependencies
-  shadowJar.relocate "io.opentelemetry.instrumentation", "io.opentelemetry.javaagent.shaded.instrumentation"
+  shadowJar.relocate("io.opentelemetry.instrumentation", "io.opentelemetry.javaagent.shaded.instrumentation") {
+    // Exclude resource providers since they live in the agent class loader
+    exclude("io.opentelemetry.instrumentation.resources.*")
+    exclude("io.opentelemetry.instrumentation.spring.resources.*")
+  }
 
   // relocate OpenTelemetry API usage
   shadowJar.relocate "io.opentelemetry.api", "io.opentelemetry.javaagent.shaded.io.opentelemetry.api"

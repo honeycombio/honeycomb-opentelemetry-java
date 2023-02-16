@@ -1,7 +1,6 @@
 package io.honeycomb.opentelemetry;
 
 import com.google.common.base.Preconditions;
-
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
@@ -17,8 +16,8 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
-import io.opentelemetry.sdk.extension.resources.OsResource;
-import io.opentelemetry.sdk.extension.resources.ProcessRuntimeResource;
+import io.opentelemetry.instrumentation.resources.OsResource;
+import io.opentelemetry.instrumentation.resources.ProcessRuntimeResource;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -35,8 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
 import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isLegacyKey;
+import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
 
 /**
  * This class exists to make it easier and more intuitive to use Honeycomb with OpenTelemetry.
