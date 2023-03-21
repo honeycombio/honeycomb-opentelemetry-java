@@ -1,6 +1,9 @@
+import com.github.jk1.license.render.InventoryMarkdownReportRenderer
+
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id "maven-publish"
+    id ("com.github.jk1.dependency-license-report") version "2.0"
 }
 
 apply from: "$rootDir/gradle/shadow.gradle"
@@ -63,4 +66,9 @@ tasks {
     assemble {
         dependsOn(shadowJar)
     }
+}
+
+licenseReport {
+    outputDir = rootProject.file("licenses").absolutePath
+    renderers = [new InventoryMarkdownReportRenderer()]
 }
