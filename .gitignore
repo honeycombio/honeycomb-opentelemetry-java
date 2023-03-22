@@ -37,6 +37,9 @@ gradle-app.setting
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 
+# Avoid ignoring .jar license folders
+!licenses/**/*.jar
+
 # Cache of project
 .gradletasknamecache
 

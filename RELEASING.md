@@ -2,6 +2,8 @@
 
 1. Prep public docs PR with the new version (java-distro, otel-java-install, otel-java-run)
 
+1. Run `./gradlew generateLicenseReport` to ensure all project dependency licenses are correclty represented in this repository. If there are any changes, submit PR to update licenses.
+
 1. Update the `project.version` in the root build.gradle file with the new release version. Snapshot version is one patch bump ahead of the new release (e.g. if we're releasing `1.0.0` then the corresponding snapshot would be `1.0.1`)
 
 1. Update the version in `DistroMetadata.java` with the new release version
