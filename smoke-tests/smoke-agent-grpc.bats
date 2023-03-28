@@ -28,7 +28,7 @@ teardown_file() {
 
 @test "Auto instrumentation produces an incoming web request span" {
 	result=$(span_names_for "io.opentelemetry.tomcat-7.0")
-	assert_equal "$result" '"/"'
+	assert_equal "$result" '"GET /"'
 }
 
 @test "Auto instrumentation emits metrics" {
