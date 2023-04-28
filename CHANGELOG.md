@@ -1,5 +1,20 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.5.0] - 2023-04-28
+
+### Maintenance
+
+- maint(deps): bump org.junit.jupiter:junit-jupiter-engine from 5.9.2 to 5.9.3 (#416)
+- maint(deps): bump versions.opentelemetry from 1.24.0 to 1.25.0 (#415)
+- maint(deps): bump versions.opentelemetryJavaagent from 1.23.0 to 1.25.0 (#413)
+- maint(deps): bump versions.opentelemetry from 1.23.1 to 1.24.0 (#408)
+- maint(deps): bump io.github.gradle-nexus.publish-plugin from 1.2.0 to 1.3.0 (#407)
+- maint(deps): bump io.github.gradle-nexus.publish-plugin from 1.1.0 to 1.2.0 (#402)
+- maint(deps): upgrade otel java agent to 1.23.0 (#406)
+- maint(deps): bump versions.opentelemetry from 1.22.0 to 1.23.1 (#401)
+- maint: Add dependency license files (#403) | [@pkanal](https://github.com/pkanal)
+- maint: update licenses in prep for release (#419) | [@JamieDanielson](https://github.com/JamieDanielson)
+
 ## [1.4.2] - 2023-02-16
 
 ### Maintenance

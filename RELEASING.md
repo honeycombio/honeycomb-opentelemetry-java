@@ -1,6 +1,6 @@
 # Creating a new release
 
-1. Prep public docs PR with the new version (java-distro, otel-java-install, otel-java-run)
+1. Prep public docs PR with the new version in data file `/honeycomb-opentelemetry-java/release.json`
 
 1. Run `./gradlew generateLicenseReport` to ensure all project dependency licenses are correclty represented in this repository. If there are any changes, submit PR to update licenses.
 

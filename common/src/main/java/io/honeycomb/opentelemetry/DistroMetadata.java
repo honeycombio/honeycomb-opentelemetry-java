@@ -18,7 +18,7 @@ public class DistroMetadata {
      * with the version number and read it, but that isn't possible from the
      * Java agent.
      */
-    public static final String VERSION_VALUE = "1.4.2";
+    public static final String VERSION_VALUE = "1.5.0";
     public static final String VARIANT_FIELD = "honeycomb.distro.variant";
     public static final String VARIANT_AGENT = "agent";
     public static final String VARIANT_SDK = "sdk";
