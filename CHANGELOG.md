@@ -13,6 +13,7 @@
 - maint(deps): upgrade otel java agent to 1.23.0 (#406)
 - maint(deps): bump versions.opentelemetry from 1.22.0 to 1.23.1 (#401)
 - maint: Add dependency license files (#403) | [@pkanal](https://github.com/pkanal)
+- maint: update licenses in prep for release (#419) | [@JamieDanielson](https://github.com/JamieDanielson)
 
 ## [1.4.2] - 2023-02-16
 
