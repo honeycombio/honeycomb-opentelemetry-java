@@ -47,7 +47,7 @@ jobs:
             bats --version
       - run:
           name: Smoke Test
-          command: make smoke-sdk-grpc
+          command: make smoke
       - store_test_results:
           path: ./smoke-tests/
       - store_artifacts:
@@ -132,7 +132,13 @@ matrix_executors: &matrix_executors
   parameters:
     executor:
       - name: gradle/default
+        tag: "8.0"
+      - name: gradle/default
+        tag: "11.0"
+      - name: gradle/default
         tag: "17.0"
+      - name: gradle/default
+        tag: "18.0"
 
 workflows:
   version: 2
