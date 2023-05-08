@@ -8,14 +8,14 @@ x-env-base: &env_base
   OTEL_METRIC_EXPORT_INTERVAL: 1000
 
 x-app-base: &app_base
-  image: openjdk:17-jdk-alpine
+  image: eclipse-temurin:17-jdk-jammy
   command: "java -javaagent:/agent.jar -jar /app.jar"
   depends_on:
     - collector
 
 services:
   collector:
-    image: otel/opentelemetry-collector:0.52.0
+    image: otel/opentelemetry-collector:0.69.0
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
       - "./collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml"
