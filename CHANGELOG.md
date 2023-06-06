@@ -1,5 +1,15 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.5.1] - 2023-06-06
+
+### Maintenance
+
+- maint: update docker image and collector version in smoke tests (#422) | @JamieDanielson
+- maint(deps): bump io.grpc:grpc-netty-shaded from 1.53.0 to 1.55.1 (#423) | @dependabot
+- maint(deps): bump versions.opentelemetry from 1.25.0 to 1.26.0 (#425) | @dependabot
+- maint(deps): bump versions.opentelemetryJavaagent from 1.25.0 to 1.26.0 (#424) | @dependabot
+- maint(deps): bump org.junit:junit-bom from 5.9.2 to 5.9.3 (#420) | @dependabot
+
 ## [1.5.0] - 2023-04-28
 
 ### Maintenance
