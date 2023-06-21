@@ -10,6 +10,8 @@
     - When updating the OTel Agent/SDK version, update the OTLP version header as needed in `DistroMetadata.java`
     - This can be found in upstream repo `/dependencyManagement/build.gradle.kts`
 
+1. If OTLP proto version changes in previous step, update tests in `EnvironmentConfigurationTest.java`
+
 1. Update the Changelog
 
 1. If the new release updates the OpenTelemetry SDK and/or agent versions, update the `Latest release built with` section in the [README](./README.md).
