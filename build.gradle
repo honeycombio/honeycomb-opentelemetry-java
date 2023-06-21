@@ -7,9 +7,9 @@ allprojects {
     def tag = System.getenv("CIRCLE_TAG")
     if (tag != null && tag.startsWith("v")) {
         // circle tag means we're publishing a release version
-        project.version = "1.5.1"
+        project.version = "1.5.2"
     } else {
-        project.version = "1.5.2-SNAPSHOT"
+        project.version = "1.5.3-SNAPSHOT"
     }
 }
 

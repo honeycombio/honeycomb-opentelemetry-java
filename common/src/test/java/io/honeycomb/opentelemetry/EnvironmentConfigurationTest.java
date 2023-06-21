@@ -139,7 +139,7 @@ public class EnvironmentConfigurationTest {
 
         EnvironmentConfiguration.enableOTLPTraces();
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.traces.endpoint"));
-        Assertions.assertEquals("x-otlp-version=0.19.0,X-Honeycomb-Team=11111111111111111111111111111111,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.traces.headers"));
+        Assertions.assertEquals("x-otlp-version=0.20.0,X-Honeycomb-Team=11111111111111111111111111111111,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.traces.headers"));
     }
 
     @Test
@@ -154,7 +154,7 @@ public class EnvironmentConfigurationTest {
 
         EnvironmentConfiguration.enableOTLPTraces();
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.traces.endpoint"));
-        Assertions.assertEquals("x-otlp-version=0.19.0,X-Honeycomb-Team=specialenvkey", System.getProperty("otel.exporter.otlp.traces.headers"));
+        Assertions.assertEquals("x-otlp-version=0.20.0,X-Honeycomb-Team=specialenvkey", System.getProperty("otel.exporter.otlp.traces.headers"));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class EnvironmentConfigurationTest {
         EnvironmentConfiguration.enableOTLPMetrics();
         Assertions.assertEquals("otlp", System.getProperty("otel.metrics.exporter"));
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
-        Assertions.assertEquals("x-otlp-version=0.19.0,X-Honeycomb-Team=my-key,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
+        Assertions.assertEquals("x-otlp-version=0.20.0,X-Honeycomb-Team=my-key,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
     }
 
     // make sure OtlpTraces logic doesn't bleed into metrics; dataset still needed
@@ -177,7 +177,7 @@ public class EnvironmentConfigurationTest {
         EnvironmentConfiguration.enableOTLPMetrics();
         Assertions.assertEquals("otlp", System.getProperty("otel.metrics.exporter"));
         Assertions.assertEquals("https://api.honeycomb.io:443", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
-        Assertions.assertEquals("x-otlp-version=0.19.0,X-Honeycomb-Team=11111111111111111111111111111111,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
+        Assertions.assertEquals("x-otlp-version=0.20.0,X-Honeycomb-Team=11111111111111111111111111111111,X-Honeycomb-Dataset=my-dataset", System.getProperty("otel.exporter.otlp.metrics.headers"));
     }
 
     @Test

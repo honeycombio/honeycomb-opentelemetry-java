@@ -1,5 +1,15 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.5.2] - 2023-06-21
+
+### Maintenance
+
+- maint(deps): bump versions.opentelemetry from 1.26.0 to 1.27.0 (#428)
+- maint(deps): bump versions.opentelemetryJavaagent from 1.26.0 to 1.27.0 (#431)
+- maint(deps): bump org.junit.jupiter:junit-jupiter-api from 5.9.2 to 5.9.3 (#429)
+- maint(deps): bump io.grpc:grpc-netty-shaded from 1.55.1 to 1.56.0 (#430)
+- maint: update licenses for new otel-java versions (#432)| [@JamieDanielson](https://github.com/JamieDanielson)
+
 ## [1.5.1] - 2023-06-06
 
 ### Maintenance
