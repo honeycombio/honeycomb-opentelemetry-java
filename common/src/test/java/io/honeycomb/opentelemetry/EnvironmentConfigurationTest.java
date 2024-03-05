@@ -224,7 +224,7 @@ public class EnvironmentConfigurationTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("getIsLegacyKeyArguments")
     public void test_isLegacyKey(String name, String input, boolean expected) {
-        Assertions.assertEquals(EnvironmentConfiguration.isLegacyKey(input), expected);
+        Assertions.assertEquals(EnvironmentConfiguration.isClassicKey(input), expected);
     }
 
     private static Stream<Arguments> getIsLegacyKeyArguments() {

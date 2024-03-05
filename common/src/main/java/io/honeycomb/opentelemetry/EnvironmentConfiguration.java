@@ -181,7 +181,7 @@ public class EnvironmentConfiguration {
         return value != null && !value.isEmpty();
     }
 
-    public static boolean isLegacyKey(String key) {
+    public static boolean isClassicKey(String key) {
         if(!isPresent(key)) {
             return false;
         }
@@ -235,7 +235,7 @@ public class EnvironmentConfiguration {
         }
 
         // heads up: even if dataset is set, it will be ignored
-        if (isPresent(apiKey) && !isLegacyKey(apiKey) && isPresent(dataset)) {
+        if (isPresent(apiKey) && !isClassicKey(apiKey) && isPresent(dataset)) {
             if (isPresent(serviceName)) {
                 System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
             } else {
@@ -305,7 +305,7 @@ public class EnvironmentConfiguration {
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(DistroMetadata.OTLP_PROTO_VERSION_HEADER, DistroMetadata.OTLP_PROTO_VERSION_VALUE);
         headers.put(HONEYCOMB_TEAM_HEADER, apiKey);
-        if (isLegacyKey(apiKey)) {
+        if (isClassicKey(apiKey)) {
             // if the key is legacy, add dataset to the header
             if (isPresent(dataset)) {
                 headers.put(HONEYCOMB_DATASET_HEADER, dataset);
