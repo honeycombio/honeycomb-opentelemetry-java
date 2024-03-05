@@ -3,10 +3,14 @@ package io.honeycomb.opentelemetry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 public class EnvironmentConfigurationTest {
 
@@ -215,5 +219,23 @@ public class EnvironmentConfigurationTest {
         } catch (Exception e) {
             Assertions.fail(e);
         }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getIsLegacyKeyArguments")
+    public void test_isLegacyKey(String name, String input, boolean expected) {
+        Assertions.assertEquals(EnvironmentConfiguration.isClassicKey(input), expected);
+    }
+
+    private static Stream<Arguments> getIsLegacyKeyArguments() {
+        return Stream.of(
+            Arguments.of( "full ingest key string, non classic", "hcxik_01hqk4k20cjeh63wca8vva5stw70nft6m5n8wr8f5mjx3762s8269j50wc", false),
+            Arguments.of( "ingest key id, non classic", "hcxik_01hqk4k20cjeh63wca8vva5stw", false),
+            Arguments.of( "full ingest key string,classic", "hcaic_1234567890123456789012345678901234567890123456789012345678", true),
+            Arguments.of( "ingest key id, classic", "hcaic_12345678901234567890123456", false),
+            Arguments.of( "v2 configuration key", "kgvSpPwegJshQkuowXReLD", false),
+            Arguments.of( "classic key", "12345678901234567890123456789012", true),
+            Arguments.of( "empty string", "", false)
+        );
     }
 }

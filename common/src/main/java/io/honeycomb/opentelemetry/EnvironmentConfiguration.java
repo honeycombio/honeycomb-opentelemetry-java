@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,9 @@ public class EnvironmentConfiguration {
 
     private static final Properties properties = loadPropertiesFromConfigFile();
     private static final String OTEL_AGENT_CONFIG_FILE = "otel.javaagent.configuration-file";
+
+    private static final Pattern CLASSIC_KEY_REGEX = Pattern.compile("^[a-f0-9]*$");
+    private static final Pattern INGEST_CLASSIC_KEY_REGEX = Pattern.compile("^hc[a-z]ic_[a-z0-9]*$");
 
     // OTLP exporter protocols
     public static final String OTEL_EXPORTER_OTLP_PROTOCOL = "OTEL_EXPORTER_OTLP_PROTOCOL";
@@ -177,9 +181,17 @@ public class EnvironmentConfiguration {
         return value != null && !value.isEmpty();
     }
 
-    public static boolean isLegacyKey(String key) {
-        // legacy key has 32 characters
-        return isPresent(key) && key.length() == 32;
+    public static boolean isClassicKey(String key) {
+        if(!isPresent(key)) {
+            return false;
+        }
+        else if(key.length() == 32) {
+            return CLASSIC_KEY_REGEX.matcher(key).matches();
+        }
+        else if(key.length() == 64) {
+            return INGEST_CLASSIC_KEY_REGEX.matcher(key).matches();
+        }
+        return false;
     }
 
     private static String readVariable(String key, String fallback) {
@@ -223,7 +235,7 @@ public class EnvironmentConfiguration {
         }
 
         // heads up: even if dataset is set, it will be ignored
-        if (isPresent(apiKey) && !isLegacyKey(apiKey) && isPresent(dataset)) {
+        if (isPresent(apiKey) && !isClassicKey(apiKey) && isPresent(dataset)) {
             if (isPresent(serviceName)) {
                 System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
             } else {
@@ -293,7 +305,7 @@ public class EnvironmentConfiguration {
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(DistroMetadata.OTLP_PROTO_VERSION_HEADER, DistroMetadata.OTLP_PROTO_VERSION_VALUE);
         headers.put(HONEYCOMB_TEAM_HEADER, apiKey);
-        if (isLegacyKey(apiKey)) {
+        if (isClassicKey(apiKey)) {
             // if the key is legacy, add dataset to the header
             if (isPresent(dataset)) {
                 headers.put(HONEYCOMB_DATASET_HEADER, dataset);

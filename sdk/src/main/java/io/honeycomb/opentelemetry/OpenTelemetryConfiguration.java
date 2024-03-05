@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isLegacyKey;
+import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isClassicKey;
 import static io.honeycomb.opentelemetry.EnvironmentConfiguration.isPresent;
 
 /**
@@ -317,7 +317,7 @@ public final class OpenTelemetryConfiguration {
             }
 
             // heads up: even if dataset is set, it will be ignored
-            if (isPresent(tracesApiKey) && !isLegacyKey(tracesApiKey) && isPresent(tracesDataset)) {
+            if (isPresent(tracesApiKey) && !isClassicKey(tracesApiKey) && isPresent(tracesDataset)) {
                 if (isPresent(serviceName)) {
                     System.out.printf("WARN: Dataset is ignored in favor of service name. Data will be sent to service name: %s%n", serviceName);
                 } else {
@@ -379,7 +379,7 @@ public final class OpenTelemetryConfiguration {
                 headers.entrySet().forEach(entry -> builder.addHeader(entry.getKey(), entry.getValue()));
 
                 // if legacy key and missing dataset, warn on missing dataset
-                if (isLegacyKey(tracesApiKey) && !isPresent(tracesDataset)) {
+                if (isClassicKey(tracesApiKey) && !isPresent(tracesDataset)) {
                     logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
                         EnvironmentConfiguration.HONEYCOMB_DATASET));
                 }
@@ -410,7 +410,7 @@ public final class OpenTelemetryConfiguration {
                 headers.entrySet().forEach(entry -> builder.addHeader(entry.getKey(), entry.getValue()));
 
                 // if legacy key and missing dataset, warn on missing dataset
-                if (isLegacyKey(tracesApiKey) && !isPresent(tracesDataset)) {
+                if (isClassicKey(tracesApiKey) && !isPresent(tracesDataset)) {
                     logger.warning(EnvironmentConfiguration.getErrorMessage("dataset",
                         EnvironmentConfiguration.HONEYCOMB_DATASET));
                 }
