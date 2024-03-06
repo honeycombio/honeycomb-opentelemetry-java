@@ -1,5 +1,15 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.6.0] - 2024-03-06
+
+### Enhancements
+
+- feat: add support for classic ingest keys (#448) | [@cewkrupa](https://github.com/cewkrupa)
+
+### Maintenance
+- maint: update codeowners to pipeline-team (#446) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint: update codeowners to pipeline (#445) | [@JamieDanielson](https://github.com/JamieDanielson)
+
 ## [1.5.2] - 2023-06-21
 
 ### Maintenance

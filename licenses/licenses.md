@@ -1,7 +1,7 @@
 
 #agent
 ##Dependency License Report
-_2023-06-21 10:50:10 EDT_
+_2024-03-06 11:27:05 EST_
 ## The Apache License, Version 2.0
 
 **1** **Group:** `io.opentelemetry.javaagent` **Name:** `opentelemetry-javaagent` **Version:** `1.27.0` 
