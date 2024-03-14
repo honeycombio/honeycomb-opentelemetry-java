@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import io.honeycomb.opentelemetry.sdk.trace.samplers.DeterministicTraceSampler;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
 import io.opentelemetry.api.GlobalOpenTelemetry;
-import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -275,24 +274,24 @@ public final class OpenTelemetryConfiguration {
         }
 
         /**
-         * Returns a new {@link OpenTelemetry} built with the configuration of this {@link
+         * Returns a new {@link OpenTelemetrySdk} built with the configuration of this {@link
          * Builder} and registers it as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. An exception will be thrown if this method is attempted to
          * be called multiple times in the lifecycle of an application - ensure you have only one SDK for
          * use as the global instance. If you need to configure multiple SDKs for tests, use {@link
          * GlobalOpenTelemetry#resetForTest()} between them.
          *
-         * @return {@link OpenTelemetry} instance
+         * @return {@link OpenTelemetrySdk} instance
          * @see GlobalOpenTelemetry
          */
-        public OpenTelemetry buildAndRegisterGlobal() {
-            OpenTelemetry sdk = build();
+        public OpenTelemetrySdk buildAndRegisterGlobal() {
+            OpenTelemetrySdk sdk = build();
             GlobalOpenTelemetry.set(sdk);
             return sdk;
         }
 
         /**
-         * Returns a new {@link OpenTelemetry} built with the configuration of this {@link
+         * Returns a new {@link OpenTelemetrySdk} built with the configuration of this {@link
          * Builder}. This SDK is not registered as the global {@link
          * io.opentelemetry.api.OpenTelemetry}. It is recommended that you register one SDK using {@link
          * Builder#buildAndRegisterGlobal()} for use by instrumentation that requires
@@ -302,10 +301,10 @@ public final class OpenTelemetryConfiguration {
          * {@link SdkTracerProvider} with a {@link BatchSpanProcessor} that has an
          * {@link OtlpGrpcSpanExporter} configured.</p>
          *
-         * @return {@link OpenTelemetry} instance
+         * @return {@link OpenTelemetrySdk} instance
          * @see GlobalOpenTelemetry
          */
-        public OpenTelemetry build() {
+        public OpenTelemetrySdk build() {
             Preconditions.checkNotNull(sampler, "sampler must be non-null");
 
             Logger logger = Logger.getLogger(OpenTelemetryConfiguration.class.getName());

@@ -2,7 +2,7 @@ package io.honeycomb.examples.springbootsdk;
 
 import io.honeycomb.opentelemetry.OpenTelemetryConfiguration;
 import io.honeycomb.opentelemetry.sdk.trace.spanprocessors.BaggageSpanProcessor;
-import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
     @Bean
-    public OpenTelemetry honeycomb() {
+    public OpenTelemetrySdk honeycomb() {
         return OpenTelemetryConfiguration.builder()
             .addSpanProcessor(new BaggageSpanProcessor())
             .setApiKey(System.getenv("HONEYCOMB_API_KEY"))
