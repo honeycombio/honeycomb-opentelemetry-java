@@ -5,16 +5,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
 
 @RestController
 public class HelloController {
     private static final String importantInfo = "Important Information";
 
     @Autowired
-    private OpenTelemetry openTelemetry;
+    private OpenTelemetrySdk openTelemetry;
 
     @GetMapping("/")
     public String index() {
