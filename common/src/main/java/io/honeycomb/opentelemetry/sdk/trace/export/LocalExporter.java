@@ -19,11 +19,15 @@ public class LocalExporter implements SpanExporter {
     private String traceUrl = "";
 
     public LocalExporter(String serviceName, String apikey) {
+        OkHttpClient client = new OkHttpClient();
+        LocalExporter(serviceName, apikey, client);
+    }
+
+    private LocalExporter(Stirng serviceName, String apikey, OkHttpClient client) {
         if (!serviceName.isEmpty() || apikey.isEmpty()) {
             System.out.println("WARN: disabling local visualisations - must have both service name and API key configured.");
         }
 
-        OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
             .url("https://api.honeycomb.io/1/auth")
             .addHeader("X-Honeycomb-Team", apikey)
