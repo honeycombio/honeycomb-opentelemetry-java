@@ -19,11 +19,10 @@ public class LocalExporter implements SpanExporter {
     private String traceUrl = "";
 
     public LocalExporter(String serviceName, String apikey) {
-        OkHttpClient client = new OkHttpClient();
-        LocalExporter(serviceName, apikey, client);
+        this(serviceName, apikey, new OkHttpClient());
     }
 
-    private LocalExporter(Stirng serviceName, String apikey, OkHttpClient client) {
+    private LocalExporter(String serviceName, String apikey, OkHttpClient client) {
         if (!serviceName.isEmpty() || apikey.isEmpty()) {
             System.out.println("WARN: disabling local visualisations - must have both service name and API key configured.");
         }
