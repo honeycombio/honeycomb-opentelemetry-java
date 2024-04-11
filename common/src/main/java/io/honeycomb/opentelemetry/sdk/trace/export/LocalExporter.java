@@ -10,9 +10,7 @@ import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 
 public class LocalExporter implements SpanExporter {
 
@@ -22,7 +20,7 @@ public class LocalExporter implements SpanExporter {
         this(serviceName, apikey, new OkHttpClient());
     }
 
-    private LocalExporter(String serviceName, String apikey, OkHttpClient client) {
+    protected LocalExporter(String serviceName, String apikey, OkHttpClient client) {
         if (!serviceName.isEmpty() || apikey.isEmpty()) {
             System.out.println("WARN: disabling local visualisations - must have both service name and API key configured.");
         }
@@ -41,7 +39,7 @@ public class LocalExporter implements SpanExporter {
                 String environment = body.split("\"environment\":")[1].split(",")[0];
                 traceUrl = buildTraceUrl(apikey, serviceName, team, environment);
             } else {
-                System.out.println("WARN: failed to extract team from Honeycomb auth response");
+                throw new IOException();
             }
         } catch (IOException e) {
             System.out.println("WARN: failed to extract team from Honeycomb auth response");
@@ -53,7 +51,7 @@ public class LocalExporter implements SpanExporter {
         if (!traceUrl.isEmpty()) {
             spans.forEach((span) -> {
                 if (span.getParentSpanContext() == SpanContext.getInvalid()) {
-                    System.out.println(String.format("Honeycomb link: %s=%s", traceUrl, span.getTraceId()));
+                    logTraceUrl(span.getSpanId());
                 }
             });
         }
@@ -70,12 +68,16 @@ public class LocalExporter implements SpanExporter {
         return CompletableResultCode.ofSuccess();
     }
 
-    private String buildTraceUrl(String apikey, String serviceName, String team, String environment) {
+    protected String buildTraceUrl(String apikey, String serviceName, String team, String environment) {
         StringBuilder url = new StringBuilder("https://ui.honeycomb.io/").append(team);
         if (!isClassicKey(apikey)) {
             url.append("/environments/").append(environment);
         }
         url.append(team).append("/datasets/").append(serviceName).append("/traces?trace_id");
         return url.toString();
+    }
+
+    protected void logTraceUrl(String traceId) {
+        System.out.println(String.format("Honeycomb link: %s=%s", traceUrl, traceId));
     }
 }
