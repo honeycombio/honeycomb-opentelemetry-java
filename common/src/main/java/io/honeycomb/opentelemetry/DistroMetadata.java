@@ -26,7 +26,7 @@ public class DistroMetadata {
     public static final String RUNTIME_VERSION_VALUE = System.getProperty("java.runtime.version");
 
     public static final String OTLP_PROTO_VERSION_HEADER = "x-otlp-version";
-    public static final String OTLP_PROTO_VERSION_VALUE = "0.20.0";
+    public static final String OTLP_PROTO_VERSION_VALUE = "1.1.0";
 
     /**
      * Get Metadata as a map of strings to strings.
