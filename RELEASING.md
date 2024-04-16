@@ -1,12 +1,12 @@
 # Creating a new release
 
-1. Prep public docs PR with the new version in data file `/honeycomb-opentelemetry-java/release.json`
+1. Prep Honeycomb docs PR with the new version in data file `data/projects/honeycomb-opentelemetry-java/release.json`
 
 1. Run `./gradlew generateLicenseReport` to ensure all project dependency licenses are correctly represented in this repository. If there are any changes, submit PR to update licenses.
 
 1. Update the `project.version` in the root build.gradle file with the new release version. Snapshot version is one patch bump ahead of the new release (e.g. if we're releasing `1.0.0` then the corresponding snapshot would be `1.0.1`)
 
-1. Update the version in `DistroMetadata.java` with the new release version
+1. Update the version in `common/src/main/java/io/honeycomb/opentelemetry/DistroMetadata.java` with the new release version
     - When updating the OTel Agent/SDK version, update the OTLP version header as needed in `DistroMetadata.java`
     - This can be found in upstream repo `/dependencyManagement/build.gradle.kts`
 
