@@ -18,7 +18,7 @@ public class DistroMetadata {
      * with the version number and read it, but that isn't possible from the
      * Java agent.
      */
-    public static final String VERSION_VALUE = "1.6.0";
+    public static final String VERSION_VALUE = "1.7.0";
     public static final String VARIANT_FIELD = "honeycomb.distro.variant";
     public static final String VARIANT_AGENT = "agent";
     public static final String VARIANT_SDK = "sdk";
@@ -26,7 +26,7 @@ public class DistroMetadata {
     public static final String RUNTIME_VERSION_VALUE = System.getProperty("java.runtime.version");
 
     public static final String OTLP_PROTO_VERSION_HEADER = "x-otlp-version";
-    public static final String OTLP_PROTO_VERSION_VALUE = "0.20.0";
+    public static final String OTLP_PROTO_VERSION_VALUE = "1.1.0";
 
     /**
      * Get Metadata as a map of strings to strings.

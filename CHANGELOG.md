@@ -1,5 +1,16 @@
 # honeycomb-opentelemetry-java changelog
 
+## [1.7.0] - 2024-04-16
+
+### Enhancements
+
+- feat: return an OpenTelemetrySdk from the builder (#451) | [@NLincoln](https://github.com/NLincoln)
+
+### Maintenance
+
+- maint: bump otel to 1.35/1.33.1 (#453) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint: add labels to release.yml for auto-generated grouping (#450) | [@JamieDanielson](https://github.com/JamieDanielson)
+
 ## [1.6.0] - 2024-03-06
 
 ### Enhancements
