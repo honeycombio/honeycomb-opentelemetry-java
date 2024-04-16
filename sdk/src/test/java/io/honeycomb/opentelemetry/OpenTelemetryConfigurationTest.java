@@ -77,7 +77,7 @@ public class OpenTelemetryConfigurationTest {
             Assertions.assertInstanceOf(BaggageSpanProcessor.class, processors.get(0));
             Assertions.assertInstanceOf(BatchSpanProcessor.class, processors.get(1));
             SpanProcessor processor = processors.get(1);
-            Assertions.assertTrue(processor.toString().contains("spanExporter=io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter"));
+            Assertions.assertTrue(processor.toString().contains("spanExporter=OtlpGrpcSpanExporter"));
         } catch (Exception e) {
             Assertions.fail(e);
         }
@@ -109,7 +109,7 @@ public class OpenTelemetryConfigurationTest {
             // verify configured span processors
             Assertions.assertInstanceOf(BatchSpanProcessor.class, processors.get(1));
             SpanProcessor processor = processors.get(1);
-            Assertions.assertTrue(processor.toString().contains("spanExporter=io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter"));
+            Assertions.assertTrue(processor.toString().contains("spanExporter=OtlpHttpSpanExporter"));
         } catch (Exception e) {
             Assertions.fail(e);
         }
