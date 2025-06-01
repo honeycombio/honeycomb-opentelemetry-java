@@ -10,7 +10,7 @@ dependencies {
     compileOnly "io.opentelemetry:opentelemetry-sdk:${versions.opentelemetry}"
 
     testImplementation "io.opentelemetry:opentelemetry-sdk:${versions.opentelemetry}"
-    testImplementation(platform('org.junit:junit-bom:5.9.3'))
+    testImplementation(platform('org.junit:junit-bom:5.13.0'))
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
