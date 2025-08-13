@@ -4,7 +4,7 @@
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-java)
 [![Maven](https://img.shields.io/maven-central/v/io.honeycomb/honeycomb-opentelemetry-javaagent)](https://mvnrepository.com/artifact/io.honeycomb/honeycomb-opentelemetry-javaagent)
 
-**STATUS**: This project is being Sunset. See [this issue](https://github.com/honeycombio/honeycomb-opentelemetry-java/issues/458) for more details.
+**STATUS**: This project is now archived. See [this issue](https://github.com/honeycombio/honeycomb-opentelemetry-java/issues/458) for more details.
 
 This is Honeycomb's distribution of OpenTelemetry for Java.
 It makes getting started with OpenTelemetry and Honeycomb easier!
